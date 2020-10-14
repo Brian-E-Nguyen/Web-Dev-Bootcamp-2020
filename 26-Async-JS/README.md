@@ -86,3 +86,68 @@ JS executes the third line of code while the browser waits for 3 seconds
 ### 2.3 Stack Example
 
 [Link to example](http://latentflip.com/loupe/?code=Y29uc29sZS5sb2coIlNlbmRpbmcgcmVxdWVzdCB0byBzZXJ2ZXIhIikKc2V0VGltZW91dChmdW5jdGlvbigpIHsKICAgIGNvbnNvbGUubG9nKCJIZXJlIGlzIHlvdXIgZGF0YSBmcm9tIHRoZSBzZXJ2ZXIuLi4iKQp9LCAzMDAwKQpjb25zb2xlLmxvZygiSSBBTSBBVCBUSEUgRU5EIE9GIFRIRSBGSUxFISIp!!!)
+
+## 3. Callback Helll :(
+
+Let's say that we want to constantly change our page's background color every second. One way to do this is like this:
+
+```js
+setTimeout(() => {
+    document.body.style.backgroundColor = 'red'
+}, 1000)
+
+setTimeout(() => {
+    document.body.style.backgroundColor = 'orange'
+}, 2000)
+```
+
+But as you can see, it looks janky and inefficient. And if we wanted more colors, then we would have to copy more of this code and hardcode the time.
+
+A slightly more efficient way to do this is to nest the `setTimeout` functions in each other
+
+```js
+setTimeout(() => {
+    document.body.style.backgroundColor = 'red';
+    setTimeout(() => {
+        document.body.style.backgroundColor = 'orange'
+    }, 1000)
+}, 1000)
+```
+But as you can see, everything looks ridiculous
+
+```js
+setTimeout(() => {
+    document.body.style.backgroundColor = 'red';
+    setTimeout(() => {
+        document.body.style.backgroundColor = 'orange';
+        setTimeout(() => {
+            document.body.style.backgroundColor = 'yellow';
+            setTimeout(() => {
+                document.body.style.backgroundColor = 'green';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = 'blue';
+                    setTimeout(() => {
+                        document.body.style.backgroundColor = 'purple';
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }, 1000);
+    }, 1000);
+}, 1000)
+```
+
+Another example:
+
+```js
+searchMoviesAPI('amedeus', () => {
+    saveToMyDB(movie, () => {
+        // if it works, run this
+    }, () => {
+        // if not, then run this
+    })
+})
+```
+
+As you can see, nesting is really bad because more than one callback can pass into each function.
+
+Fortunately there are new additions that will solve this problem
