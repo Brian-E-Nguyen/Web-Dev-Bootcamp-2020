@@ -195,3 +195,56 @@ fakeRequestCallback('books.com/page1',
     })
 ```
 
+## 5. Demo: fakeRequest Using Promises
+
+A **promise** is an object representing the eventual completion or failure of an asynchronous operation. A common operation is getting data from other API's. Things that can make it fail are bad URL's, the internet's down, whatever. It's like a promise in the real world. It's the eventual guarantee of receiving a value
+
+```js
+const fakeRequestPromise = (url) => {
+    return new Promise((resolve, reject) => {
+        const delay = Math.floor(Math.random() * (4500)) + 500;
+        setTimeout(() => {
+            if (delay > 4000) {
+                reject('Connection Timeout :(')
+            } else {
+                resolve(`Here is your fake data from ${url}`)
+            }
+        }, delay)
+    })
+}
+```
+
+When we execute the `fakeRequestPromise` with any URL, the return value is a *Promise*
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img4.jpg?raw=true)
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img5.jpg?raw=true)
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img6.jpg?raw=true)
+
+You can attach callbacks or methods to promises that will run depending if a promise is successful or it failed
+
+```js
+const request = fakeRequestPromise('yelp.com/api/coffee');
+request.then(() => {
+    console.log('PROMISE RESOLVED')
+    console.log('IT WORKED')
+}).catch(() => {
+    console.log('PROMISE REJECTED')
+    console.log('OH NO, ERROR!!!')
+})
+```
+
+You don't need to save it to a variable. You can chain it.
+
+```js
+fakeRequestPromise('yelp.com/api/coffee')
+    .then(() => {
+        console.log('PROMISE RESOLVED')
+        console.log('IT WORKED')
+    })
+    .catch(() => {
+        console.log('PROMISE REJECTED')
+        console.log('OH NO, ERROR!!!')
+})
+```
