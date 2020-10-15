@@ -276,3 +276,65 @@ fakeRequestPromise('yelp.com/api/coffee/page1')
 ```
 
 The callbacks go down line by line. If at any point the request failed, then it will go to the catch block
+
+## 7. Creating Our Own Promises
+
+When creating promises, we always pass in two parameters: `resolve` and `reject`
+
+```js
+new Promise((resolve, reject) => {
+    
+})
+```
+
+If we were to put this in the console, it would say that the status is "Pending." If we were to put a function inside of the promise called `resolve()` or `reject()`, then it would say that the status is resolved or rejected respectively
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img7.jpg?raw=true)
+
+Here is an example for making a request with our custom made Promise
+
+```js
+const fakeRequest = (url) => {
+    return new Promise((resolve, reject) => {
+        const rand = Math.random();
+        setTimeout(() => {
+            if (rand < 0.7) {
+                resolve('YOUR FAKE DATA HERE');
+            }
+            reject('Request Error!');
+        }, 1000)
+    })
+}
+
+fakeRequest('/dogs/1')
+    .then((data) => {
+        console.log("DONE WITH REQUEST!")
+        console.log('data is:', data)
+    })
+    .catch((err) => {
+        console.log("OH NO!", err)
+    })
+```
+
+Here is an example with changing the body colors
+
+```js
+const delayedColorChange = (color, delay) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            document.body.style.backgroundColor = color;
+            resolve();
+        }, delay)
+    })
+}
+
+delayedColorChange('red', 1000)
+    .then(() => delayedColorChange('orange', 1000))
+    .then(() => delayedColorChange('yellow', 1000))
+    .then(() => delayedColorChange('green', 1000))
+    .then(() => delayedColorChange('blue', 1000))
+    .then(() => delayedColorChange('indigo', 1000))
+    .then(() => delayedColorChange('violet', 1000))
+```
+
+In this case, we don't use `reject` because there's nothing to reject
