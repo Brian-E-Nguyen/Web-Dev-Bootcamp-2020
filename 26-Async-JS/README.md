@@ -248,3 +248,31 @@ fakeRequestPromise('yelp.com/api/coffee')
         console.log('OH NO, ERROR!!!')
 })
 ```
+
+## 6. The Magic of Promises
+
+We can clean up the multiple nested `fakeRequestCallback` function with this:
+
+```js
+fakeRequestPromise('yelp.com/api/coffee/page1')
+    .then((data) => {
+        console.log("IT WORKED!!!!!! (page1)")
+        console.log(data)
+        return fakeRequestPromise('yelp.com/api/coffee/page2')
+    })
+    .then((data) => {
+        console.log("IT WORKED!!!!!! (page2)")
+        console.log(data)
+        return fakeRequestPromise('yelp.com/api/coffee/page3')
+    })
+    .then((data) => {
+        console.log("IT WORKED!!!!!! (page3)")
+        console.log(data)
+    })
+    .catch((err) => {
+        console.log("OH NO, A REQUEST FAILED!!!")
+        console.log(err)
+    })
+```
+
+The callbacks go down line by line. If at any point the request failed, then it will go to the catch block
