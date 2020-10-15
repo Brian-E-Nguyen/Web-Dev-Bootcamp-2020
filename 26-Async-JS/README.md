@@ -151,3 +151,47 @@ searchMoviesAPI('amedeus', () => {
 As you can see, nesting is really bad because more than one callback can pass into each function.
 
 Fortunately there are new additions that will solve this problem
+
+## 4. Demo: fakeRequest Using Callbacks
+
+```js
+const fakeRequestCallback = (url, success, failure) => {
+    const delay = Math.floor(Math.random() * 4500) + 500;
+    setTimeout(() => {
+        if (delay > 4000) {
+            failure('Connection Timeout :(')
+        } else {
+            success(`Here is your fake data from ${url}`)
+        }
+    }, delay)
+}
+```
+
+For this function, we pass in a URL and two callbacks: success and failure. If we want to make multiple requests, we can (but shouldn't) do nesting
+
+```js
+fakeRequestCallback('books.com/page1',
+    function (response) {
+        console.log("IT WORKED!!!!")
+        console.log(response)
+        fakeRequestCallback('books.com/page2',
+            function (response) {
+                console.log("IT WORKED AGAIN!!!!")
+                console.log(response)
+                fakeRequestCallback('books.com/page3',
+                    function (response) {
+                        console.log("IT WORKED AGAIN (3rd req)!!!!")
+                        console.log(response)
+                    },
+                    function (err) {
+                        console.log("ERROR (3rd req)!!!", err)
+                    })
+            },
+            function (err) {
+                console.log("ERROR (2nd req)!!!", err)
+            })
+    }, function (err) {
+        console.log("ERROR!!!", err)
+    })
+```
+
