@@ -448,3 +448,30 @@ async function printRainbow() {
 
 printRainbow();
 ```
+
+## 10. Handling Errros in Async Functions
+
+To handle errors in async functions, use the try/catch blocks.
+
+```js
+async function makeTwoRequests() {
+    let data1 = await fakeRequest('/page');
+    console.log(data1)
+}
+```
+
+We can change the above function into this:
+
+```js
+async function makeTwoRequests() {
+    try {
+        let data1 = await fakeRequest('/page1');
+        console.log(data1);
+        let data2 = await fakeRequest('/page2');
+        console.log(data2);
+    } catch (e) {
+        console.log("CAUGHT AN ERROR!")
+        console.log("error is:", e)
+    }
+}
+```

@@ -103,5 +103,4 @@ async function makeTwoRequests() {
         console.log("CAUGHT AN ERROR!")
         console.log("error is:", e)
     }
-
 }
