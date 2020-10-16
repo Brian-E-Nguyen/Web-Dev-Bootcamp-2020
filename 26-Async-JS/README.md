@@ -338,3 +338,65 @@ delayedColorChange('red', 1000)
 ```
 
 In this case, we don't use `reject` because there's nothing to reject
+
+## 8. Async Keyword
+
+Async functions help us write cleaner asynchronous code
+
+- async functions always return a promise
+- if the function returns a value, the promise will be resolved with that value
+- if the function throws an exception, the promise will be rejected
+
+```js
+async function hello() {
+    return 'Hey guy!';
+}
+hello(); // Promise {<resolved>: "Hey guy!"}
+
+async function uhOh() {
+    throw new Error('oh no!');
+}
+uhOh(); // {<rejected>: Error: oh no!}
+```
+
+If we were to make an async function with nothing in it, for example, then it will return a promise
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img8.jpg?raw=true)
+
+We can also use arrow functions.
+
+```js
+const sing = async () => {
+    throw "OH NO, PROBLEM!"
+    return 'LA LA LA LA'
+}
+
+sing()
+    .then(data => {
+        console.log("PROMISE RESOLVED WITH:", data)
+    })
+    .catch(err => {
+        console.log("OH NO, PROMISE REJECTED!")
+        console.log(err)
+    })
+```
+
+The way we reject a promise is by throwing an error inside of the async function
+
+```js
+const login = async (username, password) => {
+    if (!username || !password) throw 'Missing Credentials'
+    if (password === 'corgifeetarecute') return 'WELCOME!'
+    throw 'Invalid Password'
+}
+
+login('todd', 'corgifeetarecute')
+    .then(msg => {
+        console.log("LOGGED IN!")
+        console.log(msg)
+    })
+    .catch(err => {
+        console.log("ERROR!")
+        console.log(err)
+    })
+```
