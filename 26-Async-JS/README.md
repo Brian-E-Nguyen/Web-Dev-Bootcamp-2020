@@ -400,3 +400,51 @@ login('todd', 'corgifeetarecute')
         console.log(err)
     })
 ```
+
+## 9. The Await Keyword
+
+- we (mostly) use the `await` keyword inside of functions declared with `async`
+- `await` will pause the execution of a function, **waiting for a promise to be resolved**
+
+Let's take a look at this code:
+
+```js
+const delayedColorChange = (color, delay) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            document.body.style.backgroundColor = color;
+            resolve();
+        }, delay)
+    })
+}
+
+async function rainbow() {
+    await delayedColorChange('red', 1000)
+    await delayedColorChange('orange', 1000)
+    await delayedColorChange('yellow', 1000)
+    await delayedColorChange('green', 1000)
+    await delayedColorChange('blue', 1000)
+    await delayedColorChange('indigo', 1000)
+    await delayedColorChange('violet', 1000)
+    return "ALL DONE!"
+}
+```
+
+Remember that `delayedColorChange` returns a promise. The `await` keyword waits for a promise to be returned. The first `delayedColorChange` will execute, then the code will wait until it returns a promise. Then, it will execute the second one (orange).
+
+To check that the rainbow is finished, we can do this: 
+
+```js
+rainbow().then(() => console.log("END OF RAINBOW!"))
+```
+
+or like this:
+
+```js
+async function printRainbow() {
+    await rainbow();
+    console.log("END OF RAINBOW!")
+}
+
+printRainbow();
+```
