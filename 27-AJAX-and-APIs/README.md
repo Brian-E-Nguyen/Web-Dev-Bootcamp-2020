@@ -177,3 +177,79 @@ const fetchBitcoinPrice = async () => {
     }
 }
 ```
+
+## 8. Axios
+
+### 8.1 Intro to Axios
+
+Axios is a library that is built on top of the `fetch()` request. Axios makes everything easier with making API calls.
+
+[Link to the axios GitHub](https://github.com/axios/axios)
+
+To make things easy, we will load the CDN onto our HTML file to access axios
+
+```html
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axios</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+```
+
+#### 8.1.1 Fetching with .get()
+
+The first one is `.get()`. This returns a promise, but unlike the regular `fetch()` method, it also returns the data as well
+
+```js
+axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
+```
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img10.jpg?raw=true)
+
+We can also use `.then()` to chain the methods. We already have the response object fully parsed, so no need to do additional steps
+
+```js
+axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
+    .then(res => {
+        console.log(res.data.ticker.price)
+    })
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img11.jpg?raw=true)
+
+... and of course we can use `.catch()`
+
+```js
+axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
+    .then(res => {
+        console.log(res.data.ticker.price)
+    })
+    .catch(error => {
+        console.log('ERROR!!', err)
+    })
+```
+
+We can also use async/await as well
+
+```js
+const fetchBitcoinPrice = async () => {
+    try {
+        const res = await axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
+        console.log(res.data.ticker.price)
+    } catch (e) {
+        console.log("ERROR!", e)
+    }
+}
+```
+
+#### 8.1.2 Note
+
+Since we used a CDN, we don't have to use 
+
+```js
+const axios = require('axios').default;
+```
+
+in our examples
