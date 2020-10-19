@@ -81,3 +81,28 @@ const parsedData = JSON.parse(data);
 `JSON.stringify(value[, replacer[, space]])`
 
 > Returns a JSON string corresponding to the specified value
+
+## 4. Using Postman
+
+**NOTE:** I am skipping this section because I already know how to use it
+
+## 5. Query Strings & Headers
+
+- URL: **/search/shows?q=:query**
+- Example: http://api.tvmaze.com/search/shows?q=girls
+
+Everytime you see `:query` on an API documentation, that means it is a variable. `?q` is a query string and it's a way of providing additional information to a request. The reason why we bring this up because a lot of websites use query strings
+
+In Postman, you can easily edit the key-value pairs, or you can edit them manually in the URL
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img2.jpg?raw=true)
+
+Note that not all API's are the same. Some of them may require headers
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img3.jpg?raw=true)
+
+If we were to request https://icanhazdadjoke.com, it will return HTML by default. If we want to change what we get returned, we need to specify the header
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img4.jpg?raw=true)
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img5.jpg?raw=true)
