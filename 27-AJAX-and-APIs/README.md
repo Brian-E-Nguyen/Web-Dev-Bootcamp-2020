@@ -253,3 +253,38 @@ const axios = require('axios').default;
 ```
 
 in our examples
+
+### 8.2 Setting Headers with Axios
+
+```js
+const getDadJoke = async () => {
+    const response = await axios.get('https://icanhazdadjoke.com');
+    console.log(response)
+}
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img12.jpg?raw=true)
+
+With some API's, like the icanhazdadjoke, we need to specify headers to retrieve what data we want. For this example, it is returning HTML, but we want JSON. How can we do that?
+
+The `.get()` method accepts a second parameter that is an object
+
+```js
+const getDadJoke = async () => {
+    const config = { headers: { Accept: 'application/json' }}
+    const response = await axios.get('https://icanhazdadjoke.com', config);
+    console.log(response)
+}
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img13.jpg?raw=true)
+
+We can now extract the joke with the response we got
+
+```js
+const getDadJoke = async () => {
+    const config = { headers: { Accept: 'application/json' }}
+    const response = await axios.get('https://icanhazdadjoke.com', config);
+    console.log(response.data.joke)
+}
+```
