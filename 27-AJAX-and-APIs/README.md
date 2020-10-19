@@ -106,3 +106,74 @@ If we were to request https://icanhazdadjoke.com, it will return HTML by default
 ![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img4.jpg?raw=true)
 
 ![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img5.jpg?raw=true)
+
+## 6. Making XHR's
+
+**NOTE:** I am skipping this section because XHR is not ideal
+
+## 7. The Fetch API
+
+The Fetch API:
+
+- is a newer way of making requets via JS
+- supports promises while XHR did not
+- is not supported by Internet Explorer
+
+The simplest way to retrieve data is by using the `fetch()` function. Example:
+
+`fetch('https://api.cryptonator.com/api/ticker/btc-usd')`
+
+This will then return a promise
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img6.jpg?raw=true)
+
+Of course, if we request an endpoint that doesn't exist, the request will be rejected
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img7.jpg?raw=true)
+
+With the `fetch()` method, we can chain them with `.then()`
+
+```js
+fetch('https://api.cryptonator.com/api/ticker/btc-usd')
+    .then(res => {
+        console.log("RESPONSE", res);
+    })
+    .catch(e => {
+        console.log("OH NO! ERROR!", e)
+    })
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img8.jpg?raw=true)
+
+What's kinda annoying about fetch is that it doesn't return data just yet. What happens is that fetch will resolve the promise as soon as it receives the header, so that is when we use a second method called `.json()`. It is used with the *response* variable
+
+```js
+fetch('https://api.cryptonator.com/api/ticker/btc-usd')
+    .then(res => {
+        console.log("RESPONSE, WAITING TO PARSE", res);
+        return res.json(); // right here
+    })
+    .then(data => {
+        console.log('DATA PARSED...', data);
+        // console.log(data.ticker.price)
+    })
+    .catch(e => {
+        console.log("OH NO! ERROR!", e);
+    })
+```
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img9.jpg?raw=true)
+
+This is used with a 'promisey' version, but now here's the async version
+
+```js
+const fetchBitcoinPrice = async () => {
+    try {
+        const res = await fetch('https://api.cryptonator.com/api/ticker/btc-usd');
+        const data = await res.json();
+        console.log(data.ticker.price)
+    } catch (e) {
+        console.log("SOMETHING WENT WRONG!!!", e)
+    }
+}
+```
