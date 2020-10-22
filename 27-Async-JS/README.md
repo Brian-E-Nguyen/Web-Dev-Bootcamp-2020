@@ -37,7 +37,7 @@ isRightTriangle(3, 4, 5)
 
 `isRightTriangle` calls `square`, which then calls `multiply`
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img1.jpg?raw=true)
 
 From the `multiply` function, the 9 is then passed into `square`, which then passes into `isRightTriangle`
 
@@ -51,7 +51,7 @@ From the `multiply` function, the 9 is then passed into `square`, which then pas
 
 Chrome-based browsers also has a debugger in the dev tools. Go to the "Sources" tab
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img2.jpg?raw=true)
 
 
 ## 2. WebAPI's and Single Threaded
@@ -79,7 +79,7 @@ Ok, but how does it work?
 - the JS call stack recognizes these Web API functiosn and passes them off to the browser to take care of. It's like JS is telling the browser "remind me in 3 seconds to finish this."
 - once the browser finishes those tasks, they return and are pushed onto the stack as a callback
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img3.jpg?raw=true)
 
 JS executes the third line of code while the browser waits for 3 seconds
 
@@ -216,11 +216,11 @@ const fakeRequestPromise = (url) => {
 
 When we execute the `fakeRequestPromise` with any URL, the return value is a *Promise*
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img4.jpg?raw=true)
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img5.jpg?raw=true)
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img6.jpg?raw=true)
 
 You can attach callbacks or methods to promises that will run depending if a promise is successful or it failed
 
@@ -289,7 +289,7 @@ new Promise((resolve, reject) => {
 
 If we were to put this in the console, it would say that the status is "Pending." If we were to put a function inside of the promise called `resolve()` or `reject()`, then it would say that the status is resolved or rejected respectively
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img7.jpg?raw=true)
 
 Here is an example for making a request with our custom made Promise
 
@@ -361,7 +361,7 @@ uhOh(); // {<rejected>: Error: oh no!}
 
 If we were to make an async function with nothing in it, for example, then it will return a promise
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/26-Async-JS/26-Async-JS/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/27-Async-JS/img-for-notes/img8.jpg?raw=true)
 
 We can also use arrow functions.
 
