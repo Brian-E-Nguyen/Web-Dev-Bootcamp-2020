@@ -16,4 +16,20 @@ Until recently, we could only run JavaScript code in a web browser.   Node is a 
 - Drone Software
 - A Whole Lot More!
 
+## 3. The Node REPL
+
+To access the Node REPL in your terminal (assuming it's already downloaded), type in `node`.
+
+Some basic commands are `.help`, `.exit`, `.save`, etc.
+
+You can do basic JS inside of the Node REPL
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/30-NodeJS/img-for-notes/img1.jpg)
+
+However, there are things that we don't have in Node JS. We don't have DOM API's, window, or the document. Instead of the window, we have an object called `global`
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/30-NodeJS/img-for-notes/img2.jpg)
+
+We don't have functions that exist in browsers when we use Node JS, but what we do have is a bunch of modules that help us interact with files, folders, and the OS
+
 [Link to slides](https://www.canva.com/design/DAEEJ5vmCOs/-MdF0FsNq0tKab3baCY6eg/view?utm_content=DAEEJ5vmCOs&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton#4)
