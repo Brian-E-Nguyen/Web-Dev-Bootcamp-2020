@@ -32,4 +32,21 @@ However, there are things that we don't have in Node JS. We don't have DOM API's
 
 We don't have functions that exist in browsers when we use Node JS, but what we do have is a bunch of modules that help us interact with files, folders, and the OS
 
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/30-NodeJS/img-for-notes/img3.jpg)
+
 [Link to slides](https://www.canva.com/design/DAEEJ5vmCOs/-MdF0FsNq0tKab3baCY6eg/view?utm_content=DAEEJ5vmCOs&utm_campaign=designshare&utm_medium=link&utm_source=sharebutton#4)
+
+## 4. Running Node Files
+
+To run files with Node JS, type in `node <filename>` in the terminal
+
+```js
+// firstScript.js code
+for (let i = 0; i < 10; i++) {
+    console.log('HELLO');
+}
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/30-NodeJS/img-for-notes/img4.jpg)
+
+Make sure you are referencing the file relative to where you are at. You can't just type in the file name and always expect it to work
