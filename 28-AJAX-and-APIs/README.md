@@ -21,7 +21,7 @@ The idea of AJAX is creating apps where using JS, you can load, fetch, save, or 
 
 For example, on this website called [Cryptonator](https://www.cryptonator.com/api/), it gives us an endpoint for us to use, and it returns us JSON value
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img1.jpg?raw=true)
 
 It's an interface not for humans, but rather web pages.
 
@@ -95,17 +95,17 @@ Everytime you see `:query` on an API documentation, that means it is a variable.
 
 In Postman, you can easily edit the key-value pairs, or you can edit them manually in the URL
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img2.jpg?raw=true)
 
 Note that not all API's are the same. Some of them may require headers
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img3.jpg?raw=true)
 
 If we were to request https://icanhazdadjoke.com, it will return HTML by default. If we want to change what we get returned, we need to specify the header
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img4.jpg?raw=true)
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img5.jpg?raw=true)
 
 ## 6. Making XHR's
 
@@ -125,11 +125,11 @@ The simplest way to retrieve data is by using the `fetch()` function. Example:
 
 This will then return a promise
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img6.jpg?raw=true)
 
 Of course, if we request an endpoint that doesn't exist, the request will be rejected
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img7.jpg?raw=true)
 
 With the `fetch()` method, we can chain them with `.then()`
 
@@ -143,7 +143,7 @@ fetch('https://api.cryptonator.com/api/ticker/btc-usd')
     })
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img8.jpg?raw=true)
 
 What's kinda annoying about fetch is that it doesn't return data just yet. What happens is that fetch will resolve the promise as soon as it receives the header, so that is when we use a second method called `.json()`. It is used with the *response* variable
 
@@ -162,7 +162,7 @@ fetch('https://api.cryptonator.com/api/ticker/btc-usd')
     })
 ```
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img9.jpg?raw=true)
 
 This is used with a 'promisey' version, but now here's the async version
 
@@ -206,7 +206,7 @@ The first one is `.get()`. This returns a promise, but unlike the regular `fetch
 ```js
 axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
 ```
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img10.jpg?raw=true)
 
 We can also use `.then()` to chain the methods. We already have the response object fully parsed, so no need to do additional steps
 
@@ -217,7 +217,7 @@ axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
     })
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img11.jpg?raw=true)
 
 ... and of course we can use `.catch()`
 
@@ -263,7 +263,7 @@ const getDadJoke = async () => {
 }
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img12.jpg?raw=true)
 
 With some API's, like the icanhazdadjoke, we need to specify headers to retrieve what data we want. For this example, it is returning HTML, but we want JSON. How can we do that?
 
@@ -277,7 +277,7 @@ const getDadJoke = async () => {
 }
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/27-AJAX-and-APIs/27-AJAX-and-APIs/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/28-AJAX-and-APIs/img-for-notes/img13.jpg?raw=true)
 
 We can now extract the joke with the response we got
 
