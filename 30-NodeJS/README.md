@@ -123,3 +123,9 @@ Hi there, Dave
 Hi there, Brad
 Hi there, Joe
 ```
+
+## 6. File System Module Crash Course
+
+Refer to broilerplate.js for example work
+
+[Link to official documentation](https://nodejs.org/api/fs.html)
