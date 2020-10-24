@@ -179,3 +179,38 @@ REQUIRED AN ENTIRE DIRECTORY! [
   { name: 'janet', color: 'orange' }
 ]
 ```
+
+## 3. Intro to NPM
+
+**Node Package Manager (NPM)** is literally two things:
+
+1. A library of thousands of packages published by other developers that we can use for free
+2. A command-line tool to easily install and manage those packages in our Node projects
+
+NPM is already included with Node.js. Just type in `npm` on your terminal
+
+```
+$ npm
+
+Usage: npm <command>
+
+where <command> is one of:
+    access, adduser, audit, bin, bugs, c, cache, ci, cit,
+    clean-install, clean-install-test, completion, config,
+    create, ddp, dedupe, deprecate, dist-tag, docs, doctor,
+    edit, explore, fund, get, help, help-search, hook, i, init,
+    install, install-ci-test, install-test, it, link, list, ln,
+    login, logout, ls, org, outdated, owner, pack, ping, prefix,
+    profile, prune, publish, rb, rebuild, repo, restart, root,
+    run, run-script, s, se, search, set, shrinkwrap, star,
+    stars, start, stop, t, team, test, token, tst, un,
+    uninstall, unpublish, unstar, up, update, v, version, view,
+    whoami
+
+npm <command> -h  quick help on <command>
+npm -l            display full usage info
+npm help <term>   search for help on <term>
+npm help npm      involved overview
+```
+
+[Link to NPM's website](https://www.npmjs.com/)
