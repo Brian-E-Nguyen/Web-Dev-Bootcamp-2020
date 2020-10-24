@@ -116,3 +116,66 @@ const square = x => x * x;
 exports.square = square;
 exports.PI = PI;
 ```
+
+## 2. Requiring a Directory
+
+Let's say we have a directory called 'shelter' with cat files in them. One of them, for example, looks like this:
+
+```js
+// blue.js
+module.exports = {
+    name: 'blue',
+    color: 'grey'
+}
+```
+
+And then, we have a file, `index.js` that looks like this:
+
+```js
+// index.js
+const blue = require('./blue');
+const sadie = require('./sadie');
+const janet = require('./janet');
+
+const allCats = [blue, sadie, janet];
+console.log(allCats)
+```
+
+Here's what it would look like when we run this file:
+
+```
+$ node index.js
+[
+  { name: 'blue', color: 'grey' },
+  { name: 'sadie', color: 'white' },
+  { name: 'janet', color: 'orange' }
+]
+```
+
+If we wanted to require an entire directory, **node is going to look for the `index.js` file** and whatever file exports is what the directory will export. Now, we'll change our `index.js` file so that it can export `allCats`
+
+```js
+// index.js
+const blue = require('./blue');
+const sadie = require('./sadie');
+const janet = require('./janet');
+
+const allCats = [blue, sadie, janet];
+module.exports = allCats;
+```
+
+Outside of our directory, we'll make changes to the `app.js`
+
+```js
+const cats = require('./shelter');
+console.log('REQUIRED AN ENTIRE DIRECTORY!', cats)
+```
+
+```
+$ node app.js
+REQUIRED AN ENTIRE DIRECTORY! [
+  { name: 'blue', color: 'grey' },
+  { name: 'sadie', color: 'white' },
+  { name: 'janet', color: 'orange' }
+]
+```
