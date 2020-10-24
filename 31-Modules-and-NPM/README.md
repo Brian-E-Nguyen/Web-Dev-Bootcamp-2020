@@ -214,3 +214,98 @@ npm help npm      involved overview
 ```
 
 [Link to NPM's website](https://www.npmjs.com/)
+
+## 4. Installing Packages
+
+### 4.1 Installation
+
+To install packages from NPM, use `npm install <package name>` or  `npm i <package name>`. The package name comes from the package's page on the NPM site. Note that we have to copy the name exactly.
+
+For our example, we'll use a package called `give-me-a-joke`. We will now create a new directory called "Jokesters", go into that directory and run `npm install give-me-a-joke`.
+
+However, if we run this, we get this warning message:
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img1.jpg?raw=true)
+
+We'll address this in the next video.
+
+### 4.2 Generated Files and Directories
+
+When we imported this module, we get a new folder called "node_modules".
+
+```
+$ ls
+node_modules  package-lock.json
+```
+
+Every single thing inside the "node_modules" folder is a dependency for `give-me-a-joke`. Don't ever touch this folder
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img2.jpg?raw=true)
+
+We are also given a file called `package-lock.json`. This is a record of the "node_modules" directory. Don't touch that either
+
+```json
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "accepts": {
+      "version": "1.3.7",
+      "resolved": "https://registry.npmjs.org/accepts/-/accepts-1.3.7.tgz",
+      "integrity": "sha512-Il80Qs2WjYlJIBNzNkK6KYqlVMTbZLXgHx2oT0pU/fjRHyEp+PEfEPY0R3WCwAGVOtauxh1hOxNgIf5bv7dQpA==",
+      "requires": {
+        "mime-types": "~2.1.24",
+        "negotiator": "0.6.2"
+      }
+    },
+    "ajv": {
+      "version": "6.12.6",
+      "resolved": "https://registry.npmjs.org/ajv/-/ajv-6.12.6.tgz",
+      "integrity": "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==",
+      "requires": {
+        "fast-deep-equal": "^3.1.1",
+        "fast-json-stable-stringify": "^2.0.0",
+        "json-schema-traverse": "^0.4.1",
+        "uri-js": "^4.2.2"
+      }
+    },
+    ...
+```
+
+### 4.3 Working With the Module
+
+[Link to give-me-a-joke](https://www.npmjs.com/package/give-me-a-joke)
+
+Let's create an `index.js` file inside of the "Jokester" directory. To import the module, we would have to require it by name. In this case, it should look like this:
+
+```js
+const jokes = require('give-me-a-joke');
+// To test if we imported the module correctly
+console.dir(jokes);
+```
+
+```
+$ node index.js
+{
+  getRandomCNJoke: [Function],
+  getCustomJoke: [Function],
+  getRandomDadJoke: [Function],
+  getRandomJokeOfTheDay: [Function]
+}
+```
+
+Now we can see that we have access to everything related to `give-me-a-joke`. Let's use `getRandomDadJoke`
+
+```js
+const jokes = require('give-me-a-joke');
+
+// To get a random dad joke
+jokes.getRandomDadJoke (function(joke) {
+    console.log(joke)
+});
+```
+
+```
+$ node index.js
+I went to the store to pick up eight cans of sprite... when I got home I realized I'd only picked seven up
+```
