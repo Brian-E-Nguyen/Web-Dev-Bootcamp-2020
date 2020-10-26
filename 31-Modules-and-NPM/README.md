@@ -309,3 +309,7 @@ jokes.getRandomDadJoke (function(joke) {
 $ node index.js
 I went to the store to pick up eight cans of sprite... when I got home I realized I'd only picked seven up
 ```
+
+## 5. Adding Global Packages
+
+If we want to install packages globally, we would use `npm install -g <package name>`
