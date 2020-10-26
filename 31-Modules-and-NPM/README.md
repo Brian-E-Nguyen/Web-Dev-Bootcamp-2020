@@ -456,3 +456,13 @@ Now we will install another package. If you remember before, we saw an error in 
 }
 
 ```
+
+## 7. Installing All Dependencies for a Project
+
+We don't usually share the `node_modules` folder with anyone if we're uploading code to GitHub. When we download a new package, we aren't given a node_modules folder (assuming it isn't already there). To get it, we would just need to do `npm install`
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img4.jpg?raw=true)
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img5.jpg?raw=true)
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img6.jpg?raw=true)
