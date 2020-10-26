@@ -240,7 +240,7 @@ node_modules  package-lock.json
 
 Every single thing inside the "node_modules" folder is a dependency for `give-me-a-joke`. Don't ever touch this folder
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img2.jpg?raw=true)
 
 We are also given a file called `package-lock.json`. This is a record of the "node_modules" directory. Don't touch that either
 
@@ -313,3 +313,146 @@ I went to the store to pick up eight cans of sprite... when I got home I realize
 ## 5. Adding Global Packages
 
 If we want to install packages globally, we would use `npm install -g <package name>`
+
+## 6. Package.json
+
+### 6.1 Basic Info
+
+The `package.json` file contains metadata or information about a particular project, package, or application. There are things like the description, license, name, version, etc. The stuff that we care about the most are the dependencies
+
+ Here's what the `package.json` file looks like for `give-me-a-joke`
+
+```json
+{
+  "_from": "give-me-a-joke",
+  "_id": "give-me-a-joke@0.3.2",
+  "_inBundle": false,
+  "_integrity": "sha512-crqm+UGdXSsZPiYJz1SpkHIl/LPd95UCCkku6UcJzeu73MCGZ1ND+tmv/hfRadHQpi8cupg5hI+LrKH6XD0QCQ==",
+  "_location": "/give-me-a-joke",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "give-me-a-joke",
+    "name": "give-me-a-joke",
+    "escapedName": "give-me-a-joke",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/give-me-a-joke/-/give-me-a-joke-0.3.2.tgz",
+  "_shasum": "75f256375e30cab7a8a182f2191d51293cf3e93e",
+  "_spec": "give-me-a-joke",
+  "_where": "C:\\Users\\BRIAN\\Desktop\\Web-Dev-Bootcamp-2020\\31-Modules-and-NPM\\Jokester",
+  "author": {
+    "name": "Saurabh Shubham"
+  },
+  "bugs": {
+    "url": "https://github.com/Saurabh3333/give-me-a-joke/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "request": "^2.88.2"
+  },
+  "deprecated": false,
+  "description": "A npm-module for random and customized jokes.",
+  "homepage": "https://github.com/Saurabh3333/give-me-a-joke#readme",
+  "keywords": [
+    "give-me-a-joke",
+    "chuck",
+    "norris",
+    "jokes",
+    "npm",
+    "jokes",
+    "dad",
+    "joke",
+    "santa",
+    "banta",
+    "jokes",
+    "random",
+    "funny",
+    "cn-jokes",
+    "filler-jokes",
+    "jokes-filler"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "give-me-a-joke",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saurabh3333/give-me-a-joke.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.3.2"
+}
+
+```
+
+### 6.2 Creating Our Own Package (`npm init`)
+
+To create our own package, we would run `npm init`
+
+```
+$ npm init
+
+Press ^C at any time to quit.
+package name: (artster)
+version: (1.0.0)
+description:
+entry point: (index.js)
+test command:
+git repository:
+keywords:
+author: Brian
+license: (ISC)
+About to write to C:\Users\BRIAN\Desktop\Web-Dev-Bootcamp-2020\31-Modules-and-NPM\Artster\package.json:
+
+{
+  "name": "artster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brian",
+  "license": "ISC"
+}
+
+
+Is this OK? (yes)
+```
+
+This will then create a `package.json` file in our directory.
+
+Now we will install another package. If you remember before, we saw an error in the command line. It was more of a warning, but it stated that it couldn't find the `package.json`. But now that we have it
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/31-Modules-and-NPM/img-for-notes/img3.jpg?raw=true)
+
+...and when we look in the `package.json` file, it now has `figlet` as a dependency
+
+```json
+{
+  "name": "artster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brian",
+  "license": "ISC",
+  "dependencies": {
+    "figlet": "^1.5.0"
+  }
+}
+
+```
