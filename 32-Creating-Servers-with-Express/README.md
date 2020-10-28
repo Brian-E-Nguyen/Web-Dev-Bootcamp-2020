@@ -149,3 +149,128 @@ LISTENING ON PORT 3000
 WE GOT A NEW REQUEST
 WE GOT A NEW REQUEST
 ```
+
+## 4. The Request & Response Objects
+
+### 4.1 Intro
+
+We can past in two different objects in the `use()` method: the request and the response. These are objects made by express and passed into this callback
+
+```js
+app.use((req, res) => {
+    console.log('WE GOT A NEW REQUEST')
+    console.dir(req)
+})
+```
+
+An HTTP request is not a JS object, it's just text. JS is converting that request into a JS object.
+
+When we run this code, we can see the request object that we sent. One of the things that we can see is the path name
+
+```
+ baseUrl: '',
+  originalUrl: '/',
+  _parsedUrl: Url {
+    protocol: null,
+    slashes: null,
+    auth: null,
+    host: null,
+    port: null,
+    hostname: null,
+    hash: null,
+    search: null,
+    query: null,
+    pathname: '/',
+    path: '/',
+    href: '/',
+    _raw: '/'
+  },
+```
+
+If we were to change the request path to `localhost:3000/dogs` for example, we would get this:
+
+```
+  baseUrl: '',
+  originalUrl: '/dogs',
+  _parsedUrl: Url {
+    protocol: null,
+    slashes: null,
+    auth: null,
+    host: null,
+    port: null,
+    hostname: null,
+    hash: null,
+    search: null,
+    query: null,
+    pathname: '/dogs',
+    path: '/dogs',
+    href: '/dogs',
+    _raw: '/dogs'
+  },
+```
+
+### 4.2 res.send()
+
+`res.send()` can send back responses in various forms, like text, JSON, etc. 
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+app.use((req, res) => {
+    console.log('WE GOT A NEW REQUEST')
+    // new piece of code
+    res.send('HELLO, WE GOT YOUR REQUEST! THIS IS A RESPONSE');
+})
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+})
+```
+
+When we go to localhost:3000, we get this message:
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img4.jpg?raw=true)
+
+If we were to change the header of the response, say JSON, then Express will automatically format the content-type for us
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+app.use((req, res) => {
+    console.log('WE GOT A NEW REQUEST');
+    // new piece of code
+    res.send({color: 'red'});
+})
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+})
+```
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img6.jpg?raw=true)
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img6.jpg?raw=true)
+
+You can even pass in HTML to `res.send()` as well
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+app.use((req, res) => {
+    console.log('WE GOT A NEW REQUEST')
+    // new piece of code
+    res.send('<h1>This is my webpage!</h1>');
+})
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+})
+```
+
+![img77](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img7.jpg?raw=true)
