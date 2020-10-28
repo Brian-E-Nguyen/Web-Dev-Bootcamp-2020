@@ -29,3 +29,123 @@ When you use a **library,** you are in charge! You control the flow of the appli
 With **frameworks,** that control is inverted.  The framework is in charge, and you are merely a participant! The framework tells you where to plug in the code.
 - You are writing the code how the framework tells you. You have to follow along their structure (name of files, what you put in those files)
 - You're trading off your freedom for speed of development
+
+## 3. Our Very First Express App
+
+The goal in this section is to get a server up and running. We will make a new directory called "FirstApp" and we will create a `package.json` file in it with `npm init -y`. The `-y` will skip all of the manual specifications when creating the file. 
+
+```
+$ npm init -y
+Wrote to C:\Users\BRIAN\Desktop\Web-Dev-Bootcamp-2020\32-Creating-Servers-with-Express\FirstApp\package.json:
+
+{
+  "name": "FirstApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
+```
+
+To install express, use `npm i express`. We will then create an `index.js` file and then require express in it.
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+console.dir(app); // to make sure we imported the frameworks correctly
+```
+
+Running this file will display the many different functions that Express comes with
+
+```
+$ node index.js
+[Function: app] EventEmitter {
+  _events: [Object: null prototype] { mount: [Function: onmount] },
+  _eventsCount: 1,
+  _maxListeners: undefined,
+  setMaxListeners: [Function: setMaxListeners],
+  getMaxListeners: [Function: getMaxListeners],
+  emit: [Function: emit],
+  addListener: [Function: addListener],
+  on: [Function: addListener],
+  prependListener: [Function: prependListener],
+  once: [Function: once],
+  prependOnceListener: [Function: prependOnceListener],
+  removeListener: [Function: removeListener],
+  off: [Function: removeListener],
+  removeAllListeners: [Function: removeAllListeners],
+  listeners: [Function: listeners],
+  rawListeners: [Function: rawListeners],
+  listenerCount: [Function: listenerCount],
+  eventNames: [Function: eventNames],
+  init: [Function: init],
+  ...
+```
+
+The main thing that we would need to do to get a server going is just start listening. There is a method called `listen()`. It requires a port that it will listen on.
+
+```js
+const express = require('express');
+const app = express();
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+})
+```
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+```
+
+The app is sitting there and listnening for a request. It doesn't end. This is only served locally on your own machine. We would have to go to a place called `localhost`, which is a reference to your machine.
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img2.jpg?raw=true)
+
+When we go to `http://localhost:3000/`, we get this message. Now it may seem like an error, because it actually is, but if we were to go to a different port, we would get this:
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img3.jpg?raw=true)
+
+This is a message saying that there is nothing at all. The previous one says that there is no response, but a server is there.
+
+The next thing we're gonna do is use the `use()` method:
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+// new piece of code
+app.use(() => {
+    console.log('WE GOT A NEW REQUEST')
+})
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+})
+```
+
+What this does is that when we have an incoming request, the callback will execute. Doesn't matter where the request is, what it is, just that all requests will execute the callback.
+
+When we run this file and go to `localhost:3000`, we would get this in our terminal:
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+WE GOT A NEW REQUEST
+```
+
+If we hit refresh, it shows up a second time
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+WE GOT A NEW REQUEST
+WE GOT A NEW REQUEST
+```
