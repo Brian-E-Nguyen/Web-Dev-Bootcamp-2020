@@ -273,4 +273,94 @@ app.listen(3000, () => {
 })
 ```
 
-![img77](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img7.jpg?raw=true)
+
+## 5. Express Routing Basics
+
+Routing refers to taking incoming requests and a path that is requested, and matching that to some code in some response. For example, a path can be `localhost:3000/dogs`. 
+
+Express has the `.get()` method, and we will use that to specify what response we get when going to certain routes
+
+**NOTE:** for this example, comment out `app.use()` because no matter what request we send, it will always execute that one.
+
+We will have a path `/cats` for example in our `index.js` file
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+// app.use((req, res) => {
+//     console.log('WE GOT A NEW REQUEST')
+//     res.send('<h1>This is my webpage!</h1>');
+// })
+
+// /cats => 'meow'
+app.get('/cats', (req, res) => {
+    console.log('CAT REQUEST');
+})
+// /dogs => 'woof'
+// '/' 
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+})
+```
+
+When we run `index.js` we will get this and go to `localhost:3000/cats`:
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+CAT REQUEST
+```
+
+Using the forward slash `/` considers the path a root path.
+
+
+
+### 5.2 Generic Responses
+
+There are sometimes when we would make a request to a path that doesn't exist. We would need a generic response for this. To do this, we would use the `*` character as a route in `app.get()`
+
+```js
+app.get('*', (req,res) => {
+    res.send('I DO NOT KNOW THAT PATH')
+})
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img8.jpg?raw=true)
+
+
+###
+
+Final code:
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+// app.use((req, res) => {
+//     console.log('WE GOT A NEW REQUEST')
+//     res.send('<h1>This is my webpage!</h1>');
+// })
+
+app.get('/', (req, res) => {
+    res.send('This is the homepage!')
+});
+
+// /cats => 'meow'
+app.get('/cats', (req, res) => {
+    res.send('MEOW')
+});
+// /dogs => 'woof'
+app.get('/dogs', (req, res) => {
+    res.send('WOOF');
+});
+
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+});
+```
