@@ -493,3 +493,121 @@ app.listen(3000, () => {
     console.log('LISTENING ON PORT 3000')
 });
 ```
+
+## 7. Working With Query Strings
+
+### 7.1 Basics
+
+Often, applications are set up to expect query strings. For example, if we were to sort a post's comments by new, we would see this url:
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img12.jpg?raw=true)
+
+We see that the query string has the word 'new' passed in to sort.
+
+If we define some route, we do not add anything to this path here in terms of matching a query string. 
+
+```js
+app.get('/r/:subreddit/:postID', (req, res) => {
+    const { subreddit, postID } = req.params;
+    res.send(`
+        <h1>
+            Viewing post ID: ${postID} on the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+```
+
+Instead, the request object has a property called `query`, and in that property, we will find key-value pairs made or based upon the query string.
+
+```js
+app.get('/search', (req, res) => {
+    res.send('HIIIII!!!!')
+    console.log(req.query);
+})
+```
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+{}
+```
+
+Our query string is empty right now, but if we add a query string, which in Postman we can do through params, the query object contains the queries that we pass in
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img13.jpg?raw=true)
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+{ q: 'dogs', color: 'blue' }
+```
+
+We can use the `req.query` object as a variable
+
+```js
+app.get('/search', (req, res) => {
+    const { q } = req.query;
+    res.send(`<h1>Search results for: ${q}</h1>`);
+});
+```
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img14.jpg?raw=true)
+
+### 7.2 Final Code
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+// app.use((req, res) => {
+//     console.log('WE GOT A NEW REQUEST')
+//     res.send('<h1>This is my webpage!</h1>');
+// })
+
+app.get('/', (req, res) => {
+    res.send('This is the homepage!')
+});
+
+// subreddit
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.send(`
+        <h1>
+            Browsing the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+
+// subreddit -> post
+app.get('/r/:subreddit/:postID', (req, res) => {
+    const { subreddit, postID } = req.params;
+    res.send(`
+        <h1>
+            Viewing post ID: ${postID} on the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+
+// /cats => 'meow'
+app.get('/cats', (req, res) => {
+    res.send('MEOW')
+});
+// /dogs => 'woof'
+app.get('/dogs', (req, res) => {
+    res.send('WOOF');
+});
+
+app.get('/search', (req, res) => {
+    const { q } = req.query;
+    res.send(`<h1>Search results for: ${q}</h1>`);
+})
+
+// Generic route
+app.get('*', (req,res) => {
+    res.send('I DO NOT KNOW THAT PATH')
+})
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+});
+```
