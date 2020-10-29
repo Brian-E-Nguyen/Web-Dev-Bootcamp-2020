@@ -332,9 +332,7 @@ app.get('*', (req,res) => {
 ![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img8.jpg?raw=true)
 
 
-###
-
-Final code:
+### 5.3 Final Code
 
 ```js
 // index.js
@@ -359,6 +357,137 @@ app.get('/dogs', (req, res) => {
     res.send('WOOF');
 });
 
+app.get('*', (req,res) => {
+    res.send('I DO NOT KNOW THAT PATH')
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000')
+});
+```
+
+## 6. Express Path Parameters
+
+### 6.1 Intro
+
+Often we would want to define patterns for our routes. For example, the URL "https://www.reddit.com/r/SquaredCircle/" has the "SquaredCircle" route, which will show wrestling content. If you go to another one, like r/pics, it will show you pictures. The point is there are patterns. Now there are 1000's of subreddits created, and we wouldn't manually create them with our code. It'll be impossible. Instead, we define a generic pattern
+
+```js
+// r/<SOMETHING HERE>
+```
+
+`<SOMETHING HERE>` would be a variable that we pass into. To do this, we would follow this pattern:
+
+```js
+app.get('/r/:subreddit', (req, res) => {
+    res.send('THIS IS A SUBREDDIT')
+});
+```
+
+This will match the actual string `subreddit` and anything that follows this pattern. If we run `index.js` and go to any path with this pattern, we would get this:
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img9.jpg?raw=true)
+
+### 6.2 `params`
+
+Express has a property in the request object called `params` that shows us the parameters of the path
+
+```js
+app.get('/r/:subreddit', (req, res) => {
+    console.log(req.params);
+    res.send('THIS IS A SUBREDDIT');
+});
+```
+
+```
+$ node index.js
+LISTENING ON PORT 3000
+{ subreddit: 'cats' }
+```
+
+We can utilize `params` to store the subreddit name in a variable
+
+```js
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.send(`
+        <h1>
+            Browsing the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img10.jpg?raw=true)
+
+### 6.3 Multiple Parameters
+
+We are not limited to one parameter. For example, we can have `https://www.reddit.com/r/SquaredCircle/top/`, where `top` is an additional parameter.
+
+To do this in our code, we would append different variables to a route like this:
+
+```js
+app.get('/r/:subreddit/:postID', (req, res) => {
+    const { subreddit, postID } = req.params;
+    res.send(`
+        <h1>
+            Viewing post ID: ${postID} on the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/32-Creating-Servers-with-Express/img-for-notes/img11.jpg?raw=true)
+
+### 6.4 Final Code
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+// app.use((req, res) => {
+//     console.log('WE GOT A NEW REQUEST')
+//     res.send('<h1>This is my webpage!</h1>');
+// })
+
+app.get('/', (req, res) => {
+    res.send('This is the homepage!')
+});
+
+// subreddit
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.send(`
+        <h1>
+            Browsing the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+
+// subreddit -> post
+app.get('/r/:subreddit/:postID', (req, res) => {
+    const { subreddit, postID } = req.params;
+    res.send(`
+        <h1>
+            Viewing post ID: ${postID} on the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+
+// /cats => 'meow'
+app.get('/cats', (req, res) => {
+    res.send('MEOW')
+});
+// /dogs => 'woof'
+app.get('/dogs', (req, res) => {
+    res.send('WOOF');
+});
+
+// Generic route
+app.get('*', (req,res) => {
+    res.send('I DO NOT KNOW THAT PATH')
+})
 
 app.listen(3000, () => {
     console.log('LISTENING ON PORT 3000')

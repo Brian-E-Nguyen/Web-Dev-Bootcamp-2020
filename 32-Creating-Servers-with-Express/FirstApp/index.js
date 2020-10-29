@@ -11,6 +11,26 @@ app.get('/', (req, res) => {
     res.send('This is the homepage!')
 });
 
+// subreddit
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.send(`
+        <h1>
+            Browsing the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+
+// subreddit -> post
+app.get('/r/:subreddit/:postID', (req, res) => {
+    const { subreddit, postID } = req.params;
+    res.send(`
+        <h1>
+            Viewing post ID: ${postID} on the ${subreddit} subreddit!
+        </h1>
+    `);
+});
+
 // /cats => 'meow'
 app.get('/cats', (req, res) => {
     res.send('MEOW')
@@ -20,6 +40,7 @@ app.get('/dogs', (req, res) => {
     res.send('WOOF');
 });
 
+// Generic route
 app.get('*', (req,res) => {
     res.send('I DO NOT KNOW THAT PATH')
 })
