@@ -611,3 +611,38 @@ app.listen(3000, () => {
     console.log('LISTENING ON PORT 3000')
 });
 ```
+
+## 8. Auto-Restart With Nodemon
+
+One thing that's really annoying with node is having to manually restart our server every time there are changes in our code. To prevent this, there's a package called `nodemon`. Generally we would install this globally.
+
+`npm i -g nodemon`
+
+To check you have nodemon, use `nodemon -v`.
+
+To use nodemon, use `nodemon <file>` instead of the regular `node <file>`
+
+```
+$ nodemon index.js
+[nodemon] 2.0.6
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node index.js`
+LISTENING ON PORT 3000
+```
+
+Every time we save our `index.js` file, the server automatically restarts
+
+```
+$ nodemon index.js
+[nodemon] 2.0.6
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node index.js`
+LISTENING ON PORT 3000
+[nodemon] restarting due to changes...
+[nodemon] starting `node index.js`
+LISTENING ON PORT 3000
+```
