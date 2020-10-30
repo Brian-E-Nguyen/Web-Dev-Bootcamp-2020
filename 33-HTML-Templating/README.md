@@ -187,3 +187,27 @@ app.listen(3000, () => {
     console.log('LISTENING ON PORT 3000');
 });
 ```
+
+## 4. EJS Interpolation Syntax
+
+The EJS has "tags" which are listed below and on the official documents
+
+- `<%` 'Scriptlet' tag, for control-flow, no output
+- `<%_` ‘Whitespace Slurping’ Scriptlet tag, strips all whitespace before it
+- `<%=` Outputs the value into the template (HTML escaped)
+- `<%-` Outputs the unescaped value into the template
+- `<%#` Comment tag, no execution, no output
+- `<%%` Outputs a literal '<%'
+- `%>` Plain ending tag
+- `-%>` Trim-mode ('newline slurp') tag, trims following newline
+- `_%>` ‘Whitespace Slurping’ ending tag, removes all whitespace after it
+
+These tags indicate EJS, in that they are not treated as HTML. The first one we will see is `<%=`. In our `home.ejs`, we will change our `<h1>`
+
+```html
+<h1>The homepage <%= %>!</h1>
+```
+
+Whatever we put in there will be treated as JavaScript, so we could put `4 + 5` and that will evaluate to 9
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img3.jpg?raw=true)
