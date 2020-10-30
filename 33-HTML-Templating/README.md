@@ -90,3 +90,100 @@ We don't need to have the extension name or say `views/home.ejs` because it alre
 Now let's run our `index.js` file
 
 ![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img1.jpg?raw=true)
+
+### 2.5 Final Code
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => {
+    res.render('home.ejs');
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000');
+});
+```
+
+## 3. Setting the Views Directory
+
+### 3.1 The Problem
+
+One minor issue that we should address, which is something that you may encounter, is that the default views directory is only going to work if we are running the application from within the same directory where the view folder is.
+
+To explain this, if we are outside our "Templating_Demo" folder and we run our `index.js` file...
+
+```
+$ nodemon Templating_Demo/index.js
+[nodemon] 2.0.6
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node Templating_Demo/index.js`
+LISTENING ON PORT 3000
+```
+
+...it works just fine. But if we were to go to `localhost:3000`, we get this:
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img2.jpg?raw=true)
+
+Notice the path on the first line of the error. It shows the wrong path
+
+`C:\Users\BRIAN\Desktop\Web-Dev-Bootcamp-2020\33-HTML-Templating\views`
+
+EJS just appends "views" to our current working directory.
+
+### 3.2 The Solution
+
+If we want it to work when we're outside of the directory, then we would need to change the "views" directory. In our `index.js` file, we would have to require a new package called `path` and then create another `app.set()`
+
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'));
+
+......
+```
+
+What we've done now is instead of being the current working directory where I executed the file from wher I was located, we are telling Node to execute the file from where `index.js` is located. Let's run it now. Note the `nodemon` execution line
+
+```
+$ nodemon Templating_Demo/index.js
+[nodemon] 2.0.6
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node Templating_Demo/index.js`
+LISTENING ON PORT 3000
+```
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img1.jpg?raw=true)
+
+### 3.3 Final Code
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+
+app.get('/', (req, res) => {
+    res.render('home.ejs');
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000');
+});
+```
