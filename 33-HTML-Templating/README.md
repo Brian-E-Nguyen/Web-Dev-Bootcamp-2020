@@ -211,3 +211,98 @@ These tags indicate EJS, in that they are not treated as HTML. The first one we 
 Whatever we put in there will be treated as JavaScript, so we could put `4 + 5` and that will evaluate to 9
 
 ![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img3.jpg?raw=true)
+
+## 5. Passing Data to Templates
+
+### 5.1 Intro
+
+We will define a new route in our `index.js` file. This will generate us a new number
+
+```js
+app.get('/rand', (req, res) => {
+    res.render('random')
+});
+```
+
+And inside of our new `random.ejs` file, we will have this in our body:
+
+```html
+<h1>Your random number is: <%= Math.floor(Math.random() * 10) + 1 %></h1>
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img4.jpg?raw=true)
+
+Now this does work. It randomly generates a number everytime we refresh the page, but generally we want to remove as much logic as possible from our templates. Our templates should only display things. What we should do is generate a number from an outside source, and then pass it into the template.
+
+### 5.2 How to Pass Data Into Templates
+
+What we should do in our `index.js` file is to generate a random number in our `app.get()` code block. In our `res.render()` line, we can pass in a second argument, which is an object that is a key-value pair
+
+```js
+// index.js
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1
+    res.render('random', {rand: num});
+});
+```
+
+Whatever `num` is, it will be associated as `rand`, and we use that in our `random.ejs` file
+
+```html
+<h1>Your random number is: <%= rand %></h1>
+```
+
+The page still works now with a much more simple template. 
+
+You don't have to define the object as a key-value pair. You can just pass in the variable itself
+
+```js
+// index.js
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1
+    res.render('random', {num});
+});
+```
+
+```html
+<h1>Your random number is: <%= num %></h1>
+```
+
+### 5.3 Final Codes
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+
+app.get('/', (req, res) => {
+    res.render('home.ejs');
+});
+
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1
+    res.render('random', {rand: num});
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000');
+});
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random</title>
+</head>
+<body>
+    <h1>Your random number is: <%= rand %></h1>
+</body>
+</html>
+```
