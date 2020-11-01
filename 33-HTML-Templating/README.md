@@ -306,3 +306,33 @@ app.listen(3000, () => {
 </body>
 </html>
 ```
+
+## 6. Subreddit Template Demo
+
+We will now create a new subreddit route in our `index.js` file
+
+```js
+// index.js
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.render('subreddit', { subreddit })
+});
+```
+
+In our new `subreddit.ejs` file, we have the passed-in value (subreddit) in our title and our `<h1>` tag 
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= subreddit %> </title>
+</head>
+<body>
+    <h1>Browsing The <%= subreddit %> subreddit</h1>
+</body>
+</html>
+```
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img5.jpg?raw=true)
