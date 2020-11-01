@@ -522,3 +522,236 @@ app.listen(3000, () => {
     console.log('LISTENING ON PORT 3000');
 });
 ```
+
+## 9. More Complex Subreddit Demo
+
+### 9.1 Intro
+
+We now have a new `data.json` file that we will use to display data onto our subreddits. We will have to require it in our `index.js` file
+
+```js
+// index.js
+const redditData = require('./data.json');
+```
+
+In our `r/subreddit` route, we will extract one subreddit to demonstrate
+
+```js
+// index.js
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    res.render('subreddit', { subreddit })
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img11.jpg?raw=true)
+
+### 9.2 Spreading Data
+
+Instead of just passing the data itself as an object, we'll spread it into the object that we pass in. This allows us to access individual properties like name, subscribers, description, posts, etc.
+
+To do this, we have to add three periods before the variable like this:
+
+```js
+// index.js
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    res.render('subreddit', { ...data });
+});
+```
+
+Now in our `subreddit.ejs` file, we have access to stuff like `name`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Look right here -->
+    <title><%= name %> </title>
+</head>
+<body>
+    <!-- and here -->
+    <h1>Browsing The <%= name %> subreddit</h1>
+    <h2><%= description %> </h2>
+</body>
+</html>
+```
+
+And it still works
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img12.jpg?raw=true)
+
+We can use other key-values as well, like `description`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> </title>
+</head>
+<body>
+    <h1>Browsing The <%= name %> subreddit</h1>
+    <h2><%= description %> </h2>
+    <p><%= subscribers %> total subscribers</p>
+    <hr>
+    <% for (let post of posts) { %> 
+        <article>
+            <h3><%= post.title %> </h3>
+        </article>
+    <% } %> 
+</body>
+</html>
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img13.jpg?raw=true)
+
+This, of course, works on other subreddits as well
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img14.jpg?raw=true)
+
+### 9.3 Adding More To Subreddit Posts
+
+Let's make the posts look prettier by formating the titles and adding images
+
+```html
+<% for (let post of posts) { %> 
+    <article>
+        <p><%= post.title %> - <b><%= post.author %> </b></p>
+        <% if (post.img) { %> 
+            <img src="<%= post.img %>" alt="">
+        <% } %> 
+    </article>
+<% } %> 
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img15.jpg?raw=true)
+
+### 9.4 Render Page If Data Exists
+
+A little thing that we can do to fix our codes is a conditional to render the page *if* we have data
+
+```js
+// index.js
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    if(data){
+        res.render('subreddit', { ...data });
+    }
+    else {
+        res.render('notfound', {subreddit})
+    }
+});
+```
+
+```html
+<!-- notfound.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Found</title>
+</head>
+<body>
+    <h1><%= subreddit %> subreddit not found!</h1>
+</body>
+</html>
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img16.jpg?raw=true)
+
+### 9.5
+
+#### 9.5.1 index.js
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+const redditData = require('./data.json');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+
+app.get('/', (req, res) => {
+    res.render('home.ejs');
+});
+
+app.get('/cats', (req, res) => {
+    const cats = [
+        'Blue', 'Rocket', 'Monty', 'Stephanie', 'Winston'
+    ];
+    res.render('cats', {cats})
+});
+
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    if(data){
+        res.render('subreddit', { ...data });
+    }
+    else {
+        res.render('notfound', {subreddit})
+    }
+});
+
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1
+    res.render('random', {num});
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000');
+});
+```
+
+#### 9.5.2 subreddit.ejs
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> </title>
+</head>
+<body>
+    <h1>Browsing The <%= name %> subreddit</h1>
+    <h2><%= description %> </h2>
+    <p><%= subscribers %> total subscribers</p>
+    <hr>
+    <% for (let post of posts) { %> 
+        <article>
+            <p><%= post.title %> - <b><%= post.author %> </b></p>
+            <% if (post.img) { %> 
+                <img src="<%= post.img %>" alt="">
+            <% } %> 
+        </article>
+    <% } %> 
+</body>
+</html>
+```
+
+#### 9.5.3 notfound.ejs
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Found</title>
+</head>
+<body>
+    <h1><%= subreddit %> subreddit not found!</h1>
+</body>
+</html>
+```
