@@ -400,3 +400,125 @@ We can also add a ternary operator to make things simpler
 </body>
 </html>
 ```
+
+## 8. Loops in EJS
+
+### 8.1 Setting Up Our New Route
+
+Another thing we use templates for all the time is looping for creation of very similar content, like thousands of posts that follows the same format. We can use a template to loop through all of the data.
+
+Let's set up a route called "cats" in our `index.js` file and have a fake database of cats
+
+```js
+// index.js
+app.get('/cats', (req, res) => {
+    const cats = [
+        'Blue', 'Rocket', 'Monty', 'Stephanie', 'Winston'
+    ];
+});
+```
+
+Now we want to pass the `cats` db through our new `cats.ejs` template
+
+```js
+app.get('/cats', (req, res) => {
+    const cats = [
+        'Blue', 'Rocket', 'Monty', 'Stephanie', 'Winston'
+    ];
+    res.render('cats', {cats})
+});
+```
+
+```html
+<!-- cats.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Cats!</title>
+</head>
+<body>
+    <h1>All The Cats</h1>
+    <p><%= cats %> </p>
+</body>
+</html>
+```
+
+This will be our output:
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img9.jpg?raw=true)
+
+### 8.2 How to Use Loops
+
+Obviously this looks bad. What if we take each cat and have their own `<li>` tag? It will look nicer. We would have to use a loop like this:
+
+```html
+<ul>
+    <% for (let cat of cats) { %> 
+        <li><%= cat %></li>
+    <% } %> 
+</ul>
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img10.jpg?raw=true)
+
+### 8.3 Final Codes
+
+#### 8.3.1 cats.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Cats!</title>
+</head>
+<body>
+    <h1>All The Cats</h1>
+    <ul>
+    <% for (let cat of cats) { %> 
+        <li><%= cat %></li>
+    <% } %> 
+    </ul>
+</body>
+</html>
+```
+
+#### 8.3.2 index.js
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+
+app.get('/', (req, res) => {
+    res.render('home.ejs');
+});
+
+app.get('/cats', (req, res) => {
+    const cats = [
+        'Blue', 'Rocket', 'Monty', 'Stephanie', 'Winston'
+    ];
+    res.render('cats', {cats})
+});
+
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    res.render('subreddit', { subreddit })
+});
+
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1
+    res.render('random', {num});
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000');
+});
+```
