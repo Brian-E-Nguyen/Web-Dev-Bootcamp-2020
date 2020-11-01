@@ -336,3 +336,67 @@ In our new `subreddit.ejs` file, we have the passed-in value (subreddit) in our 
 ```
 
 ![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img5.jpg?raw=true)
+
+## 7. Conditionals in EJS
+
+### 7.1 Intro
+
+The `<% %>` EJS operator allows us to add JS logic without having anything actually rendered as a result. Going back to our /rand page, let's say we want something to display depending on what number we get. If we get an even number, then the page displays we have an even number; else, display we have an odd number.
+
+To do this, our `random.ejs` file will have is this code block:
+
+```html
+<!-- random.ejs -->
+<h1>Your random number is: <%= num %></h1>
+<% if(num % 2 === 0) { %> 
+    <h2>That is an even number!</h2>
+<% } %> 
+```
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img6.jpg?raw=true)
+
+And to show that the `<h2>` tag doesn't display when we get an odd number:
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img7.jpg?raw=true)
+
+We can add an `else` of course. 
+
+```html
+<!-- random.ejs -->
+<h1>Your random number is: <%= num %></h1>
+<% if(num % 2 === 0) { %> 
+    <h2>That is an even number!</h2>
+<% } else { %> 
+    <h2>That is an odd number!</h2>
+<% } %> 
+```
+
+We can also add a ternary operator to make things simpler
+
+```html
+<h3><%= num % 2 === 0 ? 'EVEN' : 'ODD' %> </h3>
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img8.jpg?raw=true)
+
+### 7.2 Final Code
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random</title>
+</head>
+<body>
+    <h1>Your random number is: <%= num %></h1>
+    <% if(num % 2 === 0) { %> 
+        <h2>That is an even number!</h2>
+    <% } else { %> 
+        <h2>That is an odd number!</h2>
+    <% } %> 
+    <h3><%= num % 2 === 0 ? 'EVEN' : 'ODD' %> </h3>
+</body>
+</html>
+```
