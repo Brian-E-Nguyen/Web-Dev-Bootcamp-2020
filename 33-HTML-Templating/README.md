@@ -895,3 +895,63 @@ app.listen(3000, () => {
 </body>
 </html>
 ```
+
+## 11. Bootstrap + Express
+
+In this section, we've copied the *Templating_Demo* folder and renamed it *Bootstrap_Demo* so that we can compare them before and after; however, we did remove the contents in the *public* directory to include Bootstrap. We will add *public/js* and *public/css* in those directories. 
+
+Then, we will download Bootstrap compiled CSS and JS. Inside of *public/css*, we will take the `bootstrap.min.css` file that we've downloaded and place it into that directory. Similarly, inside of *public/js*, we will put the `bootstrap.min.js` file into that directory
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img19.jpg?raw=true)
+
+We will now work with our `subreddit.js` file and change the `<link>` tag. We need to change `href` with this path and now we will have a new `<script>` tag inside of this file
+
+```html
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<script src="/js/bootstrap.min.js"></script>
+```
+
+When we run the server, we can see that the font changed, indicating that we loaded Bootstrap successfully (kindof)
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img20.jpg?raw=true)
+
+If we look into the console, it gives us an error. Bootstrap still requires jQuery, so we will load the jQuery file into our *public/js* directory and require it
+
+```html
+<script src="/js/jquery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+```
+
+Let's take a navbar template and past it into our `subreddit.ejs` file
+
+[Link to Bootstrap navbar](https://getbootstrap.com/docs/4.0/components/navbar/)
+
+In our navbar component, we will change a few things
+
+The href link for home will be from `#` to `/` so that it can actually take us home. We can also list our other routes as well
+
+```html
+<div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+    <li class="nav-item">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/rand">Random</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/r/chickens">Chickens</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/r/soccer">Soccer</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/r/mightyharvest">Mighty Harvest</a>
+    </li>
+    </ul>
+</div>
+```
+
+And now everything works
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img21.jpg?raw=true)
