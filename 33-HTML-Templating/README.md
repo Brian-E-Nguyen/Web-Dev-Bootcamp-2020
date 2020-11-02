@@ -1014,4 +1014,12 @@ And everything still works
 
 ![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img21.jpg?raw=true)
 
-We can also make a template for our navbar as well. We'll cut the code from our 
+We can also make a template for our navbar as well. We'll cut the code from our `subreddit.ejs` file and make a new file called `navbar.ejs` in our files folder. Then we can include the navbar file in whatever page we need
+
+```html
+<%- include('partials/head') %> 
+<body>
+    <%- include('partials/navbar') %>
+
+    ....
+```
