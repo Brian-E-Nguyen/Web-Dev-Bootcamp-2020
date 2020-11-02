@@ -955,3 +955,63 @@ The href link for home will be from `#` to `/` so that it can actually take us h
 And now everything works
 
 ![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img21.jpg?raw=true)
+
+## 12. EJS & Partials
+
+### 12.1 Intro
+
+If we want to use the same HTML code on other pages, like
+
+```html
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> </title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+```
+
+We would have to duplicate all of this on many pages, and it can be very tiresome. What we will do is create some templates, which will then be included in the pages that we need.
+
+### 12.2 How to Include Partials
+
+First we will cut out this code in our `subreddit.ejs` file:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Demo</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+```
+
+Then we will make a new directory called *views/partials*, add a new file called `head.ejs`, and paste that code inside of it.
+
+How we can include this file inside of our `subreddit.ejs` file is to use the `<%- %>` tag following this pattern.
+
+```html
+<ul>
+  <% users.forEach(function(user){ %>
+    <%- include('user/show', {user: user}); %>
+  <% }); %>
+</ul>
+```
+
+We will now have this code at the top of the `subreddit.ejs`
+
+```html
+<%- include('partials/head') %> 
+```
+
+And everything still works
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img21.jpg?raw=true)
+
+We can also make a template for our navbar as well. We'll cut the code from our 
