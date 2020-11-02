@@ -755,3 +755,143 @@ app.listen(3000, () => {
 </body>
 </html>
 ```
+
+## 10. Serving Static Assets in Express
+
+### 10.1 How To Serve Static Assets
+
+Serving **static files** refer to things like CSS and JS files that we want to include in the response back to client-side
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img17.jpg?raw=true)
+
+To do this, we need to use something called `express.static()`. It's known as middleware. 
+
+[Link to serving static files docs](https://expressjs.com/en/starter/static-files.html)
+
+We pass in the argument the folder of files that we want to pass in.
+
+`app.use(express.static('public))`
+
+We will place this in our `index.js`
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+const redditData = require('./data.json');
+
+app.use(express.static('public'));
+
+...
+```
+
+We will now make an `app.css` file inside of the "public" directory
+
+```css
+/* app.css */
+body {
+    background-color: aqua;
+}
+```
+
+Now we have to refer to that stylesheet inside one of our templates
+
+```html
+<!-- subreddit.ejs -->
+<link rel="stylesheet" href="/app.css">
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/33-HTML-Templating/img-for-notes/img18.jpg?raw=true)
+
+### 10.2 Running index.js Outside of the CWD
+
+If we were to run index.js outside of our CWD, then it wouldn't run because it couldn't find `app.css`. We can do the exact same thing with 
+
+`app.set('views', path.join(__dirname, '/views'))`
+
+--
+
+`app.use(express.static('public'));` 
+
+will now be 
+
+`app.use(express.static(path.join(__dirname, 'public')));`
+
+And it still works
+
+### 10.3 Final Codes
+
+#### 10.3.1 index.js
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+const redditData = require('./data.json');
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'))
+
+app.get('/', (req, res) => {
+    res.render('home.ejs');
+});
+
+app.get('/cats', (req, res) => {
+    const cats = [
+        'Blue', 'Rocket', 'Monty', 'Stephanie', 'Winston'
+    ];
+    res.render('cats', {cats})
+});
+
+app.get('/r/:subreddit', (req, res) => {
+    const { subreddit } = req.params;
+    const data = redditData[subreddit];
+    if(data){
+        res.render('subreddit', { ...data });
+    }
+    else {
+        res.render('notfound', {subreddit})
+    }
+});
+
+app.get('/rand', (req, res) => {
+    const num = Math.floor(Math.random() * 10) + 1
+    res.render('random', {num});
+});
+
+app.listen(3000, () => {
+    console.log('LISTENING ON PORT 3000');
+});
+```
+
+#### 10.3.2 subreddit.js
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= name %> </title>
+    <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+    <h1>Browsing The <%= name %> subreddit</h1>
+    <h2><%= description %> </h2>
+    <p><%= subscribers %> total subscribers</p>
+    <hr>
+    <% for (let post of posts) { %> 
+        <article>
+            <p><%= post.title %> - <b><%= post.author %> </b></p>
+            <% if (post.img) { %> 
+                <img src="<%= post.img %>" alt="">
+            <% } %> 
+        </article>
+    <% } %> 
+</body>
+</html>
+```
