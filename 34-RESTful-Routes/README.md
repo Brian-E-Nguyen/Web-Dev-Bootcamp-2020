@@ -113,7 +113,7 @@ Let's make a GET request to test it out
 
 It works, not let's test out the POST request
 
-![img77](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img7.jpg?raw=true)
 
 ### 2.4 Final Codes
 
@@ -164,4 +164,59 @@ app.listen(portNumber, () => {
     </form>
 </body>
 </html>
+```
+
+## 3. Parsing the Request Body
+
+### 3.2 How to Parse the Request Body
+
+So now that we have a basic POST request, let's extract or let's view the data from the request body and do something with it. In Express, there's an easy way to access that data. Just like we have query-string data, it is automatically parsed. `req` includes `req.body` so that we can see the contents
+
+```js
+app.post('/tacos', (req, res) => {
+    console.log(req.body);
+    res.send('POST /tacos response');
+});
+```
+
+However, when we `console.log(req.body)` we get undefined. According to the `req.body` docs, it is undefined by default, and is populated when you use body-parsing middleware such as `express.json()` or `express.urlencoded()`. This is because **we can send data in many different forms**, which means we can parse them differently
+
+We will use this code
+
+```js
+app.use(express.urlencoded({ extended: true}));
+```
+
+Remember that `app.use()` runs on whatever request we get
+
+Now when we send a POST request, we get this:
+
+```
+$ nodemon index.js
+[nodemon] 2.0.6
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node index.js`
+LISTENING ON PORT 3000
+{ meat: 'beyond meat', qty: '10' }
+```
+
+Let's change the POST request to make it more clear
+
+```js
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+})
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img8.jpg?raw=true)
+
+### 3.2 Quick Fix
+
+Hopefully it's clear that we're not parsing JSON data in the request body. We have to tell Express to anticipate it.
+
+```js
+app.use(express.json());
 ```
