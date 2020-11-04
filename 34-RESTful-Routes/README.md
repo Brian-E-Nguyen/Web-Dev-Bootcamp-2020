@@ -249,3 +249,15 @@ DELETE /gists/{gist_id}
 ```
 
 A lot of these have the same endpoints but with different verbs. The verbs are what controls the operations
+
+## 5. RESTful Comments Overview
+
+We will now create our own "comments" DB with different routes. Below will be the pattern that we will follow
+
+```
+GET /comments - list all comments
+POST /comment - Create a new comment
+GET /comments/:id - Get one comment (using ID)
+PATCH /comments/:id - Update one comment
+DELETE /comments/:id - Delete one comment
+```
