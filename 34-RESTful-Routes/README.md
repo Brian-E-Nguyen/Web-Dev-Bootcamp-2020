@@ -220,3 +220,32 @@ Hopefully it's clear that we're not parsing JSON data in the request body. We ha
 ```js
 app.use(express.json());
 ```
+
+## 4. Intro to REST
+
+### 4.1 What is REST?
+
+**Representational State Transfer (REST)** is an "architectural style for distributed hypermedia systems." It's basically a set of guidelines for how a client + server should communicate and perform CRUD operations on a given resource.
+
+The main idea of REST is treating data on the server-side as resources that can be CRUDed. The most common way of approaching REST is in formatting the URLs and the HTTP verbs in your application
+
+### 4.2 REST examples
+
+```
+GET /gists
+GET /gists/{gist_id}
+```
+
+```
+POST /gists/{gist_id}
+```
+
+```
+PATCH /gists/{gist_id}
+```
+
+```
+DELETE /gists/{gist_id}
+```
+
+A lot of these have the same endpoints but with different verbs. The verbs are what controls the operations
