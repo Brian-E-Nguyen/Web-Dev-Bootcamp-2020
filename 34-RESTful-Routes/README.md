@@ -583,3 +583,103 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 8. Express Redirects
+
+### 8.1 The Problem
+
+Whenever we make a new comment, it takes us to the POST route, not the actual GET route.
+
+If we were to refresh the page on the POST route, then we get this message
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img14.jpg?raw=true)
+
+This is saying that if we click "Confirm", then we will send another POST request. This is what happens if we do this multiple times and we send a GET request to `/comments`
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img15.jpg?raw=true)
+
+It's because we are currently in the POST request route. Since we kept on refreshing, we are constantly sending POST requests
+
+```js
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment})
+    res.send('IT WORKED');
+});
+```
+
+### 8.2 res.redirect()
+
+Instead of rendering something directly in our POST route, we will redirect the user to another view. We will redirect them back to where the comments are
+
+The `res` object has a method called `res.redirect()`. It passes in the parameter of what view we want to go to. It is by default a GET request. Let's now make changes to our POST request
+
+```js
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment});
+    // new code
+    res.redirect('/comments');
+});
+```
+
+This redirects the user every time the user adds a comment. To tell that this works, open up the dev tools and check the network activity
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img16.jpg?raw=true)
+
+### 8.3 Final Code (index.js)
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const portNumber = 3000;
+const path = require('path');
+
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+const comments = [
+    {
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+
+app.get('/comments/new', (req, res) => {
+    res.render('comments/new')
+});
+
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment});
+    res.redirect('/comments');
+});
+
+app.get('/tacos', (req, res) => {
+    res.send('GET /tacos response');
+});
+
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+});
+
+app.listen(portNumber, () => {
+    console.log(`LISTENING ON PORT ${portNumber}`);
+});
+```
