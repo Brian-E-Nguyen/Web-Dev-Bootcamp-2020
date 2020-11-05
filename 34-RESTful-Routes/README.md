@@ -417,3 +417,169 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 7. RESTful Comments New
+
+We need two routes for this section to
+
+1. serve the form for making comments
+2. make the POST request
+
+### 7.1 Form
+
+We will create a new route with the code below and create a `new.ejs` file
+
+```js
+app.get('/comments/new', (req, res) => {
+    res.render('comments/new')
+});
+```
+
+Inside of the `new.ejs` file, we will have a form where the user can make a new comment
+
+```html
+<h1>Make a new comment</h1>
+<form action="/comments" method="post">
+    <section>
+        <label for="username">Enter username</label>
+        <input type="text" name="username" placeholder="Username" id="username">
+    </section>
+    <section>
+        <label for="comment">Comment Text</label>
+        <br>
+        <textarea id="comment" cols="30" rows="10"></textarea>
+    </section>
+    <button>Submit</button>
+</form>
+```
+
+### 7.2 Making the POST Request
+
+Now we'll make a POST request inside of our `index.js`, which will look like this:
+
+```js
+app.post('/comments', (req, res) => {
+    console.log(req.body);
+    res.send('IT WORKED');
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img11.jpg?raw=true)
+
+We get this page when we fill out the form, and this what our console would look like:
+
+```
+$ nodemon index.js
+[nodemon] 2.0.6
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: js,mjs,json
+[nodemon] starting `node index.js`
+LISTENING ON PORT 3000
+{ username: 'brina', comment: 'ojietrwpf' }
+```
+
+### 7.3 Extracting Our Data
+
+Let's extract the username and comment so we can use them to add to the `comments` list
+
+```js
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment})
+    res.send('IT WORKED');
+});
+```
+
+We'll fill out the form now, and then make a GET request to `/comments` to see if it worked
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img12.jpg?raw=true)
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img13.jpg?raw=true)
+
+### 7.4 Final Codes
+
+#### 7.4.1 index.js
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const portNumber = 3000;
+const path = require('path');
+
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+const comments = [
+    {
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+
+app.get('/comments/new', (req, res) => {
+    res.render('comments/new')
+});
+
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment})
+    res.send('IT WORKED');
+});
+
+app.get('/tacos', (req, res) => {
+    res.send('GET /tacos response');
+});
+
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+});
+
+app.listen(portNumber, () => {
+    console.log(`LISTENING ON PORT ${portNumber}`);
+});
+```
+
+#### 7.4.1 new.js
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Comment</title>
+</head>
+<body>
+    <h1>Make a new comment</h1>
+    <form action="/comments" method="post">
+        <section>
+            <label for="username">Enter username</label>
+            <input type="text" name="username" placeholder="Username" id="username">
+        </section>
+        <section>
+            <label for="comment">Comment Text</label>
+            <br>
+            <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+        </section>
+        <button>Submit</button>
+    </form>
+</body>
+</html>
+```
