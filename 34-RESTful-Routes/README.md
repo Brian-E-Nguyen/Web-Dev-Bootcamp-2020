@@ -261,3 +261,159 @@ GET /comments/:id - Get one comment (using ID)
 PATCH /comments/:id - Update one comment
 DELETE /comments/:id - Delete one comment
 ```
+
+## 6. RESTful Comments Index
+
+### 6.1 Setting Up Our Files
+
+We will now install EJS into the *REST_Demo*. We don't need to import it but what we need to do is set the view engine
+
+```js
+app.set('view engine', 'ejs');
+```
+
+We will then make our *views* directory inside of the *REST_Demo* directory and include the statement to run the server in absolute paths
+
+```js
+const path = require('path');
+app.set('views', path.join(__dirname, 'views'));
+```
+
+We'll create our new route that will display all comments. We don't have any comments, so we'll hardcode a fake DB inside of our `index.js`.
+
+```js
+const comments = [
+    {
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+```
+
+### 6.2 Making Our GET Request
+
+Our get request will look like this:
+
+```js
+app.get('/comments', (req, res) => {
+    res.render('comments/index');
+});
+```
+
+then we'll create a new EJS file called `index.ejs` inside of a new directory called *comments*
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Index</title>
+</head>
+<body>
+    <h1>Comments</h1>
+</body>
+</html>
+```
+
+Let's start the server and go to the `/comments` path to make sure it's working
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img9.jpg?raw=true)
+
+### 6.3 Rendering Comments
+
+Now we will pass in the comments in `res.render()` and we'll change our `index.ejs` to display the comments
+
+```js
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+```
+
+```html
+<ul>
+    <% for(let c of comments) { %> 
+        <li><%=c.comment%> - <b><%=c.username%></b> </li>
+    <%}%>
+</ul>
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img10.jpg?raw=true)
+
+### 6.4 Final Codes
+
+#### 6.4.1 index.js
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const portNumber = 3000;
+const path = require('path');
+
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+const comments = [
+    {
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+
+app.get('/tacos', (req, res) => {
+    res.send('GET /tacos response');
+});
+
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+});
+
+app.listen(portNumber, () => {
+    console.log(`LISTENING ON PORT ${portNumber}`);
+});
+```
+
+#### 6.4.2 index.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Index</title>
+</head>
+<body>
+    <h1>Comments</h1>
+    <ul>
+        <% for(let c of comments) { %> 
+            <li><%=c.comment%> - <b><%=c.username%></b> </li>
+        <%}%>
+    </ul>
+</body>
+</html>
+```
