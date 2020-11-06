@@ -748,7 +748,7 @@ Let's make a get request with comment ID 3. We will get this returned to us
 
 ![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img17.jpg?raw=true)
 
-### 9.2 Improving the Index Pag
+### 9.2 Improving the Index Page
 
 In our `index.ejs` file, we will make all comments have their own link tab so when we click on them, we will make a GET request to their own respective `/comments/:id` page
 
@@ -760,3 +760,161 @@ In our `index.ejs` file, we will make all comments have their own link tab so wh
 ```
 
 ![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img18.jpg?raw=true)
+
+## 10. The UUID Package
+
+There's a slight problem, which is that if we create a new comment, and then go to that comment's `/comments/:id` route, we get nothing because we have no way of creating a new comment ID.
+
+An efficient solution for this is to get unique ID's in there, to mimic what we would use in an actual DB. This is where the Universally Unique ID UUID package comes in.
+
+### 10.1 Quickstart
+
+We will install and require UUID in our REST_Demo directory 
+
+1. Install
+
+```
+npm i uuid
+```
+
+2. Create a UUID
+
+```js
+const { v4: uuidv4 } = require('uuid');
+uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+```
+
+Everytime we call `uuidv4()`, we will get a new unique ID.
+
+Note that the code below is destructuring. The variable before the colon is the official name. We can give it a new name with a variable to the right of the colon
+
+```js
+{ v4: uuidv4 }
+```
+
+### 10.2 Making Our Changes
+
+Now we can replace our hardcoded ID's in our `comments` table with `uuidv4()`
+
+```js
+const comments = [
+    {
+        id: uuidv4(),
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        id: uuidv4(),
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        id: uuidv4(),
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+```
+
+Also when we make a new comment, we need to give it a new ID. 
+
+```js
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment, id: uuidv4()});
+    res.redirect('/comments');
+});
+```
+
+One other thing that we need to change is this code
+
+```js
+app.get('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === parseInt(id));
+    res.render('comments/show', {comment});
+});
+```
+
+We don't need to parse the integer anymore, so now it should look like this:
+
+```js
+app.get('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/show', {comment});
+});
+```
+
+Let's run our server and test out the UUID
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img19.jpg?raw=true)
+
+
+### 10.3 Final Code (index.js)
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const portNumber = 3000;
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+const comments = [
+    {
+        id: uuidv4(),
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        id: uuidv4(),
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        id: uuidv4(),
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+
+app.get('/comments/new', (req, res) => {
+    res.render('comments/new')
+});
+
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment, id: uuidv4()});
+    res.redirect('/comments');
+});
+
+app.get('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/show', {comment});
+});
+
+app.get('/tacos', (req, res) => {
+    res.send('GET /tacos response');
+});
+
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+});
+
+app.listen(portNumber, () => {
+    console.log(`LISTENING ON PORT ${portNumber}`);
+});
+```
