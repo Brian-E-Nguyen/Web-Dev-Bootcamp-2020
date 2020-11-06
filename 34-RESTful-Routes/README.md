@@ -683,3 +683,80 @@ app.listen(portNumber, () => {
     console.log(`LISTENING ON PORT ${portNumber}`);
 });
 ```
+
+## 9. RESTful Comments Show
+
+### 9.1 Coding the Route
+
+We will work with the name *Show* for this section
+
+| Name | Path          | Verb | Purpose                          |
+|------|---------------|------|----------------------------------|
+| Show | /comments/:id | GET  | Details for one specific comment |
+
+We will get the specific ID of a comment so that we can retrieve and display it. Let's create a GET request in `index.js`
+
+```js
+app.get('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === parseInt(id));
+    res.render('comments/show', {comment});
+});
+```
+
+Since we have ID with our users, let's add that into our `comments` table
+
+```js
+const comments = [
+    {
+        id: 1,
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        id: 2,
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        id: 3,
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+```
+
+Now let's make our `show.ejs` file
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show</title>
+</head>
+<body>
+    <h1>Comment id: <%= comment.id %> </h1>
+    <h2><%=comment.comment%> - <%=comment.username %></h2>
+    <a href="/comments">Back to index</a>
+</body>
+</html>
+```
+
+Let's make a get request with comment ID 3. We will get this returned to us
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img17.jpg?raw=true)
+
+### 9.2 Improving the Index Pag
+
+In our `index.ejs` file, we will make all comments have their own link tab so when we click on them, we will make a GET request to their own respective `/comments/:id` page
+
+```html
+<% for(let c of comments) { %> 
+    <li><%=c.comment%> - <b><%=c.username%></b> </li> 
+    <a href="/comments/<%= c.id %> ">details</a>
+<%}%>
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img18.jpg?raw=true)
