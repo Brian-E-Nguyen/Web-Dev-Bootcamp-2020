@@ -4,10 +4,12 @@ const app = express();
 const portNumber = 3000;
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+var methodOverride = require('method-override')
+
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 
@@ -59,6 +61,12 @@ app.patch('/comments/:id', (req, res) => {
     // Update the old comment with the new one
     foundComment.comment = newCommentText;
     res.redirect('/comments');
+});
+
+app.get('/comments/:id/edit', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/edit', {comment});
 });
 
 app.get('/tacos', (req, res) => {

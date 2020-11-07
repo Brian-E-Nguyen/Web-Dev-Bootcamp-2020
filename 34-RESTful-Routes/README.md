@@ -1076,3 +1076,193 @@ app.listen(portNumber, () => {
     console.log(`LISTENING ON PORT ${portNumber}`);
 });
 ```
+
+## 12. Express Method Override
+
+### 12.1 Intro
+
+| Name | Path          | Verb | Purpose                          |
+|------|---------------|------|----------------------------------|
+| Edit | /comments/:id/edit | GET  | Form to edit specific comment |
+
+We will make a form in this section to help us easily update our comments; however, the problem with HTML forms is that they can only send GET our POST requests. Fortunately we can fake it. 
+
+### 12.2 Making Our Request
+
+Let's first make a route to serve a form. It will be a GET request
+
+```js
+app.get('/comments/:id/edit', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/edit', {comment});
+});
+```
+
+And then we'll make a new file called `edit.ejs`
+
+```html
+ <form action="/comments/<%=comment.id%>/edit">
+    <!-- Prefills textarea with original comment -->
+    <textarea name="comment" id="" cols="30" rows="10">
+        <%= comment.comment %> 
+    </textarea>
+    <button>Save</button>
+</form>
+```
+
+### 12.3 method-override Package
+
+Take a look at the `action` attribute in the form. Although we defined a custom route, we still need to implement the PATCH request. Express comess with a package called `method-override`, so we need to install it in our *RESTful_Demo* package.
+
+We will have to use this code to override our requests
+
+```js
+var express = require('express')
+var methodOverride = require('method-override')
+var app = express()
+
+app.use(methodOverride('_method')
+```
+
+### 12.4 Finishing Up The Form
+
+At the end of our form's action, we will add a query string and define it as a PATCH request. In our form's method, we still need to put "POST" in it
+
+```html
+<h1>Edit</h1>
+<form method="POST" action="/comments/<%=comment.id%>?_method=PATCH">
+    <!-- Prefills textarea with original comment -->
+    <textarea name="comment" id="" cols="30" rows="10">
+        <%= comment.comment %> 
+    </textarea>
+    <button>Save</button>
+</form>
+```
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img23.jpg?raw=true)
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img24.jpg?raw=true)
+
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img25.jpg?raw=true)
+
+### 12.5 UX Improvement
+
+In our `show.ejs` file we will add this code to the bottom so that we can easily go to the edit page
+
+```html
+<a href="/comments/<%=comment.id%>/edit">Edit Comment</a>
+```
+
+### 12.6 Final Codes
+
+#### 12.6.1 index.js
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const portNumber = 3000;
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+var methodOverride = require('method-override')
+
+
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.use(methodOverride('_method'));
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+const comments = [
+    {
+        id: uuidv4(),
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        id: uuidv4(),
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        id: uuidv4(),
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+
+app.get('/comments/new', (req, res) => {
+    res.render('comments/new')
+});
+
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment, id: uuidv4()});
+    res.redirect('/comments');
+});
+
+app.get('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/show', {comment});
+});
+
+app.patch('/comments/:id', (req, res) => {
+    // Get the ID in the request
+    const {id} = req.params;
+    // Extract the comment in the request
+    const newCommentText = req.body.comment;
+    // Use the extracted ID to find the comment associated with it
+    const foundComment = comments.find(c => c.id === id);
+    // Update the old comment with the new one
+    foundComment.comment = newCommentText;
+    res.redirect('/comments');
+});
+
+app.get('/comments/:id/edit', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/edit', {comment});
+});
+
+app.get('/tacos', (req, res) => {
+    res.send('GET /tacos response');
+});
+
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+});
+
+app.listen(portNumber, () => {
+    console.log(`LISTENING ON PORT ${portNumber}`);
+});
+```
+
+#### 12.6.2
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit</title>
+</head>
+<body>
+    <h1>Edit</h1>
+    <form method="POST" action="/comments/<%=comment.id%>?_method=PATCH">
+        <!-- Prefills textarea with original comment -->
+        <textarea name="comment" id="" cols="30" rows="10">
+            <%= comment.comment %> 
+        </textarea>
+        <button>Save</button>
+    </form>
+</body>
+</html>
+```
