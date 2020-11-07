@@ -49,6 +49,18 @@ app.get('/comments/:id', (req, res) => {
     res.render('comments/show', {comment});
 });
 
+app.patch('/comments/:id', (req, res) => {
+    // Get the ID in the request
+    const {id} = req.params;
+    // Extract the comment in the request
+    const newCommentText = req.body.comment;
+    // Use the extracted ID to find the comment associated with it
+    const foundComment = comments.find(c => c.id === id);
+    // Update the old comment with the new one
+    foundComment.comment = newCommentText;
+    res.redirect('/comments');
+});
+
 app.get('/tacos', (req, res) => {
     res.send('GET /tacos response');
 });

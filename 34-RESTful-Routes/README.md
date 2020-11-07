@@ -918,3 +918,161 @@ app.listen(portNumber, () => {
     console.log(`LISTENING ON PORT ${portNumber}`);
 });
 ```
+
+## 11. RESTful Comments Update
+
+### 11.1 Intro
+
+We will be working with *Update* in this section
+
+| Name | Path          | Verb | Purpose                          |
+|------|---------------|------|----------------------------------|
+| Update | /comments/:id | PATCH  | Updates specific comment on server |
+
+In the case of comments, we only want to update the text of the comment, not the username or ID. We'll provide a form for someone to edit the comment. 
+
+### 11.2 PATCH vs. PUT
+
+In this, we are using a *PATCH* request. It's used to apply partial modifications of a resource. This is different from a *PUT* request, in that
+
+- PUT requests are for updating an **entire** resource
+- PATCH requests are for **partially** updating a resource
+
+### 11.3 Making Our PATCH Request
+
+Let's make our `app.patch()` code to test
+
+```js
+app.patch('/comments/:id', (req, res) => {
+    res.send('UPDATING SOMETHING');
+});
+```
+
+And now let's make a PATCH request on Postman to test it out
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img20.jpg?raw=true)
+
+How to actually update our comment is to take the comment's ID, find the comment that we currently have, and then update the comment with some payload. We will have this code for testing purposes
+
+```js
+app.patch('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    // const comment = comments.find(c => c.id === id);
+    console.log(req.body.comment);
+    res.send('ALL GOOD')
+});
+```
+
+We will then use Postman to test this out. Inside of the body, we will add a key and the value. If done successfuly, the page should render "ALL GOOD"
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img21.jpg?raw=true)
+
+And this is what we would get in the console
+
+```
+[nodemon] starting `node index.js`
+LISTENING ON PORT 3000
+I LOVE U MAN
+```
+
+Let's now update our PATCH request with this code
+
+```js
+app.patch('/comments/:id', (req, res) => {
+    // Get the ID in the request
+    const {id} = req.params;
+    // Extract the comment in the request
+    const newCommentText = req.body.comment;
+    // Use the extracted ID to find the comment associated with it
+    const foundComment = comments.find(c => c.id === id);
+    // Update the old comment with the new one
+    foundComment.comment = newCommentText;
+    res.redirect('/comments');
+});
+```
+
+Now that we've got this code, let's go to a `/comment/:id` page and copy the URL. We will go into Postman and send a PATCH request to update the comment. First, make sure to send a GET request to the URL to make sure it's working. Then, change to request to PATCH and change the value of `comment` to something else in the Body. 
+
+Send the PATCH request to make sure that everything is working
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img22.jpg?raw=true)
+
+### 11.4 Final Code (index.js)
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const portNumber = 3000;
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
+uuidv4(); // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs');
+
+const comments = [
+    {
+        id: uuidv4(),
+        username: 'Todd',
+        comment: 'lol'
+    },
+    {
+        id: uuidv4(),
+        username: 'Sk8rboi',
+        comment: 'He said to ya "l8er boi"'
+    },
+    {
+        id: uuidv4(),
+        username: 'Chef Ramsay',
+        comment: 'Where\'s the lamb sauce?'
+    },
+]
+
+app.get('/comments', (req, res) => {
+    res.render('comments/index', {comments});
+});
+
+app.get('/comments/new', (req, res) => {
+    res.render('comments/new')
+});
+
+app.post('/comments', (req, res) => {
+    const {username, comment}= req.body;
+    comments.push({username, comment, id: uuidv4()});
+    res.redirect('/comments');
+});
+
+app.get('/comments/:id', (req, res) => {
+    const {id} = req.params;
+    const comment = comments.find(c => c.id === id);
+    res.render('comments/show', {comment});
+});
+
+app.patch('/comments/:id', (req, res) => {
+    // Get the ID in the request
+    const {id} = req.params;
+    // Extract the comment in the request
+    const newCommentText = req.body.comment;
+    // Use the extracted ID to find the comment associated with it
+    const foundComment = comments.find(c => c.id === id);
+    // Update the old comment with the new one
+    foundComment.comment = newCommentText;
+    res.redirect('/comments');
+});
+
+app.get('/tacos', (req, res) => {
+    res.send('GET /tacos response');
+});
+
+app.post('/tacos', (req, res) => {
+    const {meat, qty} = req.body;
+    res.send(`OK, here are your ${qty} ${meat} tacos`);
+});
+
+app.listen(portNumber, () => {
+    console.log(`LISTENING ON PORT ${portNumber}`);
+});
+```
