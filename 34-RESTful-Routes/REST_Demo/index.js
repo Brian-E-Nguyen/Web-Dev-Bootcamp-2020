@@ -13,7 +13,7 @@ app.use(methodOverride('_method'));
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 
-const comments = [
+let comments = [
     {
         id: uuidv4(),
         username: 'Todd',
@@ -67,6 +67,14 @@ app.get('/comments/:id/edit', (req, res) => {
     const {id} = req.params;
     const comment = comments.find(c => c.id === id);
     res.render('comments/edit', {comment});
+});
+
+app.delete('/comments/:id', (req, res) => {
+    // Get the ID in the request
+    const {id} = req.params;
+    // filter() returns a list with specified filters
+    comments = comments.filter(c => c.id !== id);
+    res.redirect('/comments');
 });
 
 app.get('/tacos', (req, res) => {

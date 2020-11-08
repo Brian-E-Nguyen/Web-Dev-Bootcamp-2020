@@ -1244,7 +1244,7 @@ app.listen(portNumber, () => {
 });
 ```
 
-#### 12.6.2
+#### 12.6.2 edit.ejs
 
 ```html
 <!DOCTYPE html>
@@ -1266,3 +1266,51 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 13. RESTful Comments Delete
+
+### 13.1 Intro
+
+| Name | Path          | Verb | Purpose                          |
+|------|---------------|------|----------------------------------|
+| Destroy | /comments/:id | DELETE  | Deletes specific comment |
+
+In this section, we will set up a route that deletes a specific comment. Just like the previous section, we can't use the DELETE metehod with a form, but we can fake it, or we could use JS on the client-side.
+
+### 13.2 Making Our Delete Request
+
+When we delete something, there's typically not a view for it. There's usually just a delete button. Let's start with a basic route
+
+```js
+app.delete('/comments/:id', (req, res) => {
+    // Get the ID in the request
+    const {id} = req.params;
+    // filter() returns a list with specified filters
+    comments = comments.filter(c => c.id !== id);
+    res.redirect('/comments');
+});
+```
+
+It may seem weird to not just delete the comment from the array, but it's actually good practice to make a copy of the array. With that, we have to remove the `const` declaration of our `comments` array and replace it with `let`
+
+```js
+let comments = [...];
+```
+
+### 13.3 Making Our Delete Button
+
+Let's put our delete button on `show.ejs`. It will be nested inside of a `<form>` tag
+
+```html
+<form action="/comments/<%=comment.id%>?_method=DELETE" method="post">
+    <button>Delete</button>
+</form>
+```
+
+Now let's try deleting a comment
+
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img26.jpg?raw=true)
+
+![img27](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/34-RESTful-Routes/img-for-notes/img27.jpg?raw=true)
+
+The comment is now deleted
