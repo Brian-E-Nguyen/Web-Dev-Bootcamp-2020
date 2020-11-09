@@ -125,3 +125,99 @@ We have more flexibility with NoSQL, but that doesn't always mean it's better th
 
 [Link to MongoDB website](https://www.mongodb.com/)
 
+## 4. Windows Installation
+
+- https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+- https://www.youtube.com/watch?v=FwMwO8pXfq0
+
+## 5. The Mongo Shell
+
+Just like Node, Mongo has its own REPL where we can write code to test things out and to work with databases, security, administrative permissions, etc.
+
+### 5.1 Running the Shell
+
+For this to work, you would need to have two terminals running. Run `mongod` on one terminal first, then run `mongo` on another one. If this works, you should be greeted with this 
+
+```
+---
+Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+and anyone you share the URL with. MongoDB may use this information to make product
+improvements and to suggest MongoDB products and deployment options to you.
+
+To enable free monitoring, run the following command: db.enableFreeMonitoring()
+To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+```
+
+### 5.2 Basic Commands
+
+#### 5.2.1 `help`
+
+Type `help` to show different commands
+
+```
+> help
+        db.help()                    help on db methods        
+        db.mycoll.help()             help on collection methods
+        sh.help()                    sharding helpers
+        rs.help()                    replica set helpers       
+        help admin                   administrative help       
+        help connect                 connecting to a db help   
+        help keys                    key shortcuts
+        help misc                    misc things to know
+        help mr                      mapreduce
+
+
+...
+```
+
+The mongo shell is actually a JavaScript shell, so you are able to write JS code. You don't have access to everything, but you still have a lot of resources. The Mongo syntax is like JS's syntax
+
+With Mongo, we can multiple databases at once. We can have a Yelp DB and a Twitter DB, but they don't have to be connected
+
+#### 5.2.2 `show db`
+
+When we type `db` in the shell, it shows the database that you are using by default
+
+```
+> db
+test
+```
+
+You can also type `show dbs` to show all the databases you can work with
+
+```
+> show dbs
+admin     0.000GB
+cat_app   0.000GB
+config    0.000GB
+demo      0.000GB
+local     0.000GB
+yelpcamp  0.000GB
+```
+
+#### 5.2.3 `use <db name>`
+
+To make a DB, use a command called `use <db name>`. We'll make a DB called `animalShelter`
+
+```
+> use animalShelter
+switched to db animalShelter
+```
+
+If we were to run the `show dbs` command, we would get this:
+
+```
+> show dbs
+admin     0.000GB
+cat_app   0.000GB
+config    0.000GB
+demo      0.000GB
+local     0.000GB
+yelpcamp  0.000GB
+```
+
+We don't see the `animalShelter` db. Why is that? Mongo is waiting for us to insert data in it. But if we type `db`, it will show the our current `db`
