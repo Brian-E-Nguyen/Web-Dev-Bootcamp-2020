@@ -221,3 +221,37 @@ yelpcamp  0.000GB
 ```
 
 We don't see the `animalShelter` db. Why is that? Mongo is waiting for us to insert data in it. But if we type `db`, it will show the our current `db`
+
+## 6. What is BSON?
+
+The problem with JSON is that it is pretty slow. The causes for this are that JSON
+- is a text-based format, and text parsing is very slow
+- is not space-efficient
+- supports a limited number of basic data types
+
+**Binary JSON (BSON)** is a more compact version of JSON. We can write JSON, but Mongo will store the data as binary
+
+```
+{"hello": "world"} →
+\x16\x00\x00\x00           // total document size
+\x02                       // 0x02 = type String
+hello\x00                  // field name
+\x06\x00\x00\x00world\x00  // field value
+\x00                       // 0x00 = type EOO ('end of object')
+
+{"BSON": ["awesome", 5.05, 1986]} →
+ \x31\x00\x00\x00
+ \x04BSON\x00
+ \x26\x00\x00\x00
+ \x02\x30\x00\x08\x00\x00\x00awesome\x00
+ \x01\x31\x00\x33\x33\x33\x33\x33\x33\x14\x40
+ \x10\x32\x00\xc2\x07\x00\x00
+ \x00
+ \x00
+```
+
+|          | JSON         | BSON   |
+|----------|--------------|--------|
+| **Encoding** | UTF-8 String | Binary |
+| **Data Support** | String, Boolean, Number, Array | String, Boolean, Number (Integer, Float, Long, Decimal128...), Array, Date, Raw Binary |
+| **Readability** | Human and Machine | Machine Only |
