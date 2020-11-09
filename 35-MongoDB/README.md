@@ -115,3 +115,13 @@ We can also add a new post to this database as well. But maybe that post doesn't
 ```
 
 We have more flexibility with NoSQL, but that doesn't always mean it's better than SQL
+
+## 3. Why We're Learning Mongo
+
+- Mongo is very commonly used with Node and Express (MEAN & MERN stacks)
+- it's easy to get started with (though it can be tricky to master)
+- it plays well with JavaScript
+- its popularity also means there is a strong community of devs using Mongo
+
+[Link to MongoDB website](https://www.mongodb.com/)
+
