@@ -255,3 +255,85 @@ hello\x00                  // field name
 | **Encoding** | UTF-8 String | Binary |
 | **Data Support** | String, Boolean, Number, Array | String, Boolean, Number (Integer, Float, Long, Decimal128...), Array, Date, Raw Binary |
 | **Readability** | Human and Machine | Machine Only |
+
+
+## 7. Inserting With Mongo
+
+### 7.1 Intro
+
+What we will focus on in the next few sections are CRUD operations, starting with insertion
+
+Link to the docs: https://docs.mongodb.com/manual/crud/
+
+The way that this works is that we insert into a collection. A **collection** is a grouping of data in a database. We will work with our `animalShelter` database (remember to run `use animalShelter` command). Let's use `dogs` as our first collection to begin with to insert data into. The good thing with Mongo is that if we insert something into a nonexistent collection, that collection will be made for us
+
+For insertion, we have three different methods:
+
+- `db.collection.insertOne()` - Inserts a single document into a collection.
+- `db.collection.insertMany()` - Inserts *multiple* documents into a collection
+- `db.collection.insert()` - Inserts a single document or multiple documents into a collection.
+
+These methods take in an object as a parameter so that we can insert into the collection
+
+```
+> db.dogs.insert({name: "Charlie", age: 3, breed: "corgi", catFriendly: true})
+WriteResult({ "nInserted" : 1 })
+```
+
+### 7.2 Viewing Our Data
+
+We can tell if this from the `WriteResult` statement, or that since we create a new collection, we can run `show collections`
+
+```
+> show collections
+dogs
+```
+
+If we wanted to see all dogs, we can run this command
+
+```
+> db.dogs.find()
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 3, "breed" : "corgi", "catFriendly" : true }
+```
+
+The `_id` is the primary key for each object, and it is unique for each data. 
+
+Let's now work with `db.collection.insert()`, which can pass in an array of objects as a parameter. We don't have to enforce any consitent structure for our DB. Our other dog had a name, breed, etc. We can add all of those in our data, but for now we'll ignore that
+
+```
+> db.dogs.insert([{name: "Wyatt", breed: "Golden", age: 14, catFriendly: false}, {name: "Tanya", breed: "Pom", age: 2, catFriendly: true}])
+BulkWriteResult({
+        "writeErrors" : [ ],
+        "writeConcernErrors" : [ ],
+        "nInserted" : 2,
+        "nUpserted" : 0,
+        "nMatched" : 0,
+        "nModified" : 0,
+        "nRemoved" : 0,
+        "upserted" : [ ]
+})
+```
+
+```
+> db.dogs.find()
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 3, "breed" : "corgi", "catFriendly" : true }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
+```
+
+Let's create a new `cats` collection and insert into it to make sure that each collection is separate from one another
+
+```
+> db.cats.insert({name: "Blue", age: 6, dogFriendly: false, breed: "Scottish Fold"})
+WriteResult({ "nInserted" : 1 })
+```
+
+```
+> db.cats.find()
+{ "_id" : ObjectId("5fac3451a3099aa679f64683"), "name" : "Blue", "age" : 6, "dogFriendly" : false, "breed" : "Scottish Fold" }
+
+> db.dogs.find()
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 3, "breed" : "corgi", "catFriendly" : true }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
+```
