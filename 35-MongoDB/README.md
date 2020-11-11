@@ -337,3 +337,29 @@ WriteResult({ "nInserted" : 1 })
 { "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
 { "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
 ```
+
+## 8. Finding With Mongo
+
+We are starting with a familiar method: `db.collection.find()`. We only seen how to use it w/o any arguments, and it will return every document in a collection. A lot of the times we are trying to find a certain criteria, like find all dogs that are corgis. We would pass in an object that will act like a query into the `find()` method
+
+```
+> db.dogs.find({breed: "corgi"})
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 3, "breed" : "corgi", "catFriendly" : true }
+```
+
+Another example:
+
+```
+> db.dogs.find({catFriendly: true})   
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 3, "breed" : "corgi", "catFriendly" : true }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
+```
+
+Note that the query is case-sensitive, and note that queries can return 0, 1, or more than 1 result.
+
+We can also pass in multiple queries to get more specific results
+
+```
+> db.dogs.find({catFriendly: true, age: 2}) 
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
+```
