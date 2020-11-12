@@ -363,3 +363,92 @@ We can also pass in multiple queries to get more specific results
 > db.dogs.find({catFriendly: true, age: 2}) 
 { "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
 ```
+
+## 9. Updating With Mongo
+
+### 9.1 Intro
+
+Updating is tedious because first we need to find what we want to update then specify how to update it. In our `dogs` collection, let's update Charlie's age
+
+```
+> db.dogs.find()
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 3, "breed" : "corgi", "catFriendly" : true }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true }
+```
+
+We have many different update methods that we can use:
+
+- `db.collection.updateOne(<filter>, <update>, <options>)`
+- `db.collection.updateMany(<filter>, <update>, <options>)`
+- `db.collection.replaceOne(<filter>, <update>, <options>)`
+
+A cool trick with Mongo is that you can use the Tab key when writing your code so that it can auto update it
+
+### 9.2 updateOne
+
+The thing with Mongo is that it isn't as simple as writing this query:
+
+```
+> db.dogs.updateOne({name: 'Charlie'}, {age: 4})
+
+2020-11-11T11:28:46.739-0800 E  QUERY    [js] uncaught exception: Error: the update operation document must contain atomic operators :
+DBCollection.prototype.updateOne@src/mongo/shell/crud_api.js:565:19
+@(shell):1:1
+```
+
+Mongo has special operators for updating. The most common one is `$set`, which has the following form:
+
+```
+{ $set: { <field1>: <value1>, ... } }
+```
+
+It is used to replace a value with a new value. All of these operators start with `$`.
+
+```
+> db.dogs.updateOne({name: 'Charlie'}, {$set: {age: 4}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+> db.dogs.find({age: 4})
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 4, "breed" : "corgi", "catFriendly" : true }
+```
+
+We can also pass in many fields to update
+
+```
+> db.dogs.updateOne({name: 'Charlie'}, {$set: {age: 5, breed: "Pom"}})
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+> db.dogs.find({age: 5})
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 5, "breed" : "Pom", "catFriendly" : true }
+```
+
+What if we set something that is not in the matched document? Charlie doesn't have a color, so let's try that
+
+```
+> db.dogs.updateOne({name: 'Charlie'}, {$set: {color: "chocolate"}})  
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+> db.dogs.find({age: 5})
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 5, "breed" : "Pom", "catFriendly" : true, "color" : "chocolate" }
+```
+
+Now Charlie has a new key-value pair of `color`, which is chocolate
+
+### 9.3 updateMany()
+
+We will now work with `updateMany()` with this example, which will update documents that applies to the queries
+
+```
+> db.dogs.updateMany({catFriendly: true}, {$set: {isAvailable: false}})
+
+> db.dogs.updateMany({catFriendly: true}, {$set: {isAvailable: false}})
+{ "acknowledged" : true, "matchedCount" : 2, "modifiedCount" : 2 }
+
+> db.dogs.find()
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 5, "breed" : "Pom", "catFriendly" : true, "color" : "chocolate", "isAvailable" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true, "isAvailable" : false }
+```
+
+This is saying for all dogs that have the attribute of `catFriendly` to `true`, set `isAvailable` to `false`. Notice for Charlie and Tanya that they have `isAvailable` to `false`, so we added two new key-value pairs to those documents
