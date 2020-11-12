@@ -498,3 +498,109 @@ To delete an entire collection, use `db.collection.deleteMany({})`
 > db.dogs.deleteMany({})
 { "acknowledged" : true, "deletedCount" : 2 }
 ```
+
+## 11. Additional Mongo Operators
+
+Link to query operators official document
+- https://docs.mongodb.com/manual/reference/operator/query/
+
+---
+
+```
+db.dogs.insert([
+    {name: 'Rusty', breed: 'Mutt', age: 3, weight: 25, size: 'M', personality: {catFriendly: true, childFriendly: true}},
+    {name: 'Mimi', breed: 'Pom', age: 15, weight: 25, size: 'L', personality: {catFriendly: false, childFriendly: false}},
+    {name: 'Mimi', breed: 'Pom', age: 14, weight: 10, size: 'M', personality: {catFriendly: false, childFriendly: false}},
+    {name: 'Alfred', breed: 'Golden', age: 10, weight: 5, size: 'S', personality: {catFriendly: true, childFriendly: true}},
+    {name: 'Rex', breed: 'Chihuahua', age: 17, weight: 5, size: 'S', personality: {catFriendly: true, childFriendly: true}},
+    {name: 'Brian', breed: 'Husky', age: 5, weight: 20, size: 'L', personality: {catFriendly: false, childFriendly: true}},
+])
+```
+
+What if we want to find dogs that are between certain ages? Or their weight is less than something? Or dogs that are large or small?
+
+```
+> db.dogs.findOne({age: 10})
+{
+        "_id" : ObjectId("5fad8a513b35da6a1b74a387"),
+        "name" : "Alfred",
+        "breed" : "Golden",
+        "age" : 10,
+        "weight" : 5,
+        "size" : "S",
+        "personality" : {
+                "catFriendly" : true,
+                "childFriendly" : true
+        }
+}
+```
+
+If we wanted to find dogs where childfriendly is true, it's a bit complicated. That value is nested inside of `personality`
+
+```
+> db.dogs.find({childFriendly: true})
+>
+```
+
+In order to access it, we would have to use dot notation
+
+```
+> db.dogs.find({'personality.childFriendly': true})
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a384"), "name" : "Rusty", "breed" : "Mutt", "age" : 3, "weight" : 25, "size" : "M", "personality" : { "catFriendly" : true, "childFriendly" : true 
+} }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a387"), "name" : "Alfred", "breed" : "Golden", "age" : 10, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a388"), "name" : "Rex", "breed" : "Chihuahua", "age" : 17, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a389"), "name" : "Brian", "breed" : "Husky", "age" : 5, "weight" : 20, "size" : "L", "personality" : { "catFriendly" : false, "childFriendly" : true } }
+```
+
+We can also be more specific with our query as well
+
+```
+> db.dogs.find({'personality.childFriendly': true, size: 'M'})
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a384"), "name" : "Rusty", "breed" : "Mutt", "age" : 3, "weight" : 25, "size" : "M", "personality" : { "catFriendly" : true, "childFriendly" : true 
+} }
+```
+
+What if we want to find dogs that are between certain ages? Or their weight is less than something? Or dogs that are large or small?
+
+### 11.1 $gt, $gte, $lt, $lte
+
+-`$gt` - greater than
+
+-`$gte` - greater than or equal to
+
+-`$lt` - less than
+
+-`$lte` - less than or equal to
+
+```
+> db.dogs.find({age: {$gt: 8}})
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a385"), "name" : "Mimi", "breed" : "Pom", "age" : 15, "weight" : 25, "size" : "L", "personality" : { "catFriendly" : false, "childFriendly" : false } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a386"), "name" : "Mimi", "breed" : "Pom", "age" : 14, "weight" : 10, "size" : "M", "personality" : { "catFriendly" : false, "childFriendly" : false } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a387"), "name" : "Alfred", "breed" : "Golden", "age" : 10, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a388"), "name" : "Rex", "breed" : "Chihuahua", "age" : 17, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+```
+
+### 11.2 $in
+
+The `$in` operator selects documents based upon some value that's inside an array
+
+```
+> db.dogs.find({breed: {$in: ['Pom', 'Golden']}}) 
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a385"), "name" : "Mimi", "breed" : "Pom", "age" : 15, "weight" : 25, "size" : "L", "personality" : { "catFriendly" : false, "childFriendly" : false } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a386"), "name" : "Mimi", "breed" : "Pom", "age" : 14, "weight" : 10, "size" : "M", "personality" : { "catFriendly" : false, "childFriendly" : false } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a387"), "name" : "Alfred", "breed" : "Golden", "age" : 10, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+```
+
+### 11.3 $or
+
+`$or` passes in multiple arguments and finds documents based on one or more of those arguments
+
+```
+> db.dogs.find({$or: [{'personality.catFriendly': true}, {age: {$lte: 10}}]}) 
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a384"), "name" : "Rusty", "breed" : "Mutt", "age" : 3, "weight" : 25, "size" : "M", "personality" : { "catFriendly" : true, "childFriendly" : true 
+} }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a387"), "name" : "Alfred", "breed" : "Golden", "age" : 10, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a388"), "name" : "Rex", "breed" : "Chihuahua", "age" : 17, "weight" : 5, "size" : "S", "personality" : { "catFriendly" : true, "childFriendly" : true } }
+{ "_id" : ObjectId("5fad8a513b35da6a1b74a389"), "name" : "Brian", "breed" : "Husky", "age" : 5, "weight" : 20, "size" : "L", "personality" : { "catFriendly" : false, "childFriendly" : true } }
+```
