@@ -452,3 +452,49 @@ We will now work with `updateMany()` with this example, which will update docume
 ```
 
 This is saying for all dogs that have the attribute of `catFriendly` to `true`, set `isAvailable` to `false`. Notice for Charlie and Tanya that they have `isAvailable` to `false`, so we added two new key-value pairs to those documents
+
+## 10. Deleting With Mongo
+
+Deleting with Mongo is simple. We have two methods we can use
+
+- `db.collection.deleteMany()`
+- `db.collection.deleteOne()`
+
+### 10.1 deleteOne()
+
+```
+> db.cats.find()    
+{ "_id" : ObjectId("5fac3451a3099aa679f64683"), "name" : "Blue", "age" : 7, "dogFriendly" : false, "breed" : "Scottish Fold", "lastChanged" : ISODate("2020-11-12T18:55:11.565Z") }
+
+> db.cats.deleteOne({name: 'Blue'})
+{ "acknowledged" : true, "deletedCount" : 1 }
+
+> db.cats.find()
+>
+```
+
+### 10.2 deleteMany()
+
+```
+> db.dogs.find()
+{ "_id" : ObjectId("5fac31eaa3099aa679f64680"), "name" : "Charlie", "age" : 5, "breed" : "Pom", "catFriendly" : true, "color" : "chocolate", "isAvailable" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+{ "_id" : ObjectId("5fac33b0a3099aa679f64682"), "name" : "Tanya", "breed" : "Pom", "age" : 2, "catFriendly" : true, "isAvailable" : false }
+
+> db.dogs.deleteMany({isAvailable: false})
+{ "acknowledged" : true, "deletedCount" : 2 }
+
+> db.dogs.find()
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+```
+
+To delete an entire collection, use `db.collection.deleteMany({})`
+
+```
+> db.dogs.find()
+{ "_id" : ObjectId("5fac33b0a3099aa679f64681"), "name" : "Wyatt", "breed" : "Golden", "age" : 14, "catFriendly" : false }
+{ "_id" : ObjectId("5fad87ce3b35da6a1b74a37f"), "feuj" : 223, "342erw" : 34333 }
+
+> db.dogs.deleteMany({})
+{ "acknowledged" : true, "deletedCount" : 2 }
+```
