@@ -79,3 +79,104 @@ So when we use an invalid port number, we get this:
 OH NO, ERROR!!!!
 MongoParseError: Invalid port (larger than 65535) with hostname
 ```
+
+## 3. Our First Mongoose Model
+
+The central thing that we need to understand about Mongoose is models. **Models** are JS classes that represent information in a MongoDB
+
+The link below is to the Models document
+- https://mongoosejs.com/docs/api/model.html
+
+First we would need to work with schemas. **Schemas** are a mapping of different collection keys from Mongo to different types in JS. An example is down below:
+
+```js
+const blogSchema = new Schema({
+    title:  String, // String is shorthand for {type: String}
+    author: String,
+    body:   String,
+    comments: [{ body: String, date: Date }],
+    date: { type: Date, default: Date.now },
+    hidden: Boolean,
+    meta: {
+      votes: Number,
+      favs:  Number
+    }
+  });
+```
+
+So when we receive data from the MongoDB, we are setting data types on the different keys
+
+Let's define our `movieSchema` to work with
+
+```js
+const movieSchema = new mongoose.model({
+    title: String,
+    year: Number,
+    score: Number,
+    rating: String
+});
+```
+
+Now let's work with our model by using `mongoose.model()`. We pass in a string containing the name of our model and after that we pass in the schema
+
+```js
+const Movie = mongoose.model('Movie', movieSchema);
+```
+
+The naming of our model is weird. We have to capitalize it and keep it singular. What Mongoose will do is make a collection for us. The name will be lowercase and plural, which will be `movies`. Now we have a model class called `Movie`. Now we can create a new movie object and pass in information
+
+```js
+const amadeus = new Movie({title: 'Amadeus', year: 1986, score: 9.2, rating: 'R'})
+```
+
+To see that we have data stored into `amadeus`, run Node and then run `.load index.js`. Then type in the `amadeus` object and you should get this
+
+```
+...
+
+Promise { <pending> }
+> CONNECTION OPEN!!!
+> amadeus
+{
+  _id: 5faee0b3a43a4549645e71b5,
+  title: 'Amadeus',
+  year: 1986,
+  score: 9.2,
+  rating: 'R'
+}
+```
+
+See that `amadeus` now has an ID created. However, if we use Mongo and try to find that inside of the `moviesApp` DB, there's no data 
+
+```
+> db.movies.find()
+>
+```
+
+If we want to save it to the DB, there's a method called `save()`. 
+
+```
+> amadeus.save()
+Promise { <pending> }
+```
+
+Now we can see it inside of our movieApp DB
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee0b3a43a4549645e71b5"), "title" : "Amadeus", "year" : 1986, "score" : 9.2, "rating" : "R", "__v" : 0 }
+```
+
+If we were to change the object on the JS side, let's say set score to 9.5, it wouldn't save it on the DB because it's still on the JS side. However, we can still use `.save()` and the data will update
+
+```
+> amadeus.score = 9.5
+9.5
+> amadeus.save()
+Promise { <pending> }
+```
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee0b3a43a4549645e71b5"), "title" : "Amadeus", "year" : 1986, "score" : 9.5, "rating" : "R", "__v" : 0 }
+```
