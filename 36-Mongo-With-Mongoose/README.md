@@ -60,6 +60,8 @@ CONNECTION OPEN!!!!!
 
 Using callbacks is a better option so that we can handle errors
 
+### 2.3 Final Code (index.js)
+
 ```js
 const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:170144447/movies', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -80,12 +82,33 @@ OH NO, ERROR!!!!
 MongoParseError: Invalid port (larger than 65535) with hostname
 ```
 
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/movieApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const movieSchema = new mongoose.Schema({
+    title: String,
+    year: Number,
+    score: Number,
+    rating: String
+});
+```
+
 ## 3. Our First Mongoose Model
 
 The central thing that we need to understand about Mongoose is models. **Models** are JS classes that represent information in a MongoDB
 
 The link below is to the Models document
 - https://mongoosejs.com/docs/api/model.html
+
+### 3.1 Creating the Schema
 
 First we would need to work with schemas. **Schemas** are a mapping of different collection keys from Mongo to different types in JS. An example is down below:
 
@@ -117,6 +140,8 @@ const movieSchema = new mongoose.model({
 });
 ```
 
+### 3.2 Creating the Model
+
 Now let's work with our model by using `mongoose.model()`. We pass in a string containing the name of our model and after that we pass in the schema
 
 ```js
@@ -128,6 +153,8 @@ The naming of our model is weird. We have to capitalize it and keep it singular.
 ```js
 const amadeus = new Movie({title: 'Amadeus', year: 1986, score: 9.2, rating: 'R'})
 ```
+
+### 3.3 Viewing Our Model
 
 To see that we have data stored into `amadeus`, run Node and then run `.load index.js`. Then type in the `amadeus` object and you should get this
 
@@ -167,6 +194,8 @@ Now we can see it inside of our movieApp DB
 { "_id" : ObjectId("5faee0b3a43a4549645e71b5"), "title" : "Amadeus", "year" : 1986, "score" : 9.2, "rating" : "R", "__v" : 0 }
 ```
 
+### 3.4 Updating Our Data (JS Side)
+
 If we were to change the object on the JS side, let's say set score to 9.5, it wouldn't save it on the DB because it's still on the JS side. However, we can still use `.save()` and the data will update
 
 ```
@@ -179,4 +208,28 @@ Promise { <pending> }
 ```
 > db.movies.find()
 { "_id" : ObjectId("5faee0b3a43a4549645e71b5"), "title" : "Amadeus", "year" : 1986, "score" : 9.5, "rating" : "R", "__v" : 0 }
+```
+
+### 3.5 Final Code (index.js)
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/movieApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const movieSchema = new mongoose.Schema({
+    title: String,
+    year: Number,
+    score: Number,
+    rating: String
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+const amadeus = new Movie({title: 'Amadeus', year: 1986, score: 9.2, rating: 'R'});
 ```
