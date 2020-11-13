@@ -233,3 +233,137 @@ const movieSchema = new mongoose.Schema({
 const Movie = mongoose.model('Movie', movieSchema);
 const amadeus = new Movie({title: 'Amadeus', year: 1986, score: 9.2, rating: 'R'});
 ```
+
+## 4. Insert Many
+
+### 4.1 Inserting Our Data
+
+Mongoose gives a method, `Model.insertMany()` that works the same as the Mongo version
+
+```js
+Movie.insertMany([
+    {title: 'Amadeus', year: 2001, score: 9.3, rating: 'R'},
+    {title: 'Alien', year: 1979, score: 8.1, rating: 'R'},
+    {title: 'Amadeus', year: 1999, score: 7.5, rating: 'PG'},
+    {title: 'Stand By Me', year: 1986, score: 9.2, rating: 'R'},
+    {title: 'Moonrise Kingdom', year: 2012, score: 7.3, rating: 'PG-13'}
+])
+```
+
+This method returns a promise. We do not need to call `.save()` when we run this. We will add a callback function to see if it worked
+
+```js
+Movie.insertMany([
+    {title: 'Amadeus', year: 2001, score: 9.3, rating: 'R'},
+    {title: 'Alien', year: 1979, score: 8.1, rating: 'R'},
+    {title: 'Amadeus', year: 1999, score: 7.5, rating: 'PG'},
+    {title: 'Stand By Me', year: 1986, score: 9.2, rating: 'R'},
+    {title: 'Moonrise Kingdom', year: 2012, score: 7.3, rating: 'PG-13'}
+])
+    .then(data => {
+        console.log('IT WORKED');
+        console.log(data)
+    })
+```
+
+### 4.2 Viewing Our Data
+
+Let's run `index.js`
+
+```
+$ node index.js
+CONNECTION OPEN!!!
+IT WORKED
+[
+  {
+    _id: 5faee7cfbf3e854a347a5d3c,
+    title: 'Amadeus',
+    year: 2001,
+    score: 9.3,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3d,
+    title: 'Alien',
+    year: 1979,
+    score: 8.1,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3e,
+    title: 'Amadeus',
+    year: 1999,
+    score: 7.5,
+    rating: 'PG',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3f,
+    title: 'Stand By Me',
+    year: 1986,
+    score: 9.2,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d40,
+    title: 'Moonrise Kingdom',
+    year: 2012,
+    score: 7.3,
+    rating: 'PG-13',
+    __v: 0
+  }
+]
+```
+
+And the data does appear on the Mongo side
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee0b3a43a4549645e71b5"), "title" : "Amadeus", "year" : 1986, "score" : 9.5, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3c"), "title" : "Amadeus", "year" : 2001, "score" : 9.3, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3d"), "title" : "Alien", "year" : 1979, "score" : 8.1, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3e"), "title" : "Amadeus", "year" : 1999, "score" : 7.5, "rating" : "PG", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 9.2, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d40"), "title" : "Moonrise Kingdom", "year" : 2012, "score" : 7.3, "rating" : "PG-13", "__v" : 0 }
+```
+
+Note that when making web apps, bulk inserts are not that common. We are just showing an example of this in action
+
+### 4.3 Final Code (index.js)
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/movieApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const movieSchema = new mongoose.Schema({
+    title: String,
+    year: Number,
+    score: Number,
+    rating: String
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+const amadeus = new Movie({title: 'Amadeus', year: 1986, score: 9.2, rating: 'R'});
+
+Movie.insertMany([
+    {title: 'Amadeus', year: 2001, score: 9.3, rating: 'R'},
+    {title: 'Alien', year: 1979, score: 8.1, rating: 'R'},
+    {title: 'Amadeus', year: 1999, score: 7.5, rating: 'PG'},
+    {title: 'Stand By Me', year: 1986, score: 9.2, rating: 'R'},
+    {title: 'Moonrise Kingdom', year: 2012, score: 7.3, rating: 'PG-13'}
+])
+    .then(data => {
+        console.log('IT WORKED');
+        console.log(data)
+    })
+```
