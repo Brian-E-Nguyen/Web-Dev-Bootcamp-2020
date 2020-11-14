@@ -463,3 +463,103 @@ Promise { <pending> }
   __v: 0
 }
 ```
+
+## 6. Updating With Mongoose
+
+### 6.1 Model.updateOne()
+
+`Model.updateOne()` updates a document depending on the query you pass in. In our `Movies`, Amadeus movie's year, 1986, is incorrect. Let's change it to 1984
+
+```
+> Movie.updateOne({title: 'Amadeus'}, {year: 1984}).then(res => console.log(res))
+Promise { <pending> }
+> { n: 1, nModified: 1, ok: 1 }
+```
+
+```
+> db.movies.find({title: 'Amadeus'})
+{ "_id" : ObjectId("5faee0b3a43a4549645e71b5"), "title" : "Amadeus", "year" : 1984, "score" : 9.5, "rating" : "R", "__v" : 0 }
+```
+
+### 6.2 Model.updateMany()
+
+Same concept with `Model.updateOne()`, but we are updating multiple documents a once. Let's update the movies *Amadeus* and *Stand By Me* to have scores of 10
+
+**Data before**
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3d"), "title" : "Alien", "year" : 1979, "score" : 8.1, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 9.2, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d40"), "title" : "Moonrise Kingdom", "year" : 2012, "score" : 7.3, "rating" : "PG-13", "__v" : 0 }
+{ "_id" : ObjectId("5fb0290adfe236a223c5f029"), "title" : "Amadeus", "year" : 1984, "score" : 7.5, "rating" : "PG" }
+```
+
+**Making the update**
+
+```
+> Movie.updateMany({title: {$in: ['Amadeus', 'Stand By Me']}}, {score: 10}).then(res
+ => console.log(res))
+Promise { <pending> }
+> { n: 2, nModified: 2, ok: 1 }
+```
+
+**Data after**
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3d"), "title" : "Alien", "year" : 1979, "score" : 8.1, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 10, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d40"), "title" : "Moonrise Kingdom", "year" : 2012, "score" : 7.3, "rating" : "PG-13", "__v" : 0 }
+{ "_id" : ObjectId("5fb0290adfe236a223c5f029"), "title" : "Amadeus", "year" : 1984, "score" : 10, "rating" : "PG" }
+```
+
+### 6.3 findOneAndUpdate() and findManyAndUpdate()
+
+Mongoose has `findOneAndUpdate()` and `findManyAndUpdate()` does what it says, but unlike the other update methods previously mentioned, this will instead return the object after the update was applied. Let's take the score of *Iron Giant* and set it from 7.5 to 7
+
+```
+> db.movies.find({title: 'Iron Giant'})
+{ "_id" : ObjectId("5fb02ca3dfe236a223c5f02a"), "title" : "Iron Giant", "year" : 1999, "score" : 7.5, "rating" : "PG" }
+```
+
+```
+> Movie.findOneAndUpdate({title: 'Iron Giant'}, {score: 7.0}).then(m => console.log(
+m))
+Promise { <pending> }
+> (node:26468) DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#findandmodify
+{
+  _id: 5fb02ca3dfe236a223c5f02a,
+  title: 'Iron Giant',
+  year: 1999,
+  score: 7.5,
+  rating: 'PG'
+}
+```
+
+We get back the old version for some reason, but if we look in our DB, the score is updated
+
+```
+> db.movies.find({title: 'Iron Giant'})
+{ "_id" : ObjectId("5fb02ca3dfe236a223c5f02a"), "title" : "Iron Giant", "year" : 1999, "score" : 7, "rating" : "PG" }
+```
+
+Why did it give the old version? Well that's just what Mongoose does by default; no other explanation. If we want it to return the updated version, we have to pass in an extra parameter. This will be `{new: true}`
+
+```
+> Movie.findOneAndUpdate({title: 'Iron Giant'}, {score: 7.8}, {new: true}).then(m => console.log(m))
+Promise { <pending> }
+> {
+  _id: 5fb02ca3dfe236a223c5f02a,
+  title: 'Iron Giant',
+  year: 1999,
+  score: 7.8,
+  rating: 'PG'
+}
+```
+
+The reason why we get a deprecation message is because, by default, you need to have this code:
+
+```js
+mongoose.set('useFindAndModify', false)
+```
