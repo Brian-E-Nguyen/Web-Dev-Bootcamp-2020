@@ -563,3 +563,83 @@ The reason why we get a deprecation message is because, by default, you need to 
 ```js
 mongoose.set('useFindAndModify', false)
 ```
+
+## 7. Deleting With Mongoose
+
+### 7.1 Mode.remove()
+
+We can use the `Model.remove()` method to remove one document. Let's remove *Amadeus*
+
+**Data before**
+
+```
+> db.movies.find()                     
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3d"), "title" : "Alien", "year" : 1979, "score" : 8.1, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 10, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d40"), "title" : "Moonrise Kingdom", "year" : 2012, "score" : 7.3, "rating" : "PG-13", "__v" : 0 }
+{ "_id" : ObjectId("5fb0290adfe236a223c5f029"), "title" : "Amadeus", "year" : 1984, "score" : 10, "rating" : "PG" }
+{ "_id" : ObjectId("5fb02ca3dfe236a223c5f02a"), "title" : "Iron Giant", "year" : 1999, "score" : 7.8, "rating" : "PG" }
+```
+
+**Making the deletion**
+
+```
+> Movie.remove({title: 'Amadeus'}).then(msg => console.log(msg))
+Promise { <pending> }
+> (node:2524) DeprecationWarning: collection.remove is deprecated. Use deleteOne, deleteMany, or bulkWrite instead.
+{ n: 1, ok: 1, deletedCount: 1 }
+```
+
+**Data after**
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3d"), "title" : "Alien", "year" : 1979, "score" : 8.1, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 10, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d40"), "title" : "Moonrise Kingdom", "year" : 2012, "score" : 7.3, "rating" : "PG-13", "__v" : 0 }
+{ "_id" : ObjectId("5fb02ca3dfe236a223c5f02a"), "title" : "Iron Giant", "year" : 1999, "score" : 7.8, "rating" : "PG" }
+```
+
+Notice the deprecation warning says this:
+
+```
+DeprecationWarning: collection.remove is deprecated. Use deleteOne, deleteMany, or bulkWrite instead.
+```
+
+### 7.2 Model.deleteMany()
+
+So let's use `deleteMany()`. We will delete movies that were released on or after the year 1999
+
+```
+> Movie.deleteMany({year: {$gte: 1999}}).then(res => console.log(res))
+Promise { <pending> }
+> { n: 2, ok: 1, deletedCount: 2 }
+```
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3d"), "title" : "Alien", "year" : 1979, "score" : 8.1, "rating" : "R", "__v" : 0 }
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 10, "rating" : "R", "__v" : 0 }
+```
+
+### 7.3 Model.findOneAndDelete() and Model.findManyAndDelete()
+
+Returns the deleted object, just like the update ones
+
+```
+> Movie.findOneAndDelete({title: 'Alien'}).then(m => console.log(m))
+Promise { <pending> }
+> {
+  _id: 5faee7cfbf3e854a347a5d3d,
+  title: 'Alien',
+  year: 1979,
+  score: 8.1,
+  rating: 'R',
+  __v: 0
+}
+```
+
+```
+> db.movies.find()
+{ "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 10, "rating" : "R", "__v" : 0 }
+```
