@@ -367,3 +367,99 @@ Movie.insertMany([
         console.log(data)
     })
 ```
+
+## 5. Finding With Mongoose
+
+### 5.1 Model.find()
+
+Mongoose comes with many different methods for finding. For this section, we will only work with `Model.find()`. `find()` is a "thenable" object. It does not work like traditional callbacks; it's its own thing in Mongoose. If we were to do `Movie.find({})`, it would not give back the data that we want, so we need to do this below. Run `node` and `.load index.js` as usual
+
+```
+> Movie.find({}).then(data => console.log(data))
+Promise { <pending> }
+> [
+  {
+    _id: 5faee0b3a43a4549645e71b5,
+    title: 'Amadeus',
+    year: 1986,
+    score: 9.5,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3c,
+    title: 'Amadeus',
+    year: 2001,
+    score: 9.3,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3d,
+    title: 'Alien',
+    year: 1979,
+    score: 8.1,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3e,
+    title: 'Amadeus',
+    year: 1999,
+    score: 7.5,
+    rating: 'PG',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d3f,
+    title: 'Stand By Me',
+    year: 1986,
+    score: 9.2,
+    rating: 'R',
+    __v: 0
+  },
+  {
+    _id: 5faee7cfbf3e854a347a5d40,
+    title: 'Moonrise Kingdom',
+    year: 2012,
+    score: 7.3,
+    rating: 'PG-13',
+    __v: 0
+  }
+]
+
+```
+
+We can be specific with our queries as well
+
+```
+> Movie.find({rating: 'PG-13'}).then(data => console.log(data))
+Promise { <pending> }
+> [
+  {
+    _id: 5faee7cfbf3e854a347a5d40,
+    title: 'Moonrise Kingdom',
+    year: 2012,
+    score: 7.3,
+    rating: 'PG-13',
+    __v: 0
+  }
+]
+```
+
+### 5.2 Model.findById()
+
+`Model.findById()` is really common in Express apps
+
+```
+> Movie.findById('5faee0b3a43a4549645e71b5').then(m => console.log(m))
+Promise { <pending> }
+> {
+  _id: 5faee0b3a43a4549645e71b5,
+  title: 'Amadeus',
+  year: 1986,
+  score: 9.5,
+  rating: 'R',
+  __v: 0
+}
+```
