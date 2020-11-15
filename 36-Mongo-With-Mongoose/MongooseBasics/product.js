@@ -1,3 +1,4 @@
+const { triggerAsyncId } = require('async_hooks');
 const mongoose = require('mongoose');
 const { networkInterfaces } = require('os');
 mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
@@ -12,16 +13,34 @@ mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, us
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 20
     },
     price: {
-        type: Number
+        type: Number,
+        required: true,
+        min: 0
     },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    }
 })
 
 const Product = mongoose.model('Product', productSchema);
 
-const bike = new Product({name: 'Mountain Bike', price: 599, color: 'red'})
+const bike = new Product({name: 'Bike Helmet', price: 29.50, categories: ['Cycling', 'Safety', 123]});
 bike.save()
     .then(data => {
         console.log('IT WORKED!!!');

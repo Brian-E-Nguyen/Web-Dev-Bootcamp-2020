@@ -794,3 +794,283 @@ bike.save()
         console.log(err);
     })
 ```
+
+## 9. Additonal Schema Constraints
+
+Mongoose comes with some more schema constraints for us to use.
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/36-Mongo-With-Mongoose/img-for-notes/img1.jpg?raw=true)
+
+Here's a link to the docs for the schema constraints
+- https://mongoosejs.com/docs/schematypes.html
+
+### 9.1 'default' Constraint
+
+Let's modify our `productSchema` with a new property of `onSale`
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    }
+})
+```
+
+The `default` key sets the default value of that property. Our `onSale` property is set to `false` by default unless we insert `true` when we create new data. Let's test this out with this data. Notice how we didn't pass in an `onSale` property
+
+```js
+const bike = new Product({name: 'Bike Helmet', price: 29.50,})
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+```
+> CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  onSale: false,
+  _id: 5fb18684803afd457ca894f4,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __
+```
+
+Our product has a property of `onSale` which is set to `false`. Let's look in our DB
+
+```
+> db.products.find()
+{ "_id" : ObjectId("5fb17e4a4dc92b2d1c69551c"), "name" : "Mountain Bike", "price" : 599, "__v" : 0 }
+{ "_id" : ObjectId("5fb18684803afd457ca894f4"), "onSale" : false, "name" : "Bike Helmet", "price" : 29.5, "__v" : 0 }
+```
+
+Let's try out more constraints. Let's set a property of `maxlength` in the `name` to be 20 and pass in a really long name
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    }
+})
+
+const Product = mongoose.model('Product', productSchema);
+
+const bike = new Product({name: 'Bike Helmet That Is Too Awesome to own', price: 29.50,})
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+```
+> OH NO, ERROR!!!!
+Error: Product validation failed: name: Path `name` (`Bike Helmet That Is Too Awesome to own`) is longer than the maximum allowed length (20).
+```
+
+### 9.2 Properties With Array Values
+
+What if we wanted to set up some categories? We would set up an array of strings
+
+```js
+const bike = new Product({name: 'Bike Helmet', price: 29.50, categories: ['Cycling', 'Safety']})
+```
+
+How would we set that up? In our schema, we would do this:
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String]
+})
+```
+
+Let's run `product.js` and see the output
+
+```
+> CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  onSale: false,
+  categories: [ 'Cycling', 'Safety' ],
+  _id: 5fb1894bd5cbcd6b748d242b,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 0
+}
+```
+
+And now let's look at our DB
+
+```
+> db.products.find()
+{ "_id" : ObjectId("5fb17e4a4dc92b2d1c69551c"), "name" : "Mountain Bike", "price" : 599, "__v" : 0 }
+{ "_id" : ObjectId("5fb18684803afd457ca894f4"), "onSale" : false, "name" : "Bike Helmet", "price" : 29.5, "__v" : 0 }
+{ "_id" : ObjectId("5fb1894bd5cbcd6b748d242b"), "onSale" : false, "categories" : [ "Cycling", "Safety" ], "name" : "Bike Helmet", "price" : 29.5, "__v" : 0 }
+```
+
+What if we pass in a number? It would still work, but the number will be typecasted into a string
+
+```js
+const bike = new Product({name: 'Bike Helmet', price: 29.50, categories: ['Cycling', 'Safety', 123]});
+```
+
+```
+> CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  onSale: false,
+  categories: [ 'Cycling', 'Safety', '123' ],
+  _id: 5fb189e185364a209c7a1c41,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 0
+}
+```
+
+### 9.3 Nested Objects
+
+If we have objects or nested subdocuments, we can do something like this with our new `quantity` property
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    }
+})
+```
+
+```
+> CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [ 'Cycling', 'Safety', '123' ],
+  _id: 5fb18aa850ae7154a8a7de67,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 0
+}
+```
+
+### 9.4 Final Code (product.js)
+
+```js
+const { triggerAsyncId } = require('async_hooks');
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    }
+})
+
+const Product = mongoose.model('Product', productSchema);
+
+const bike = new Product({name: 'Bike Helmet', price: 29.50, categories: ['Cycling', 'Safety', 123]});
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
