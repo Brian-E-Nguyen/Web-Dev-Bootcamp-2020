@@ -643,3 +643,154 @@ Promise { <pending> }
 > db.movies.find()
 { "_id" : ObjectId("5faee7cfbf3e854a347a5d3f"), "title" : "Stand By Me", "year" : 1986, "score" : 10, "rating" : "R", "__v" : 0 }
 ```
+
+## 8. Mongoose Schema Validations
+
+We will create a new file called `product.js` and add the Mongoose connection to it. Our DB will be `shopApp`
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+```
+
+### 8.1 Operation Buffering (not related to main topic)
+
+Let's take a look back at `index.js`. You may be wondering, how could we run the code `const Movie = mongoose.model('Movie', movieSchema);` if we don't know for sure if we have a connection? It does take time to connect. You would think that you would place it inside of the `then()` callback, but Mongoose has **operation buffering**, which allows us to start using the models we define immediately without waiting for Mongo to be connected.
+
+### 8.2 Adding Schema Validations
+
+Let's create a new schema inside `product.js`
+
+```js
+const productSchema = new mongoose.Schema({
+    name: String,
+    price: Number,
+})
+```
+
+This is simple, but there's a lot more that we can define for each property. This is the shorthand way. The longer way looks like this, where each propery has an object as its value
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String
+    },
+    price: {
+        type: number
+    },
+})
+```
+
+This is basically the same as the one above, but now we can define more, like some of the built-in validations that come with Mongoose, and one of those is the `required` validations
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number
+    },
+})
+```
+
+This is saying that the name of a product *must* be there when creating a new product. The default value of `required` is always set to `false`. Let's create a new `Product` class and a new product itself
+
+```js
+const Product = mongoose.model('Product', productSchema);
+
+const bike = new Product({name: 'Mountain Bike', price: 599});
+
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+### 8.3 Testing Our Validations
+
+Let's actually remove the `name` property and see what happens when we run this
+
+```
+Promise { <pending> }
+> OH NO, ERROR!!!!
+Error: Product validation failed: name: Path `name` is required.
+
+...
+```
+
+If we were pass in a value as a different type, let's say pass in a String for the price, it would fail
+
+```js
+const bike = new Product({name: 'Mountain Bike', price: 'Hi'})
+```
+
+What if we passed in additional information that is not in our schema? Let's pass in `color: 'red'`
+
+```js
+const bike = new Product({name: 'Mountain Bike', price: 599, color: 'red'})
+```
+
+```
+> CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  _id: 5fb17dd1217a8b623413c497,
+  name: 'Mountain Bike',
+  price: 599,
+  __v: 0
+}
+```
+
+Everything but color is there. The code or the DB didn't break, nor did it trigger the callback, but it works
+
+### 8.4 Final Code (product.js)
+
+```js
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number
+    },
+})
+
+const Product = mongoose.model('Product', productSchema);
+
+const bike = new Product({name: 'Mountain Bike', price: 599, color: 'red'})
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
