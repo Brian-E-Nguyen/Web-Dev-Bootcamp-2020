@@ -1919,3 +1919,223 @@ personSchema.virtual('fullName').get(function() {
 
 const Person = mongoose.model('Person', personSchema);
 ```
+
+## 15. Mongoose Middleware
+
+### 15.1 Intro
+
+Mongoose gives us the ability to run code before and after certain things are executed
+
+Link to middleware docs
+- https://mongoosejs.com/docs/middleware.html
+
+This is really useful on complicated apps. Let's say you are deleting a user. You would also need to delete comments, photos, etc. We can use Mongoose middleware to help us. To do this, we would use `.pre()` and `.post()`
+
+```js
+const schema = new Schema(..);
+schema.pre('save', function(next) {
+  // do stuff
+  next();
+});
+```
+
+### 15.2 Example
+
+Let's try this out with this code
+
+```js
+personSchema.pre('save', async function() {
+    console.log('ABOUT TO SAVE!!!!')
+});
+
+personSchema.post('save', async function() {
+    console.log('JUST SAVED!!!!')
+});
+```
+
+```
+> CONNECTION OPEN!!!
+> const k = new Person({first: 'Krissy', last: 'Sun'})
+undefined
+> k.save()
+Promise { <pending> }
+> ABOUT TO SAVE!!!!
+JUST SAVED!!!!
+```
+
+## 16. Final Codes
+
+### 16.1 index.js
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/movieApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const movieSchema = new mongoose.Schema({
+    title: String,
+    year: Number,
+    score: Number,
+    rating: String
+});
+
+const Movie = mongoose.model('Movie', movieSchema);
+// const amadeus = new Movie({title: 'Amadeus', year: 1986, score: 9.2, rating: 'R'});
+
+// Movie.insertMany([
+//     {title: 'Amadeus', year: 2001, score: 9.3, rating: 'R'},
+//     {title: 'Alien', year: 1979, score: 8.1, rating: 'R'},
+//     {title: 'Iron Giant', year: 1999, score: 7.5, rating: 'PG'},
+//     {title: 'Stand By Me', year: 1986, score: 9.2, rating: 'R'},
+//     {title: 'Moonrise Kingdom', year: 2012, score: 7.3, rating: 'PG-13'}
+// ])
+//     .then(data => {
+//         console.log('IT WORKED');
+//         console.log(data)
+//     })
+```
+
+### 16.2 product.js
+
+```js
+const { triggerAsyncId } = require('async_hooks');
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price must be postive ya dofus!!']
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    },
+    size: {
+        type: String,
+        enum: ['S', 'M', 'L']
+    }
+})
+
+// productSchema.methods.greet = function() {
+//     console.log('HELLOOOOOOOOOOOOOOOOOOO!');
+//     console.log(`- from ${this.name}`)
+// }
+
+productSchema.methods.toggleOnSale = function() {
+    this.onSale = !this.onSale;
+    return this.save();
+}
+
+productSchema.methods.addCategory = function(newCategory) {
+    this.categories.push(newCategory);
+    return this.save;
+}
+
+productSchema.statics.fireSale = function() {
+    return this.updateMany({}, {onSale: true, price: 0});
+}
+
+const Product = mongoose.model('Product', productSchema);
+
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    // test out the changes
+    console.log(foundProduct)
+    await foundProduct.addCategory('Outdoors');
+    // test out the changes
+    console.log(foundProduct)
+}
+
+// findProduct();
+
+Product.fireSale()
+    .then(res => console.log(res));
+
+// const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
+// bike.save()
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+
+// Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+```
+
+### 16.3 person.js
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const personSchema = new mongoose.Schema({
+    first: String,
+    last: String
+});
+
+personSchema.virtual('fullName').get(function() {
+    return `${this.first} ${this.last}`
+});
+
+personSchema.pre('save', async function() {
+    console.log('ABOUT TO SAVE!!!!')
+});
+
+personSchema.post('save', async function() {
+    console.log('JUST SAVED!!!!')
+});
+
+const Person = mongoose.model('Person', personSchema);
+```
