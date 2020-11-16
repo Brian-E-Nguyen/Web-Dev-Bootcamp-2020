@@ -1239,3 +1239,156 @@ Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runVa
         console.log(err);
     })
 ```
+
+## 11. Mongoose Validation Errors
+
+## 11.1 Custom Error Messages
+
+We can set up custom validation error messages when we are using the built-in validators. In the schema below, we will pass in an array as a value where the first element is the actual value of the validator, and the second element is the custom error message
+
+```js
+const breakfastSchema = new Schema({
+  eggs: {
+    type: Number,
+    min: [6, 'Too few eggs'],
+    max: 12
+  },
+  ...
+```
+
+Let's try this out with one of our products
+
+```js
+const productSchema = new mongoose.Schema({
+    ...
+    price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price must be postive ya dofus!!']
+    },
+    ...
+})
+```
+
+```js
+Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+```
+> OH NO, ERROR!!!!
+Error: Validation failed: price: Price must be postive ya dofus!!
+```
+
+### 11.2 enum
+
+`enum` allows us provide an array of string values to ensure that you are picking at least one of the values in that array. Let's make a new `size` property in our schema with the following sizes
+
+```js
+const productSchema = new mongoose.Schema({
+    ...
+    size: {
+        type: String,
+        enum: ['S', 'M', 'L']
+    }
+    ...
+})
+```
+
+Now, let's try inserting a product with a size of 'XS', which is not in the `enum`
+
+```js
+const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+```
+> OH NO, ERROR!!!!
+Error: Product validation failed: size: `XS` is not a valid enum value for path `size`.
+```
+
+### 11.3 Final Code (product.js)
+
+```js
+const { triggerAsyncId } = require('async_hooks');
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price must be postive ya dofus!!']
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    },
+    size: {
+        type: String,
+        enum: ['S', 'M', 'L']
+    }
+})
+
+const Product = mongoose.model('Product', productSchema);
+
+const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+
+// Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+```
