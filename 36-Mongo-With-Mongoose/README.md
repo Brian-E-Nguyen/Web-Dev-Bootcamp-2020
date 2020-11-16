@@ -1676,3 +1676,161 @@ findProduct();
 //         console.log(err);
 //     })
 ```
+
+## 13. Adding Model Static Methods
+
+### 13.1 How To
+
+In addition to instance methods, we can also add static methods to our models. **Static methods** are basically methods that live on the model itself, not on the instances of the model, so usually these methods won't act upon individual instances
+
+The syntax for creating static methods is similar to creating instance methods. The only difference is that only the `methods` keyword is replaced with `static`
+
+```js
+  // Assign a function to the "statics" object of our animalSchema
+  animalSchema.statics.findByName = function(name) {
+    return this.find({ name: new RegExp(name, 'i') });
+  };
+```
+
+`this` refers to the model class itself. It does not refer to the individual instances
+
+### 13.2 fireSale Method
+
+Let's come up with a method called `fireSale` where it will set every product to have `onSale` equal to `true` and a price of 0. 
+```js
+productSchema.statics.fireSale = function() {
+    return this.updateMany({}, {onSale: true, price: 0});
+}
+```
+
+Then we will call `fireSale` which is a method on `Product`
+
+```js
+Product.fireSale()
+    .then(res => console.log(res));
+```
+
+```
+CONNECTION OPEN!!!
+{ n: 7, nModified: 1, ok: 1 }
+```
+
+```
+> db.products.find()
+
+{ "_id" : ObjectId("5fb17e4a4dc92b2d1c69551c"), "name" : "Mountain Bike", "price" : 0, "__v" : 0, "onSale" : true }
+{ "_id" : ObjectId("5fb18684803afd457ca894f4"), "onSale" : true, "name" : "Bike Helmet", "price" : 0, "__v" : 1, "categories" : [ ], "quantity" : { "inStore" : 0, "online" : 0 } }
+{ "_id" : ObjectId("5fb1894bd5cbcd6b748d242b"), "onSale" : true, "categories" : [ "Cycling", "Safety" ], "name" : "Bike Helmet", "price" : 0, "__v" : 0 }
+{ "_id" : ObjectId("5fb189d248efd60818deea40"), "onSale" : true, "categories" : [ "Cycling", "Safety" ], "name" : "Bike Helmet", "price" : 0, "__v" : 0 }
+{ "_id" : ObjectId("5fb189e185364a209c7a1c41"), "onSale" : true, "categories" : [ "Cycling", "Safety", "123" ], "name" : "Bike Helmet", "price" : 0, "__v" : 0 }
+{ "_id" : ObjectId("5fb18aa850ae7154a8a7de67"), "quantity" : { "online" : 0, "inStore" : 0 }, "onSale" : true, "categories" : [ "Cycling", "Safety", "123" ], "name" : "Bike Helmet", "price" : 0, "__v" : 0 }
+{ "_id" : ObjectId("5fb1c4c7ce0d745db0812262"), "quantity" : { "online" : 0, "inStore" : 0 }, "onSale" : true, "categories" : [ "Cycling" ], "name" : "Tire pump", "price" : 0, "__v" : 0 }
+```
+
+We are using static methods because it does not apply to just one product
+
+### 13.3 Final Code (product.js)
+
+```js
+const { triggerAsyncId } = require('async_hooks');
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price must be postive ya dofus!!']
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    },
+    size: {
+        type: String,
+        enum: ['S', 'M', 'L']
+    }
+})
+
+// productSchema.methods.greet = function() {
+//     console.log('HELLOOOOOOOOOOOOOOOOOOO!');
+//     console.log(`- from ${this.name}`)
+// }
+
+productSchema.methods.toggleOnSale = function() {
+    this.onSale = !this.onSale;
+    return this.save();
+}
+
+productSchema.methods.addCategory = function(newCategory) {
+    this.categories.push(newCategory);
+    return this.save;
+}
+
+productSchema.statics.fireSale = function() {
+    return this.updateMany({}, {onSale: true, price: 0});
+}
+
+const Product = mongoose.model('Product', productSchema);
+
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    // test out the changes
+    console.log(foundProduct)
+    await foundProduct.addCategory('Outdoors');
+    // test out the changes
+    console.log(foundProduct)
+}
+
+// findProduct();
+
+Product.fireSale()
+    .then(res => console.log(res));
+
+// const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
+// bike.save()
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+
+// Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+```
