@@ -1834,3 +1834,88 @@ Product.fireSale()
 //         console.log(err);
 //     })
 ```
+
+## 14. Mongoose Virtuals
+
+### 14.1 Intro
+
+**Virtuals** give us the ability to add properties to a schema that don't actually exist in the DB itself, but that we have access to thanks to Mongoose. For example, we will use a person model with a first name and last naame, where don't need to store the full name in the DB, but it would be nice to have a propery that I could access as if the full name was in the DB
+
+### 14.2 First and Last Name Virtual
+
+Let's create a new `person.js` file and put this code inside
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const personSchema = new mongoose.Schema({
+    first: String,
+    last: String
+});
+
+personSchema.virtual('fullName').get(function() {
+    return `${this.first} ${this.last}`
+})
+
+const Person = mongoose.model('Person', personSchema);
+```
+
+As you can see, we have our virtual where we combine the first and last name of the Person to get the `fullName`. Let's make a new person by loading `person.js` in node
+
+```
+> CONNECTION OPEN!!!
+> const brian = new Person({first: 'Brian', last: 'Nguyen'})
+undefined
+> brian
+{ _id: 5fb2d91c52598122a42ea900, first: 'Brian', last: 'Nguyen' }
+> brian.fullName
+'Brian Nguyen'
+```
+
+Now let's save our `brian` object
+
+```
+> brian.save()
+Promise { <pending> }
+```
+
+```
+> show collections
+people
+products
+```
+
+Look at the collections. Notice how our `Person` collection got change to `people`. Cool, huh?
+
+### 14.3 Final Code (person.js)
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const personSchema = new mongoose.Schema({
+    first: String,
+    last: String
+});
+
+personSchema.virtual('fullName').get(function() {
+    return `${this.first} ${this.last}`
+});
+
+const Person = mongoose.model('Person', personSchema);
+```
