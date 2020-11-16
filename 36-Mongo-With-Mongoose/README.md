@@ -1074,3 +1074,168 @@ bike.save()
         console.log(err);
     })
 ```
+
+## 10. Validating Mongoose Updates
+
+### 10.1 The Problem
+
+So we spent all of that time setting up our schema where we have different sorts of constraints, and they're working so far, at least when we create new products. But they won't work when we update. Let's make a product that we can update
+
+```js
+const bike = new Product({name: 'Tire pump', price: 19.50, categories: ['Cycling']});
+bike.save()
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+Now let's save it
+
+```
+> CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [ 'Cycling' ],
+  _id: 5fb1c4c7ce0d745db0812262,
+  name: 'Tire pump',
+  price: 19.5,
+  __v: 0
+}
+```
+
+Let's see what happens when we set the price to negative when updating. Remember that `new: true` means that the data is shown when updating
+
+```js
+Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true})
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+```
+CONNECTION OPEN!!!
+IT WORKED!!!
+DATA: {
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [ 'Cycling' ],
+  _id: 5fb1c4c7ce0d745db0812262,
+  name: 'Tire pump',
+  price: -10.99,
+  __v: 0
+}
+```
+
+It still updates with the price at -10.99, even though we had the min at 0
+
+```js
+const productSchema = new mongoose.Schema({
+    ...
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    }
+    ...
+})
+```
+
+### 10.2 The Solution
+
+Be default, Mongoose ignores our predefined validations. We would have to tell Mongoose that we waant to apply them when updating. There's an option called `runValidators` that we would need to use and set to `true`. Now when we update the product, the validator will prevent the data from updating
+
+```js
+Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
+
+```
+> OH NO, ERROR!!!!
+Error: Validation failed: price: Path `price` (-10.99) is less than minimum allowed value (0).
+```
+
+### 10.3 Final Code (product.js)
+
+```js
+const { triggerAsyncId } = require('async_hooks');
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    }
+})
+
+const Product = mongoose.model('Product', productSchema);
+
+// const bike = new Product({name: 'Tire pump', price: 19.50, categories: ['Cycling']});
+// bike.save()
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+
+Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+    .then(data => {
+        console.log('IT WORKED!!!');
+        console.log(`DATA: ${data}`);
+    })
+    .catch(err => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(err);
+    })
+```
