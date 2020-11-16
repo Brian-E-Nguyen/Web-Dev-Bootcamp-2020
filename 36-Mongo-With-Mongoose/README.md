@@ -1392,3 +1392,287 @@ bike.save()
 //         console.log(err);
 //     })
 ```
+
+## 12. Model Instance Methods
+
+### 12.1 How To
+
+We'll talk about adding ouur own custom methods to our schema. This is really common of adding functionality to models. Instances of `Models` are **documents**. 
+
+```js
+  // define a schema
+  const animalSchema = new Schema({ name: String, type: String });
+
+  // assign a function to the "methods" object of our animalSchema
+  // 'findSimilarTypes' is the custom method that we are defining
+  animalSchema.methods.findSimilarTypes = function(cb) {
+    return mongoose.model('Animal').find({ type: this.type }, cb);
+  };
+```
+
+Let's define our own instance method with the `productSchema`
+
+```JS
+productSchema.methods.greet = function() {
+    console.log('HELLOOOOOOOOOOOOOOOOOOO!');
+}
+```
+
+Now let's load our `product.js`. In the node REPL, let's create our own instance of a product
+
+```
+CONNECTION OPEN!!!
+> const p = new Product({name: 'bike bag', price: 10})
+undefined
+> p
+{
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [],
+  _id: 5fb2c9945e750c266871129c,      
+  name: 'bike bag',
+  price: 10
+}
+>
+```
+
+Now let's call `p.greet()`
+
+```
+> p.greet()
+HELLOOOOOOOOOOOOOOOOOOO!
+undefined
+```
+
+### 12.2 Testing Instance Methods On Preexisting Data
+
+Let's do something a little bit different. From this example, we've created a new product then calling the instance method. Now, let's find a product and then call the instance method, just to show that we have access to this method
+
+```js
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    foundProduct.greet();
+}
+
+findProduct();
+```
+
+```
+> CONNECTION OPEN!!!
+HELLOOOOOOOOOOOOOOOOOOO!
+```
+
+Let's add more to the `greet()` function so that it greets you with the product name
+
+```js
+productSchema.methods.greet = function() {
+    console.log('HELLOOOOOOOOOOOOOOOOOOO!');
+    console.log(`- from ${this.name}`)
+}
+```
+
+`this` refers to the `foundProduct`
+
+```
+> CONNECTION OPEN!!!
+HELLOOOOOOOOOOOOOOOOOOO!
+- from Bike Helmet
+```
+
+### 12.3 Real-World Methods
+
+#### 12.3.1 toggleOnSale()
+
+Let's make a method that's actually useful, say, a method that would toggle if an item is on sale or not
+
+```js
+productSchema.methods.toggleOnSale = function() {
+    this.onSale = !this.onSale;
+    return this.save();
+}
+```
+
+Now let's test out this method
+
+```js
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    console.log(foundProduct);
+}
+```
+
+```
+> CONNECTION OPEN!!!
+{
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [],
+  _id: 5fb18684803afd457ca894f4,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 0
+}
+{
+  quantity: { online: 0, inStore: 0 },
+  onSale: true,
+  categories: [],
+  _id: 5fb18684803afd457ca894f4,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 1
+}
+```
+
+#### 12.3.2 addCategory()
+
+Let's make a new method called `addCategory()` and test out the method
+
+```js
+productSchema.methods.addCategory = function(newCategory) {
+    this.categories.push(newCategory);
+    return this.save;
+}
+
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    // test out the changes
+    console.log(foundProduct)
+    await foundProduct.addCategory('Outdoors');
+    // test out the changes
+    console.log(foundProduct)
+}
+```
+
+```
+> CONNECTION OPEN!!!
+{
+  quantity: { online: 0, inStore: 0 },
+  onSale: true,
+  categories: [],
+  _id: 5fb18684803afd457ca894f4,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 1
+}
+{
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [],
+  _id: 5fb18684803afd457ca894f4,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 1
+}
+{
+  quantity: { online: 0, inStore: 0 },
+  onSale: false,
+  categories: [ 'Outdoors' ],
+  _id: 5fb18684803afd457ca894f4,
+  name: 'Bike Helmet',
+  price: 29.5,
+  __v: 1
+}
+```
+
+### 12.4 Final Code (product.js)
+
+```js
+const { triggerAsyncId } = require('async_hooks');
+const mongoose = require('mongoose');
+const { networkInterfaces } = require('os');
+mongoose.connect('mongodb://localhost:27017/shopApp', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        maxlength: 20
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: [0, 'Price must be postive ya dofus!!']
+    },
+    onSale: {
+        type: Boolean,
+        default: false
+    },
+    categories: [String],
+    quantity: {
+        online: {
+            type: Number,
+            default: 0
+        },
+        inStore: {
+            type: Number,
+            default: 0
+        }
+    },
+    size: {
+        type: String,
+        enum: ['S', 'M', 'L']
+    }
+})
+
+// productSchema.methods.greet = function() {
+//     console.log('HELLOOOOOOOOOOOOOOOOOOO!');
+//     console.log(`- from ${this.name}`)
+// }
+
+productSchema.methods.toggleOnSale = function() {
+    this.onSale = !this.onSale;
+    return this.save();
+}
+
+productSchema.methods.addCategory = function(newCategory) {
+    this.categories.push(newCategory);
+    return this.save;
+}
+
+const Product = mongoose.model('Product', productSchema);
+
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    // test out the changes
+    console.log(foundProduct)
+    await foundProduct.addCategory('Outdoors');
+    // test out the changes
+    console.log(foundProduct)
+}
+
+findProduct();
+
+// const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
+// bike.save()
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+
+// Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
+```

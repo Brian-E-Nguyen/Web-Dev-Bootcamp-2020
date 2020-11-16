@@ -42,18 +42,46 @@ const productSchema = new mongoose.Schema({
     }
 })
 
+// productSchema.methods.greet = function() {
+//     console.log('HELLOOOOOOOOOOOOOOOOOOO!');
+//     console.log(`- from ${this.name}`)
+// }
+
+productSchema.methods.toggleOnSale = function() {
+    this.onSale = !this.onSale;
+    return this.save();
+}
+
+productSchema.methods.addCategory = function(newCategory) {
+    this.categories.push(newCategory);
+    return this.save;
+}
+
 const Product = mongoose.model('Product', productSchema);
 
-const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
-bike.save()
-    .then(data => {
-        console.log('IT WORKED!!!');
-        console.log(`DATA: ${data}`);
-    })
-    .catch(err => {
-        console.log('OH NO, ERROR!!!!');
-        console.log(err);
-    })
+const findProduct = async () => {
+    const foundProduct = await Product.findOne({name: 'Bike Helmet'});
+    console.log(foundProduct);
+    await foundProduct.toggleOnSale();
+    // test out the changes
+    console.log(foundProduct)
+    await foundProduct.addCategory('Outdoors');
+    // test out the changes
+    console.log(foundProduct)
+}
+
+findProduct();
+
+// const bike = new Product({name: 'Cycling Jersey', price: 28.50, categories: ['Cycling'], size: 'XS'});
+// bike.save()
+//     .then(data => {
+//         console.log('IT WORKED!!!');
+//         console.log(`DATA: ${data}`);
+//     })
+//     .catch(err => {
+//         console.log('OH NO, ERROR!!!!');
+//         console.log(err);
+//     })
 
 // Product.findOneAndUpdate({name: 'Tire pump'}, {price: -10.99}, {new: true, runValidators: true})
 //     .then(data => {
