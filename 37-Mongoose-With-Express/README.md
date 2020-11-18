@@ -410,3 +410,115 @@ Product.insertMany(seedProducts)
         console.log(error);
     });
 ```
+
+## 3. Products Index
+
+Let's change our first `app.get()` route to the one down below
+
+```js
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.send('ALL PRODUCTS WILL BE HERE');
+    console.log(products)
+});
+```
+
+And now let's run our `index.js`
+
+```
+$ node index.js
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+[
+  {
+    _id: 5fb5791fcd7ca355a4ae067f,
+    name: 'Ruby Grapefruit',
+    price: 1.99,
+    category: 'fruit',
+    __v: 0
+  },
+  {
+    _id: 5fb57be03ea7c131e03beaef,
+    name: 'Chocolate Whole Milk',
+    price: 1.99,
+    category: 'dairy',
+    __v: 0
+  },
+  {
+    _id: 5fb57be03ea7c131e03beaf0,
+    name: 'Organic Celery',
+    price: 1.49,
+    category: 'vegetable',
+    __v: 0
+  },
+  {
+    _id: 5fb57be03ea7c131e03beaf1,
+    name: 'Organic Goddess Melon',
+    price: 4.99,
+    category: 'fruit',
+    __v: 0
+  },
+  {
+    _id: 5fb57be03ea7c131e03beaf2,
+    name: 'Fairy Eggplant',
+    price: 1.99,
+    category: 'vegetable',
+    __v: 0
+  },
+  {
+    _id: 5fb57be03ea7c131e03beaf3,
+    name: 'Organic Seedless Watermelon',
+    price: 3.49,
+    category: 'fruit',
+    __v: 0
+  },
+  {
+    _id: 5fb57be03ea7c131e03beaf4,
+    name: 'Strawberry Whole Milk',
+    price: 1.99,
+    category: 'dairy',
+    __v: 0
+  }
+]
+```
+
+We will use the async callback all the time. The logic of waiting for something to comeback from mongoose and then responding, we do that all the time
+
+In our *views* directory, we will make another path, *products/index.ejs* and add this to test it out. 
+
+```html
+<h1>All Products</h1>
+```
+
+We will change our route just a bit
+
+```js
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    console.log(products);
+    res.render('products/index');
+});
+```
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img3.jpg?raw=true)
+
+Now we will pass in our products
+
+```js
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', {products});
+});
+```
+
+And in our `index.ejs`, we will add some code to display the product names
+
+```html
+<ul>
+    <% for(let product of products) { %> 
+        <li><%= product.name %></li>
+    <% } %>
+</ul>
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img4.jpg?raw=true)
