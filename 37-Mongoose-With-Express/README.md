@@ -878,3 +878,191 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 6. Updating Products
+
+### 6.1 Edit Form
+
+We will have a GET request route that will serve the edit form 
+
+```js
+app.get('/products/:id/edit', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/edit', {product})
+});
+```
+
+And then we will make our new `edit.ejs` template. We will basically copy the form from `new.ejs` and make some minor adjustments to it. Notice the `form action` and the `value` for the first input
+
+```html
+<form action="/products/<%=product._id%>" method="post">
+    <label for="name">Product Name</label>
+    <input type="text" name="name" placeholder="Product Name" id="name" value="<%=product.name%> ">
+    <label for="price">Price (Unit)</label>
+    <input type="number" name="price" placeholder="Product Name" id="price" value="<%=product.price%>">
+    <label for="category">Select Category</label>
+    <select name="category" id="category">
+        <option value="fruit">Fruit</option>
+        <option value="vegetable">Vegetable</option>
+        <option value="dairy">Dairy</option>
+    </select>
+    <button>Submit</button>
+</form>
+```
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img13.jpg?raw=true)
+
+As you can see, the form has prefilled data. We don't have a `value` attribute yet for the category, but we'll get to that later
+
+### 6.2 PUT Request
+
+Now let's make our PUT request because we are taking everything from the form and updating one or more attributes. We will test out our request with this code below:
+
+```js
+app.put('/products/:id', async (req,res) => {
+    console.log(req.body);
+    res.send('PUT!!!!!!!!!');
+});
+```
+
+Remember that we need to install `method-override` because HTML forms only support GET and POST requests. So use `npm i method-override` and put this code in `index.js`
+
+```js
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'))
+```
+
+Now in our form in `edit.ejs` put this line
+
+```js
+<form action="/products/<%=product._id%>?_method=PUT" method="post">
+```
+
+### 6.3 Testing Our Edit
+
+And now let's test it out by changing the category of a banana to "dairy"
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img14.jpg?raw=true)
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+{ name: 'Banana ', price: '3', category: 'dairy' }
+```
+
+So now we need to write the logic of updating a product using Mongoose by updating our PUT request
+
+```js
+app.put('/products/:id', async (req,res) => {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, {runValidators: true, new: true});
+    res.redirect(`/products/${product._id}`)
+});
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img15.jpg?raw=true)
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img16.jpg?raw=true)
+
+Let's add this link in `show.ejs` so that it takes us to the edit page
+
+```html
+<a href="/products/<%=product._id%>/edit">Edit Product</a>
+```
+
+### 6.4 Final Codes
+
+#### 6.4.1 index.js
+
+```js
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const portNumber = 3000;
+const methodOverride = require('method-override');
+
+const Product = require('./models/product');
+
+mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('MONGO CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, MONGO CONNECTION ERROR!!!!');
+        console.log(error)
+    });
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', {products});
+});
+
+app.get('/products/new', (req, res) => {
+    res.render('products/new')
+});
+
+app.post('/products', async (req,res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+});
+
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product);
+    res.render('products/show', {product});
+});
+
+app.get('/products/:id/edit', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/edit', {product})
+});
+
+app.put('/products/:id', async (req,res) => {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, {runValidators: true, new: true});
+    res.redirect(`/products/${product._id}`)
+});
+
+app.listen(portNumber, () => {
+    console.log(`APP IS LISTENING ON PORT ${portNumber}`)
+});
+```
+
+#### 6.4.2 edit.js
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+</head>
+<body>
+    <h1>Edit Product</h1>
+    <form action="/products/<%=product._id%>?_method=PUT" method="POST">
+        <label for="name">Product Name</label>
+        <input type="text" name="name" placeholder="Product Name" id="name" value="<%=product.name%> ">
+        <label for="price">Price (Unit)</label>
+        <input type="number" name="price" placeholder="Product Name" id="price" value="<%=product.price%>">
+        <label for="category">Select Category</label>
+        <select name="category" id="category">
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+            <option value="dairy">Dairy</option>
+        </select>
+        <button>Submit</button>
+    </form>
+    <a href="/products/<%=product._id%>">Cancel</a>
+</body>
+</html>
+```
