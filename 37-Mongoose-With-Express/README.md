@@ -678,3 +678,203 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 5. Creating Products
+
+We will create a form that is used for creating products. This will require two routes: a GET and a POST
+
+### 5.1 GET Request and Our Form
+
+Our template will be called `new.ejs`
+
+```js
+app.get('/products/new', (req, res) => {
+    res.render('products/new')
+});
+```
+
+Here is the content in `new.ejs`
+
+```html
+<form action="/products" method="post">
+    <label for="name">Product Name</label>
+    <input type="text" name="name" placeholder="Product Name" id="name">
+    <label for="price">Price (Unit)</label>
+    <input type="number" name="price" placeholder="Product Name" id="price">
+    <label for="category">Select Category</label>
+    <select name="category" id="category">
+        <option value="fruit">Fruit</option>
+        <option value="vegetable">Vegetable</option>
+        <option value="dairy">Dairy</option>
+    </select>
+    <button>Submit</button>
+</form>
+```
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img7.jpg?raw=true)
+
+### 5.2 POST Request
+
+Now we will set up a route to submit our data
+
+```js
+app.post('/products', (req,res) => {
+
+});
+```
+
+Now remember we want info from the POST request body, but we don't have access to `req.body` immediately; well, it's there, but it's not parsed. We need to tell Express to use middleware
+
+```js
+app.use(express.urlencoded({extended: true}));
+```
+
+Now let's fill in that 
+
+```js
+app.post('/products', (req,res) => {
+    console.log(req.body);
+    res.send('making your product!')
+});
+```
+
+And then we will test out this form 
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img8.jpg?raw=true)
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img9.jpg?raw=true)
+
+This is the output in the console
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+{ name: 'Cucumber', price: '3', category: 'vegetable' }
+```
+
+### 5.3 Creating The Product
+
+Now we will make an actual product itself. We will do that in our POST request
+
+```js
+app.post('/products', async (req,res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    console.log(newProduct);
+    res.send('making your product!')
+});
+```
+
+The thing is that we aren't making any validations with `req.body`. There could be more information in there that we don't need. But we'll just do this for now
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img10.jpg?raw=true)
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+{
+  _id: 5fb96c97d63aec4c1c1c33f1,
+  name: 'Heirloom Tomato',
+  price: 2,
+  category: 'fruit',
+  __v: 0
+}d
+```
+
+### 5.4 Redirecting
+
+Now we will redirect to the product's page after it has been created
+
+```js
+app.post('/products', async (req,res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img11.jpg?raw=true)
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img12.jpg?raw=true)
+
+### 5.5 Final Codes 
+
+#### 5.5.1 index.js
+
+```js
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const portNumber = 3000;
+
+const Product = require('./models/product');
+
+mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('MONGO CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, MONGO CONNECTION ERROR!!!!');
+        console.log(error)
+    });
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({extended: true}));
+
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', {products});
+});
+
+app.get('/products/new', (req, res) => {
+    res.render('products/new')
+});
+
+app.post('/products', async (req,res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+});
+
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product);
+    res.render('products/show', {product});
+});
+
+app.listen(portNumber, () => {
+    console.log(`APP IS LISTENING ON PORT ${portNumber}`)
+});
+```
+
+#### 5.5.2 new.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Product</title>
+</head>
+<body>
+    <h1>Add A Product</h1>
+    <form action="/products" method="post">
+        <label for="name">Product Name</label>
+        <input type="text" name="name" placeholder="Product Name" id="name">
+        <label for="price">Price (Unit)</label>
+        <input type="number" name="price" placeholder="Product Name" id="price">
+        <label for="category">Select Category</label>
+        <select name="category" id="category">
+            <option value="fruit">Fruit</option>
+            <option value="vegetable">Vegetable</option>
+            <option value="dairy">Dairy</option>
+        </select>
+        <button>Submit</button>
+    </form>
+</body>
+</html>
+```
