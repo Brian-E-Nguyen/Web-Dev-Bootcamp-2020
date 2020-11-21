@@ -522,3 +522,159 @@ And in our `index.ejs`, we will add some code to display the product names
 ```
 
 ![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img4.jpg?raw=true)
+
+## 4. Product Details
+
+### 4.1 Our Route
+
+Let's put this code in our `index.js`
+
+```js
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product)
+    res.send('details page!')
+})
+```
+
+Now we will take a product ID and put that in our URL. We should get this page
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img5.jpg?raw=true)
+
+And now we get this in our console
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+{
+  _id: 5fb5791fcd7ca355a4ae067f,
+  name: 'Ruby Grapefruit',
+  price: 1.99,
+  category: 'fruit',
+  __v: 0
+}
+```
+
+Now instead of just finding that product, what we're gonna do is render a template. Let's fix that route just a bit
+
+```js
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product);
+    res.render('products/show', {product});
+})
+```
+
+### 4.2 Our View (show.ejs)
+
+And now we will make our `show.ejs` file with these contents
+
+```html
+<h1><%= product.name %></h1>
+<ul>
+    <li>Price: $<%= product.price %> </li>
+    <li>Price: <%= product.category %> </li>
+</ul>
+```
+
+### 4.3 Fixing index.ejs
+
+Let's change our `index.ejs` file a bit so that we have links to all of the products
+
+```html
+<ul>
+    <% for(let product of products) { %> 
+        <li><a href="/products/<%=product._id%>"><%= product.name %> </a></li>
+    <% } %>
+</ul>
+```
+
+Now we get this as a result, where all products have their own link and each link takes you to their own page
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img6.jpg?raw=true)
+
+### 4.4 Final Codes
+
+#### 4.4.1 index.js
+
+```js
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const portNumber = 3000;
+
+const Product = require('./models/product');
+
+mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('MONGO CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, MONGO CONNECTION ERROR!!!!');
+        console.log(error)
+    });
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', {products});
+});
+
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product);
+    res.render('products/show', {product});
+})
+
+app.listen(portNumber, () => {
+    console.log(`APP IS LISTENING ON PORT ${portNumber}`)
+});
+```
+
+#### 4.4.2 show.js
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= product.name %></title>
+</head>
+<body>
+    <h1><%= product.name %></h1>
+    <ul>
+        <li>Price: $<%= product.price %> </li>
+        <li>Price: <%= product.category %> </li>
+    </ul>
+    <a href="/products">All Products</a>
+</body>
+</html>
+```
+
+#### 4.4.3 index.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products</title>
+</head>
+<body>
+    <h1>All Products!</h1>
+    <ul>
+        <% for(let product of products) { %> 
+            <li><a href="/products/<%=product._id%>"><%= product.name %> </a></li>
+        <% } %>
+    </ul>
+</body>
+</html>
+```
