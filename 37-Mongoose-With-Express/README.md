@@ -1430,3 +1430,89 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 9. Filtering By Category
+
+### 9.1 Fixing GET Products
+
+The route that we would do will be the one below
+
+```
+/products?category=dairy
+```
+
+We would get all categories, then we will divide them using our query string
+
+In our `show.ejs`, we will make the product's category a link, which will take you to a page that shows all products of that category
+
+![img30](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img30.jpg?raw=true)
+
+In our `index.js` we will extract the category from the query string and that for filter our products
+
+```js
+app.get('/products', async (req, res) => {
+    const { category } = req.query;
+    if (category) {
+        const products = await Product.find({category});
+        res.render('products/index', {products});
+    } else {
+        const products = await Product.find({});
+        res.render('products/index', {products});
+    }
+});
+```
+
+![img31](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img31.jpg?raw=true)
+
+![img32](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img32.jpg?raw=true)
+
+![img33](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img33.jpg?raw=true)
+
+### 9.2 Improving UX
+
+#### 9.2.1 Fixing h1 Tag
+
+Let's improve the code a bit. Notice how the `<h1>` tag says "All Products!" in each of the categories. Let's pass in the name of the category and use EJS to replace it
+
+```js
+app.get('/products', async (req, res) => {
+    const { category } = req.query;
+    if (category) {
+        const products = await Product.find({category});
+        res.render('products/index', {products, category});
+    } else {
+        const products = await Product.find({});
+        res.render('products/index', {products, category: 'all'});
+    }
+});
+```
+
+Then we will add this in our `index.ejs`
+
+```html
+<h1><%= category %> Products!</h1>
+```
+
+![img34](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img34.jpg?raw=true)
+
+#### 9.2.2 Linking Back to All Products
+
+Let's add this code in our `index.ejs` so that it links us back to all the products
+
+```html
+<a href="/products">All Products</a>
+```
+
+![img35](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img35.jpg?raw=true)
+
+![img36](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img36.jpg?raw=true)
+
+The problem is that the link to all products still shows when we are viewing all products. Let's improve our `index.ejs` with this code below:
+
+```html
+<% if(category !== 'All') { %> 
+    <a href="/products">All Products</a>
+<% } %> 
+```
+
+![img37](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img37.jpg?raw=true)
