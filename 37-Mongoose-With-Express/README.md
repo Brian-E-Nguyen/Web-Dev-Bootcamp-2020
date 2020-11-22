@@ -1298,3 +1298,135 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 8. Deleting Products
+
+### 8.1 Our DELETE Request
+
+Let's add this code in our `show.ejs` to have our delete button
+
+```html
+<form action="/products/<%=product._id%>?_method=DELETE" method="post">
+    <button>Delete</button>
+</form>
+```
+
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img25.jpg?raw=true)
+
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img26.jpg?raw=true)
+
+Now we need to set up a DELETE route for this button
+
+```js
+app.delete('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const deletedProdcut = await Product.findByIdAndDelete(id);
+    res.redirect('/products');
+});
+```
+
+![img27](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img27.jpg?raw=true)
+
+![img28](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img28.jpg?raw=true)
+
+![img29](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img29.jpg?raw=true)
+
+### 8.2 Final Codes
+
+#### 8.2.1 index.js
+
+```js
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const portNumber = 3000;
+const methodOverride = require('method-override');
+
+const Product = require('./models/product');
+
+mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('MONGO CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, MONGO CONNECTION ERROR!!!!');
+        console.log(error)
+    });
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+
+const categories = ['fruit', 'vegetable', 'dairy'];
+
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', {products});
+});
+
+app.get('/products/new', (req, res) => {
+    res.render('products/new', {categories})
+});
+
+app.post('/products', async (req,res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+});
+
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product);
+    res.render('products/show', {product});
+});
+
+app.get('/products/:id/edit', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/edit', {product, categories})
+});
+
+app.put('/products/:id', async (req,res) => {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, {runValidators: true, new: true});
+    res.redirect(`/products/${product._id}`)
+});
+
+app.delete('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const deletedProdcut = await Product.findByIdAndDelete(id);
+    res.redirect('/products');
+});
+
+app.listen(portNumber, () => {
+    console.log(`APP IS LISTENING ON PORT ${portNumber}`)
+});
+```
+
+### 8.2.2 show.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= product.name %></title>
+</head>
+<body>
+    <h1><%= product.name %></h1>
+    <ul>
+        <li>Price: $<%= product.price %> </li>
+        <li>Price: <%= product.category %> </li>
+    </ul>
+    <a href="/products">All Products</a>
+    <a href="/products/<%=product._id%>/edit">Edit Product</a>
+    <form action="/products/<%=product._id%>?_method=DELETE" method="post">
+        <button>Delete</button>
+    </form>
+</body>
+</html>
+```
