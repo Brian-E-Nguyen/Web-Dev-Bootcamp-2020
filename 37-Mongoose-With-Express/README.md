@@ -1066,3 +1066,235 @@ app.listen(portNumber, () => {
 </body>
 </html>
 ```
+
+## 7. Tangent On Category Selector
+
+### 7.1 Hardcoding to Solve the Problem
+
+In this section, we will fix the form by correctly showing the current category of the product when trying to edit it. In the `<option>` tag of the dropdown menu, we need to add a boolean value called `selected`.
+
+```html
+<option value="dairy" selected>Dairy</option>
+```
+
+Now when we refresh, we see that dairy is automatically selected
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img17.jpg?raw=true)
+
+What we need to do is dynamically apply the `selected` attribute depending on the type of product it is. We will need to use EJS inside of the `<option>` opening tab and use ternary operators
+
+```html
+<option value="fruit" <%=product.category === 'fruit' ? 'selected' : ''%> >Fruit</option>
+<option value="vegetable" <%=product.category === 'vegetable' ? 'selected' : ''%>>Vegetable</option>
+<option value="dairy" <%=product.category === 'dairy' ? 'selected' : ''%>>Dairy</option>
+```
+
+It works, but it's pretty ugly. And if we add more categories, it'll be a nightmare. But let's refresh the page and we can see now that it works
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img18.jpg?raw=true)
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img19.jpg?raw=true)
+
+### 7.2 Dynamic Solution
+
+Let's fix the clunkyness of this. Instead of typing one of these manually, it's better to use a loop. In our `index.js`, we will make a list of categories. We will then pass them through the `/new` and `/edit`
+
+```js
+const categories = ['fruit', 'vegetable', 'dairy'];
+
+app.get('/products/new', (req, res) => {
+    res.render('products/new', {categories})
+});
+```
+
+```html
+<select name="category" id="category">
+    <% for(let category of categories) {%> 
+        <option value="<%=category%>"><%= category %> </option>
+    <% } %> 
+</select>
+```
+
+Now let's check the Add Product form to see if it still works
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img20.jpg?raw=true)
+
+Let's inspect the element to see what it shows us
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img21.jpg?raw=true)
+
+So if we add new categories (or remove them), the dropdown menu will automatically update. Let's add fungi to our `categories` list
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img22.jpg?raw=true)
+
+Now let's fix our "edit products" form. We will reuse what we had in our "add product" form
+
+```js
+app.get('/products/:id/edit', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/edit', {product, categories})
+});
+```
+
+```html
+<% for(let category of categories) {%> 
+    <option value="<%=category%>" <%=product.category === category ? 'selected' : ''%> ><%= category %> </option>
+<% } %>
+```
+
+Now let's test this out
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img23.jpg?raw=true)
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/37-Mongoose-With-Express/img-for-notes/img24.jpg?raw=true)
+
+### 7.3 Final Codes
+
+#### 7.3.1 index.js
+
+```js
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const portNumber = 3000;
+const methodOverride = require('method-override');
+
+const Product = require('./models/product');
+
+mongoose.connect('mongodb://localhost:27017/farmStand', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('MONGO CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, MONGO CONNECTION ERROR!!!!');
+        console.log(error)
+    });
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+
+const categories = ['fruit', 'vegetable', 'dairy'];
+
+app.get('/products', async (req, res) => {
+    const products = await Product.find({});
+    res.render('products/index', {products});
+});
+
+app.get('/products/new', (req, res) => {
+    res.render('products/new', {categories})
+});
+
+app.post('/products', async (req,res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+});
+
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    console.log(product);
+    res.render('products/show', {product});
+});
+
+app.get('/products/:id/edit', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    res.render('products/edit', {product, categories})
+});
+
+app.put('/products/:id', async (req,res) => {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body, {runValidators: true, new: true});
+    res.redirect(`/products/${product._id}`)
+});
+
+app.listen(portNumber, () => {
+    console.log(`APP IS LISTENING ON PORT ${portNumber}`)
+});
+```
+
+### 7.3.2 edit.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+</head>
+<body>
+    <h1>Edit Product</h1>
+    <form action="/products/<%=product._id%>?_method=PUT" method="POST">
+        <label for="name">Product Name</label>
+        <input type="text" name="name" placeholder="Product Name" id="name" value="<%=product.name%> ">
+        <label for="price">Price (Unit)</label>
+        <input type="number" name="price" placeholder="Product Name" id="price" value="<%=product.price%>">
+        <label for="category">Select Category</label>
+        <select name="category" id="category">
+            <% for(let category of categories) {%> 
+                <option value="<%=category%>" <%=product.category === category ? 'selected' : ''%> ><%= category %> </option>
+            <% } %> 
+        </select>
+        <button>Submit</button>
+    </form>
+    <a href="/products/<%=product._id%>">Cancel</a>
+</body>
+</html>
+```
+
+### 7.3.3 index.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products</title>
+</head>
+<body>
+    <h1>All Products!</h1>
+    <ul>
+        <% for(let product of products) { %> 
+            <li><a href="/products/<%=product._id%>"><%= product.name %> </a></li>
+        <% } %>
+    </ul>
+    <a href="/products/new">New Product</a>
+</body>
+</html>
+```
+
+### 7.3.4 new.ejs
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Product</title>
+</head>
+<body>
+    <h1>Add A Product</h1>
+    <form action="/products" method="post">
+        <label for="name">Product Name</label>
+        <input type="text" name="name" placeholder="Product Name" id="name">
+        <label for="price">Price (Unit)</label>
+        <input type="number" name="price" placeholder="Product Name" id="price">
+        <label for="category">Select Category</label>
+        <select name="category" id="category">
+            <% for(let category of categories) {%> 
+                <option value="<%=category%>"><%= category %> </option>
+            <% } %> 
+        </select>
+        <button>Submit</button>
+    </form>
+</body>
+</html>
+```
