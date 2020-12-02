@@ -159,3 +159,144 @@ switched to db yelp-camp
 > db.campgrounds.find() 
 { "_id" : ObjectId("5fc7eb410e7df60c3003eafa"), "title" : "My Backyard", "description" : "cheap camping!", "__v" : 0 }
 ```
+
+## 5. Seeding Campgrounds
+
+### 5.1 index.js File
+
+We will make a _seeds_ folder to have two new seed files, `cities.js` and `seedHelpers.js`, and then we will make an `index.js` file inside of that folder
+
+
+```js
+const mongoose = require('mongoose');
+const Campground = require('../models/campgrounds');
+
+mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+    console.log('Database connected');
+});
+
+const seedDB = async() => {
+    await Campground.deleteMany({});
+    const c = new Campground({title: 'purple fields'})
+    await c.save();
+}
+
+seedDB();
+```
+
+Now we'll execute `seeds/index.js` to see our data
+
+```
+$ node seeds/index.js
+Database connected
+```
+
+```
+> db.campgrounds.find()
+{ "_id" : ObjectId("5fc7eec175f6f146dc0c05fb"), "title" : "purple fields", "__v" : 0 }
+```
+
+### 5.2 Using cities.js
+
+Now we'll use our `cities.js` seed file to test it out. We'll make a few modifications to our `seeds/index.js` file by importing our `cities.js` and making some changes to our `seedDB()` function
+
+```js
+const mongoose = require('mongoose');
+const Campground = require('../models/campgrounds');
+const cities = require('./cities');
+
+...
+
+const seedDB = async() => {
+    await Campground.deleteMany({});
+    for (let i = 0; i < 50; i++) {
+        const randomNum = Math.floor(Math.random() * 1000);
+        const camp = new Campground({
+            location: `${cities[randomNum].city}, ${cities[randomNum].state}`
+        });
+        await camp.save();
+    }
+}
+
+seedDB();
+```
+
+```
+> db.campgrounds.find()
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4173"), "location" : "West Covina, California", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4174"), "location" : "Stamford, Connecticut", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4175"), "location" : "Tigard, Oregon", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4176"), "location" : "Lancaster, Ohio", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4177"), "location" : "Fort Wayne, Indiana", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4178"), "location" : "Blaine, Minnesota", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4179"), "location" : "Garland, Texas", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e417a"), "location" : "Montebello, California", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e417b"), "location" : "Euclid, Ohio", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e417c"), "location" : "Urbandale, Iowa", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e417d"), "location" : "Midland, Michigan", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e417e"), "location" : "Santa Rosa, California", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e417f"), "location" : "Los Angeles, California", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4180"), "location" : "Rochester, New York", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4181"), "location" : "Logan, Utah", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4182"), "location" : "Newark, New Jersey", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4183"), "location" : "Troy, New York", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4184"), "location" : "Kentwood, Michigan", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4185"), "location" : "Yorba Linda, California", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f024b2afb75b789e4186"), "location" : "Bolingbrook, Illinois", "__v" : 0 }
+Type "it" for more
+```
+
+### 5.3 Using seedHelpers.js
+
+We will modify our data in our DB by adding a place and descriptor. We will import them into our `seeds/index.js`
+
+```js
+const {places, descriptors} = require('./seedHelpers');
+...
+// Returns a random element from the array
+const sample = array => array[Math.floor(Math.random() * array.length)];
+...
+const seedDB = async() => {
+    await Campground.deleteMany({});
+    for (let i = 0; i < 50; i++) {
+        const randomNum = Math.floor(Math.random() * 1000);
+        const camp = new Campground({
+            location: `${cities[randomNum].city}, ${cities[randomNum].state}`,
+            title: `${sample(descriptors)} ${sample(places)}`
+        });
+        await camp.save();
+    }
+}
+```
+
+```
+> db.campgrounds.find()
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4b8"), "location" : "Lee's Summit, Missouri", "title" : "Sea Spring", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4b9"), "location" : "Pasadena, Texas", "title" : "Diamond Hollow", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4ba"), "location" : "Columbia, South Carolina", "title" : "Maple Spring", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4bb"), "location" : "Lake Forest, California", "title" : "Ocean Group Camp", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4bc"), "location" : "Bullhead City, Arizona", "title" : "Petrified Cliffs", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4bd"), "location" : "Kettering, Ohio", "title" : "Cascade Flats", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4be"), "location" : "Columbus, Indiana", "title" : "Petrified Spring", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4bf"), "location" : "Sammamish, Washington", "title" : "Dusty Creek", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c0"), "location" : "Fort Wayne, Indiana", "title" : "Grizzly Creekside", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c1"), "location" : "Macon, Georgia", "title" : "Ancient Pond", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c2"), "location" : "Escondido, California", "title" : "Maple Horse Camp", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c3"), "location" : "Santa Ana, California", "title" : "Silent Backcountry", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c4"), "location" : "Bryan, Texas", "title" : "Silent Dispersed Camp", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c5"), "location" : "Marana, Arizona", "title" : "Ancient Cliffs", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c6"), "location" : "Evanston, Illinois", "title" : "Bullfrog Bayshore", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c7"), "location" : "West Sacramento, California", "title" : "Roaring Horse Camp", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c8"), "location" : "Wilmington, Delaware", "title" : "Redwood Hunting Camp", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4c9"), "location" : "Portland, Maine", "title" : "Diamond Spring", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4ca"), "location" : "Lowell, Massachusetts", "title" : "Silent Village", "__v" : 0 }
+{ "_id" : ObjectId("5fc7f3698ea13433fc4ab4cb"), "location" : "Plainfield, Illinois", "title" : "Diamond Creekside", "__v" : 0 }
+```
