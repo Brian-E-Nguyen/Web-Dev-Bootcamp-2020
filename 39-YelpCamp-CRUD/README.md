@@ -373,3 +373,94 @@ Now that we passed in our `campground` object, we will then display the title an
 ```
 
 ![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img10.jpg?raw=true)
+
+## 8. Campground New & Create
+
+### 8.1 Making Our Form and GET Route
+
+We will need to have two routes to create a new campground: GET and POST. Let's set up our route and create a `new.ejs` file
+
+```js
+app.get('/campgrounds/new', (req, res) => {
+    res.render('campgrounds/new');
+});
+```
+
+```html
+<form action="/campgrounds" method="post">
+    <div>
+        <label for="title">Title</label>
+        <input type="text" name="campground[title]" id="title">
+    </div>
+    <div>
+        <label for="location">Location</label>
+        <input type="text" name="campground[location]" id="location">
+    </div>
+    <button>App Campground</button>
+</form>
+```
+
+Notice the value of `name`. We have it like this because when we make a POST request, everything from `req.body` will be stored inside of the `campground`. It's a nice way to group content together 
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img11.jpg?raw=true)
+
+Look at what's happening in the pic. We are sending a GET request, but it's not working. This is because the route is treating `new` as an ID. We have to rearrange our routes in our `app.js` file by placing the `new` route on top of the `id` route
+
+```js
+app.get('/campgrounds/new', (req, res) => {
+    res.render('campgrounds/new');
+});
+
+app.get('/campgrounds/:id', async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    res.render('campgrounds/show', {campground})
+});
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img12.jpg?raw=true)
+
+### 8.2 Making Our POST Route
+
+So now we'll set up our endpoint where the form is submitted to
+
+```js
+app.post('/campgrounds', async(req, res) => {
+    res.send(req.body);
+});
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img13.jpg?raw=true)
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img14.jpg?raw=true)
+
+We sent our request but we don't see any data. We need to tell express to use a body parser inside of our `app.js`
+
+```js
+app.use(express.urlencoded({extended: true}));
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img15.jpg?raw=true)
+
+Let's modify our POSTroute so that it saves the campground to the DB and redirects us to its own page
+
+```js
+app.post('/campgrounds', async(req, res) => {
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+});
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img16.jpg?raw=true)
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img17.jpg?raw=true)
+
+### 8.3 Modifying show.ejs and new.ejs
+
+Let's add an anchor tag to take us back to all campgrounds
+
+```html
+<footer>
+    <a href="/campgrounds">All Campgrounds</a>
+</footer>
+```
