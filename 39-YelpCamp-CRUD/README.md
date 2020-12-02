@@ -300,3 +300,32 @@ const seedDB = async() => {
 { "_id" : ObjectId("5fc7f3698ea13433fc4ab4ca"), "location" : "Lowell, Massachusetts", "title" : "Silent Village", "__v" : 0 }
 { "_id" : ObjectId("5fc7f3698ea13433fc4ab4cb"), "location" : "Plainfield, Illinois", "title" : "Diamond Creekside", "__v" : 0 }
 ```
+
+## 6. Campground Index
+
+### 6.1 Making Our Route
+
+In our `app.js` file, we don't need `app.get('/makecampgroud)` so we'll delete it. We will set up other different routes
+
+```js
+// app.js
+app.get('/campgrounds', async (req, res) => {
+    const campgrounds = await Campground.find({});
+    res.render('campgrounds/index', {campgrounds})
+});
+```
+
+### 6.2 Making Our View and Displaying Our Data
+
+Then we will add a new _campgrounds_ directory inside of our _views_ directory to have our `index.ejs` file. We will add the following code to display our data
+
+```html
+<h1>All Campgrounds</h1>
+<ul>
+    <% for( let campground of campgrounds ) { %>
+        <li><%= campground.title %> </li>
+    <% } %>
+</ul>
+```
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img7.jpg?raw=true)
