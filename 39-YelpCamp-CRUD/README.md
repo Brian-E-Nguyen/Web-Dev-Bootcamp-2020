@@ -329,3 +329,47 @@ Then we will add a new _campgrounds_ directory inside of our _views_ directory t
 ```
 
 ![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img7.jpg?raw=true)
+
+## 7. Campground Show
+
+This view will show more information about each campground
+
+### 7.1 Modifying index.ejs
+
+We want each of the the campgrounds shown in `index.ejs` to take you to its own page. To do this, we would need to use an anchor tag. 
+
+```html
+ <ul>
+    <% for( let campground of campgrounds ) { %>
+        <li> <a href="/campgrounds/<%=campground._id%> "><%= campground.title %></a> </li>
+    <% } %>
+</ul>
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img8.jpg?raw=true)
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img9.jpg?raw=true)
+
+### 7.2 Modifying Our Route
+
+We want to find the campground by ID, so we need to extract the ID from the URL and use it to find the campground
+
+```js
+app.get('/campgrounds/:id', async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    res.render('campgrounds/show', {campground})
+});
+```
+
+### 7.3 Our Show Page
+
+Now that we passed in our `campground` object, we will then display the title and the location of it to test it out. This will be in our `show.ejs` file
+
+```html
+<body>
+    <h1><%= campground.title %> </h1>
+    <h2><%= campground.location %> </h2>
+</body>
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img10.jpg?raw=true)
