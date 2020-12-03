@@ -4,11 +4,11 @@
 
 We will take everything we have learned to build a massive app called __YelpCamp__
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img1.jpg?raw=true)
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img2.jpg?raw=true)
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img3.jpg?raw=true)
 
 ## 2. Access to YelpCamp Code
 
@@ -44,7 +44,7 @@ app.listen(portNumber, () => {
 });
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img4.jpg?raw=true)
 
 ### 3.2 Views Directory
 
@@ -68,7 +68,7 @@ app.listen(portNumber, () => {
 });
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img5.jpg?raw=true)
 
 ## 4. Campground Models Basic 
 
@@ -149,7 +149,7 @@ app.get('/makecampground', async (req, res) => {
 
 Now let's send a GET request to see if it works
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img6.jpg?raw=true)
 
 And now let's check our yelp-camp db
 
@@ -328,7 +328,7 @@ Then we will add a new _campgrounds_ directory inside of our _views_ directory t
 </ul>
 ```
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img7.jpg?raw=true)
 
 ## 7. Campground Show
 
@@ -346,9 +346,9 @@ We want each of the the campgrounds shown in `index.ejs` to take you to its own 
 </ul>
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img8.jpg?raw=true)
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img9.jpg?raw=true)
 
 ### 7.2 Modifying Our Route
 
@@ -372,7 +372,7 @@ Now that we passed in our `campground` object, we will then display the title an
 </body>
 ```
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img10.jpg?raw=true)
 
 ## 8. Campground New & Create
 
@@ -402,7 +402,7 @@ app.get('/campgrounds/new', (req, res) => {
 
 Notice the value of `name`. We have it like this because when we make a POST request, everything from `req.body` will be stored inside of the `campground`. It's a nice way to group content together 
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img11.jpg?raw=true)
 
 Look at what's happening in the pic. We are sending a GET request, but it's not working. This is because the route is treating `new` as an ID. We have to rearrange our routes in our `app.js` file by placing the `new` route on top of the `id` route
 
@@ -417,7 +417,7 @@ app.get('/campgrounds/:id', async (req, res) => {
 });
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img12.jpg?raw=true)
 
 ### 8.2 Making Our POST Route
 
@@ -429,9 +429,9 @@ app.post('/campgrounds', async(req, res) => {
 });
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img13.jpg?raw=true)
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img14.jpg?raw=true)
 
 We sent our request but we don't see any data. We need to tell express to use a body parser inside of our `app.js`
 
@@ -439,7 +439,7 @@ We sent our request but we don't see any data. We need to tell express to use a 
 app.use(express.urlencoded({extended: true}));
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img15.jpg?raw=true)
 
 Let's modify our POSTroute so that it saves the campground to the DB and redirects us to its own page
 
@@ -451,9 +451,9 @@ app.post('/campgrounds', async(req, res) => {
 });
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img16.jpg?raw=true)
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img17.jpg?raw=true)
 
 ### 8.3 Modifying show.ejs and new.ejs
 
@@ -496,7 +496,7 @@ And this will be inside of our `edit.ejs`
 <a href="/campgrounds/<%= campground._id %> ">Back to Campground</a>
 ```
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img18.jpg?raw=true)
 
 To improve our UX, we will have this at the bottom of our `show.ejs`
 
@@ -525,7 +525,7 @@ Now we will prepopulate our already existing camground values into the text boxe
 </form>
 ```
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img19.jpg?raw=true)
 
 ### 9.2 Method Override
 
@@ -561,9 +561,9 @@ In our `edit.ejs` form, we will edit the `action` attribute with `/campgrounds/<
 </form>
 ```
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img20.jpg?raw=true)
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img21.jpg?raw=true)
 
 Now that the PUT request works, we can edit the request to actually update the campground
 
@@ -583,11 +583,11 @@ For the values of the keys, we will take whatever is inputted from the form into
 
 Now let's try it out
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img22.jpg?raw=true)
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img23.jpg?raw=true)
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img24.jpg?raw=true)
 
 ## 10. Campground Delete
 
@@ -611,6 +611,6 @@ In our `show.ejs`, we will make a button to delete the campground
 </p>
 ```
 
-![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img25.jpg?raw=true)
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img25.jpg?raw=true)
 
-![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img26.jpg?raw=true)
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/39-YelpCamp-CRUD/img-for-notes/img26.jpg?raw=true)
