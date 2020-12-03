@@ -588,3 +588,29 @@ Now let's try it out
 ![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img23.jpg?raw=true)
 
 ![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img24.jpg?raw=true)
+
+## 10. Campground Delete
+
+We will make a simple route to delete our campgrounds
+
+```js
+app.delete('/campgrounds/:id', async (req, res) => {
+    const {id} = req.params;
+    await Campground.findByIdAndDelete(id);
+    res.redirect('/campgrounds');
+});
+```
+
+In our `show.ejs`, we will make a button to delete the campground
+
+```html
+<p>
+    <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="post">
+        <button>Delete</button>
+    </form>
+</p>
+```
+
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img25.jpg?raw=true)
+
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img26.jpg?raw=true)
