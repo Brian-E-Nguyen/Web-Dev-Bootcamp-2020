@@ -464,3 +464,127 @@ Let's add an anchor tag to take us back to all campgrounds
     <a href="/campgrounds">All Campgrounds</a>
 </footer>
 ```
+
+## 9. Campground Edit & Update
+
+### 9.1 Making Our Form and Routes
+
+We will make some new routes and a new view called `edit.ejs` to update our campgrounds
+
+```js
+app.get('/camgrounds/:id/edit', async(req,res) => {
+    const campground = await Campground.findById(req.params.id);
+    res.render('campgrounds/edit', {campground})
+});
+```
+
+And this will be inside of our `edit.ejs`
+
+```html
+<h1>Edit Campground</h1>
+<form action="/campgrounds" method="post">
+    <div>
+        <label for="title">Title</label>
+        <input type="text" name="campground[title]" id="title">
+    </div>
+    <div>
+        <label for="location">Location</label>
+        <input type="text" name="campground[location]" id="location">
+    </div>
+    <button>Add Campground</button>
+</form>
+<a href="/campgrounds/<%= campground._id %> ">Back to Campground</a>
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img18.jpg?raw=true)
+
+To improve our UX, we will have this at the bottom of our `show.ejs`
+
+```html
+<p>
+    <a href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+</p>
+<footer>
+    <a href="/campgrounds">All Campgrounds</a>
+</footer>
+```
+
+Now we will prepopulate our already existing camground values into the text boxes. In our `edit.ejs` form, we will use the `value` attribute 
+
+```html
+<form action="/campgrounds" method="post">
+    <div>
+        <label for="title">Title</label>
+        <input type="text" name="campground[title]" id="title" value="<%=campground.title%>">
+    </div>
+    <div>
+        <label for="location">Location</label>
+        <input type="text" name="campground[location]" id="location" value="<%=campground.location%>">
+    </div>
+    <button>Update Campground</button>
+</form>
+```
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img19.jpg?raw=true)
+
+### 9.2 Method Override
+
+Remember that with HTML forms, you can only send a GET or POST request. We have to install `method-override` to use other requests with forms
+
+`npm i method-override`
+
+And then in our `app.js`, we will require `method-override` and will make our PUT request to test it out
+
+```js
+const methodOverride = require('method-override');
+...
+app.use(methodOverride('_method'));
+...
+app.put('/camgrounds/:id', async (req, res) => {
+    res.send('IT WORKED!!!')
+});
+```
+
+In our `edit.ejs` form, we will edit the `action` attribute with `/campgrounds/<%=campground._id%>?_method=PUT`
+
+```html
+<form action="/campgrounds/<%=campground._id%>?_method=PUT" method="post">
+    <div>
+        <label for="title">Title</label>
+        <input type="text" name="campground[title]" id="title" value="<%=campground.title%>">
+    </div>
+    <div>
+        <label for="location">Location</label>
+        <input type="text" name="campground[location]" id="location" value="<%=campground.location%>">
+    </div>
+    <button>Update Campground</button>
+</form>
+```
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img20.jpg?raw=true)
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img21.jpg?raw=true)
+
+Now that the PUT request works, we can edit the request to actually update the campground
+
+```js
+app.put('/campgrounds/:id', async (req, res) => {
+    const {id} = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground}, {new: true});
+    res.redirect(`/campgrounds/${campground._id}`);
+});
+```
+
+For the values of the keys, we will take whatever is inputted from the form into here. Remember that inputs had names like this?
+
+```html
+<input type="text" name="campground[title]" id="title" value="<%=campground.title%>">
+```
+
+Now let's try it out
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img22.jpg?raw=true)
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img23.jpg?raw=true)
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/39-YelpCamp-CRUD/39-YelpCamp-CRUD/img-for-notes/img24.jpg?raw=true)
