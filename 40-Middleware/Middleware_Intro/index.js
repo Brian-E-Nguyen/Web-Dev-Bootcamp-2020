@@ -36,6 +36,18 @@ app.get('/dogs', (req, res) => {
     res.send('WOOF WOOF');
 });
 
+const verifyPassword = (req, res, next) => {
+    const {password} = req.query;
+    if(password === 'chickens') {
+        next();
+    }
+    res.send('SORRY WRONG PASSWORD');
+}
+
+app.get('/secret', verifyPassword, (req, res) => {
+    res.send('MY SECRET: sometimes I wear headphones in public so I dont have to talk to people')
+});
+
 app.use((req, res) => {
     res.status(404).send('NOT FOUND')
 });

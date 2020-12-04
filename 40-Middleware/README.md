@@ -238,3 +238,47 @@ app.use((req, res) => {
 ```
 
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img6.jpg?raw=true)
+
+## 6. Password Middleware Demo (NOT REAL AuthN)
+
+**NOTE:** I'm only gonna paste in the code because the stuff covered in here is pretty much useless
+
+```JS
+app.use((req, res, next) => {
+    const {password} = req.query;
+    if(password === 'chickens') {
+        next();
+    }
+    res.send('SORRY WRONG PASSWORD');
+})
+
+app.get('/secret', (req, res) => {
+    res.send('MY SECRET: sometimes I wear headphones in public so I dont have to talk to people')
+});
+```
+
+## 7. Protecting Specific Routes
+
+When we define `app.get()`, we define a path and we can have multiple callback functions that behave like middleware
+
+```js
+const verifyPassword = (req, res, next) => {
+    const {password} = req.query;
+    if(password === 'chickens') {
+        next();
+    }
+    res.send('SORRY WRONG PASSWORD');
+}
+
+app.get('/secret', verifyPassword, (req, res) => {
+    res.send('MY SECRET: sometimes I wear headphones in public so I dont have to talk to people')
+});
+```
+
+`verifyPassword` will run first, and if it calls `next()`, then `app.get('/secret')` will run
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img7.jpg?raw=true)
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img8.jpg?raw=true)
+
+Just remember this ain't real AuthN!
