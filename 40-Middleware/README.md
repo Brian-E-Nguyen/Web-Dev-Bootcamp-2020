@@ -95,3 +95,56 @@ GET /dogs 200 9 - 0.442 ms
 ```
 
 So we have this code right now, but we haven't told express to move on to the next middleware. In the next section, we will define how we can tell express to do so
+
+## 3. Defining Our Own Middleware
+
+There are lots of situation to write and use our own middleware
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img3.jpg?raw=true)
+
+The `next` refers to the next middleware. So when you call `next()`, it will call the next matching middleware or route handler. Let's add this in our `index.js`
+
+```js
+app.use(morgan('common'));
+app.use((req, res, next) => {
+    console.log('THIS IS MY FIRST MIDDLEWARE');
+    next();
+});
+```
+
+Let's see what happens when we make a request by going to one of our pages
+
+```
+[nodemon] starting `node index.js`
+App running on port 3000
+THIS IS MY FIRST MIDDLEWARE
+::1 - - [04/Dec/2020:19:06:12 +0000] "GET /dogs HTTP/1.1" 304 -
+```
+
+That's really all there is to defining middleware, or at least, the pattern of it. Now that does not mean that code that comes after `next()` executes automatically. It will eventually
+
+```JS
+app.use(morgan('common'));
+app.use((req, res, next) => {
+    console.log('THIS IS MY FIRST MIDDLEWARE');
+    next();
+    console.log('THIS IS MY FIRST MIDDLEWARE - AFTER CALLING NEXT()');
+});
+
+app.use((req, res, next) => {
+    console.log('THIS IS MY SECOND MIDDLEWARE');
+    next();
+});
+```
+
+```
+App running on port 3000
+THIS IS MY FIRST MIDDLEWARE
+THIS IS MY SECOND MIDDLEWARE
+THIS IS MY FIRST MIDDLEWARE - AFTER CALLING NEXT()
+::1 - - [04/Dec/2020:19:23:27 +0000] "GET /dogs HTTP/1.1" 304 -
+```
+
+If we wanted to be extra safe with our code, we would do `return next();` This makes sure that no code executes after `next()`. As you can see in the code, the `console.log()` is grayed out
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img4.jpg?raw=true)
