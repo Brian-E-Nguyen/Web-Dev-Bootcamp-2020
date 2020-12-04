@@ -148,3 +148,52 @@ THIS IS MY FIRST MIDDLEWARE - AFTER CALLING NEXT()
 If we wanted to be extra safe with our code, we would do `return next();` This makes sure that no code executes after `next()`. As you can see in the code, the `console.log()` is grayed out
 
 ![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img4.jpg?raw=true)
+
+## 4. More Middleware Practice
+
+With middleware, we can access and modify information from the request. The `req` object will have credentials and a signifier that someone is indeed authenticating. We can write middleware if a token is on that request. One other thing we can do is add `requestTime` to the request object
+
+```js
+var requestTime = function (req, res, next) {
+  req.requestTime = Date.now()
+  next()
+}
+```
+
+We will see request decorating a lot. Let's make out own example
+
+```js
+app.use((req, res, next) => {
+    console.log(req.method.toUpperCase());
+    next();
+});
+```
+
+```
+App running on port 3000
+GET
+```
+
+So right here, we are close to recreating what morgan does. Let's add a little bit more to it
+
+```js
+app.use((req, res, next) => {
+    console.log(req.method.toUpperCase(), req.path);
+    next();
+});
+```
+
+```
+App running on port 3000
+GET /dogs
+```
+
+We can do something mischievous with the requests. We can make every request a GET request for example
+
+```js
+app.use((req, res, next) => {
+    req.method = 'GET';
+    console.log(req.method.toUpperCase(), req.path);
+    next();
+});
+```
