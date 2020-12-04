@@ -2,11 +2,11 @@
 
 ## 1. Intro to Express Middleware
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img1.jpg?raw=true)
 
 Middleware is the building blocks of Express. They run when an request enters Express and stops when it sends a response
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img2.jpg?raw=true)
 
 From the official docs 
 
@@ -100,7 +100,7 @@ So we have this code right now, but we haven't told express to move on to the ne
 
 There are lots of situation to write and use our own middleware
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img3.jpg?raw=true)
 
 The `next` refers to the next middleware. So when you call `next()`, it will call the next matching middleware or route handler. Let's add this in our `index.js`
 
@@ -147,7 +147,7 @@ THIS IS MY FIRST MIDDLEWARE - AFTER CALLING NEXT()
 
 If we wanted to be extra safe with our code, we would do `return next();` This makes sure that no code executes after `next()`. As you can see in the code, the `console.log()` is grayed out
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img4.jpg?raw=true)
 
 ## 4. More Middleware Practice
 
@@ -227,7 +227,7 @@ app.use((req, res) => {
 
 This will only run if we never sent back anything before, if we never ended the cycle by matching any of the routes
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img5.jpg?raw=true)
 
 Another thing that we can do is use `res.status()`
 
@@ -237,7 +237,7 @@ app.use((req, res) => {
 });
 ```
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img6.jpg?raw=true)
 
 ## 6. Password Middleware Demo (NOT REAL AuthN)
 
@@ -277,8 +277,8 @@ app.get('/secret', verifyPassword, (req, res) => {
 
 `verifyPassword` will run first, and if it calls `next()`, then `app.get('/secret')` will run
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img7.jpg?raw=true)
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/40-Middleware/img-for-notes/img8.jpg?raw=true)
 
 Just remember this ain't real AuthN!
