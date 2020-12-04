@@ -197,3 +197,44 @@ app.use((req, res, next) => {
     next();
 });
 ```
+
+## 5. Setting Up A 404 Routes
+
+We've been using `app.use()` just for passing in functions and that's it and it will run for every single incoming request. But we can also pass in a string for a path match
+
+```js
+app.use('/dogs', (req, res, next) => {
+    console.log('I LOVE DOGS!!');
+    next();
+});
+```
+
+This middleware only runs with on the path of `/dogs`
+
+```
+App running on port 3000
+GET /dogs
+I LOVE DOGS!!
+```
+
+The other thing we use `app.use()` for is to define a 404. We have to put this at the very end of our routes, at the bottom of the `index.js`
+
+```JS
+app.use((req, res) => {
+    res.send('NOT FOUND')
+});
+```
+
+This will only run if we never sent back anything before, if we never ended the cycle by matching any of the routes
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img5.jpg?raw=true)
+
+Another thing that we can do is use `res.status()`
+
+```js
+app.use((req, res) => {
+    res.status(404).res.send('NOT FOUND')
+});
+```
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/40-Middleware/40-Middleware/img-for-notes/img6.jpg?raw=true)
