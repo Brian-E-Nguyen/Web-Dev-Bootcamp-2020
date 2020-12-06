@@ -165,3 +165,74 @@ and in our footer, we will add this
 ```
 
 ![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img7.jpg?raw=true)
+
+## 5. Adding Images
+
+### 5.1 Unsplash API Overview
+
+The way we are gonna add images to our campgrounds is to re-seed our DB with image URL's. We will be using the *Unsplash Source* API, which is an easy way to get free high-quality images
+
+https://unsplash.com/collections/483251/in-the-woods
+
+All we need to do is copy the collection ID and send a request to the URL
+
+https://source.unsplash.com/collection/483251/1600x900
+
+You will get a different image everytime you go to this link
+
+### 5.2 Updaing Our Model and Displaying Our Image
+
+We will update our `Campgrounds` model in `campgrounds.js` to include the image link
+
+```js
+const CampgroundSchema = new Schema({
+    title: String,
+    image: String,
+    price: Number,
+    description: String,
+    location: String
+});
+```
+
+Then in our `index.js` file from our _seeds_ directory, we will have it display the image of the camp. We will also have add our description and price
+
+```js
+const seedDB = async() => {
+    await Campground.deleteMany({});
+    for (let i = 0; i < 50; i++) {
+        const randomNum = Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random() * 20) + 10;
+        const camp = new Campground({
+            location: `${cities[randomNum].city}, ${cities[randomNum].state}`,
+            title: `${sample(descriptors)} ${sample(places)}`,
+            image: 'https://source.unsplash.com/collection/483251/1600x900',
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?",
+            price: price
+        });
+        await camp.save();
+    }
+}
+```
+
+```
+> db.campgrounds.find()
+{ "_id" : ObjectId("5fcd3d32cb603f3944351f70"), "location" : "Oro Valley, Arizona", "title" : "Roaring Spring", "image" : "https://source.unsplash.com/collection/483251/1600x900", "description" : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?", "price" : 12, "__v" : 0 }
+
+...
+```
+
+Now let's go into our `show.ejs` to display the image, description, and price
+
+```html
+<h1><%= campground.title %> </h1>
+<h2><%= campground.location %> </h2>
+<img src="<%= campground.image %> " alt="">
+<p><%= campground.description %> </p>
+<p><strong>Price:</strong> $<%= campground.price %> </p>
+```
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img9.jpg?raw=true)
+
+A problem that we have is everytime we refresh the page, a new image appears. We can fix that later
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img10.jpg?raw=true)
