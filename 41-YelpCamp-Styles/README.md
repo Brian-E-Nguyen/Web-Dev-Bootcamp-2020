@@ -104,3 +104,64 @@ Let's edit our `boilerplate.ejs` to format our page
 ```
 
 ![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img4.jpg?raw=true)
+
+## 3. Navbar Partial
+
+We will have this code as our navbar and will paste this in our `boilerplate.ejs` for now to test it out
+
+```html
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+<div class="container-fluid">
+    <a class="navbar-brand" href="#">YelpCamp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/campgrounds">Campgrounds</a>
+        <a class="nav-link" href="/campgrounds/new">New Campgrounds</a>
+    </div>
+    </div>
+</div>
+</nav>
+```
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img5.jpg?raw=true)
+
+We will make a new directory called _partials_ in our _views_ directory  and we'll call our new file `navbar.ejs`. In our `boilerplate.ejs`, we will have a new line of code. This means that our navbar is included in our boilerplate
+
+```html
+ <%- include('../partials/navbar') %> 
+<main class="container mt-5">
+    <%- body %> 
+</main>
+```
+
+## 4. Footer Partial
+
+We will make a `footer.ejs` in our *partials* folder
+
+```html
+<footer class="footer bg-dark">
+    <div class="container">
+        <span>YelpCamp 2020</span>
+    </div>
+</footer>
+```
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img6.jpg?raw=true)
+
+To make our footer go down, we will add a class to the `<body>` of our boilerplate
+
+```html
+<body class="d-flex flex-column vh-100">
+```
+
+and in our footer, we will add this
+
+```html
+<footer class="footer bg-dark py-3 mt-auto">
+```
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img7.jpg?raw=true)
