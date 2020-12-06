@@ -47,10 +47,10 @@ On the `index.js`, we will remove almost everything and add one piece of code at
 </ul>
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img1.jpg)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img1.jpg?raw=true)
 
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img2.jpg)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img2.jpg?raw=true)
 
 This is great because we can now inject stylesheets, scripts, or other files. Let's do the same for all of our other views
 
@@ -72,3 +72,35 @@ This is great because we can now inject stylesheets, scripts, or other files. Le
 </form>
 <a href="/campgrounds/<%= campground._id %> ">Back to Campground</a>
 ```
+
+## 2. Bootstrap5! Boilerplate
+
+### 2.1 Including Bootstrap in boilerplate.ejs
+
+Bootstrap 5 is in alpha at the time of writing this. It no longer depends on jQuery.
+
+Link to Bootstrap5 docs
+- https://v5.getbootstrap.com/
+
+We will start by using the CDN for now and put it in the `<head>` section of our `boilerplate.ejs`
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img3.jpg?raw=true)
+
+We will also include these two script tags underneath the `<%- body %>` of our `boilerplate.ejs`  if we wanted to work with navbars, popups, modals, etc.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-t6I8D5dJmMXjCsRLhSzCltuhNZg6P10kE0m0nAncLUjH6GeYLhRU1zfLoW3QNQDF" crossorigin="anonymous"></script>
+```
+
+### 2.2 Formatting With Bootstrap
+
+Let's edit our `boilerplate.ejs` to format our page
+
+```js
+<main class="container">
+    <%- body %> 
+</main>
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img4.jpg?raw=true)
