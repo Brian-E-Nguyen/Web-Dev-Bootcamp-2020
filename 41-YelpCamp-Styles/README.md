@@ -235,4 +235,50 @@ Now let's go into our `show.ejs` to display the image, description, and price
 
 A problem that we have is everytime we refresh the page, a new image appears. We can fix that later
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img10.jpg?raw=true)
+
+## 6. Styling Campground Index
+
+We will not make an `<li>` in our `index.ejs`. Instead we will make a Bootstrap card
+
+```html
+<% for( let campground of campgrounds ) { %>
+    <div class="card" mb-3>
+        <div class="row">
+            <div class="col-md-4">
+                <img class="img-fluid" alt="" src="<%= campground.image %> ">
+            </div>
+        </div>
+    </div>
+<% } %>
+```
+
+So far it's not looking great because they all have the same image
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img11.jpg?raw=true)
+
+Let's add a card title and description to it
+
+```html
+<% for( let campground of campgrounds ) { %>
+    <div class="card" mb-3>
+        <div class="row">
+            <div class="col-md-4">
+                <img class="img-fluid" alt="" src="<%= campground.image %> ">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"><%= campground.title %></h5>
+                    <p class="card-text"><%= campground.description %></p>
+                    <p class="card-text">
+                        <small class="text-muted"><%= campground.location %> </small>
+                    </p>
+                    <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%= campground.title %> </a>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %>
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img12.jpg?raw=true)
