@@ -47,10 +47,10 @@ On the `index.js`, we will remove almost everything and add one piece of code at
 </ul>
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img1.jpg?raw=true)
 
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img2.jpg?raw=true)
 
 This is great because we can now inject stylesheets, scripts, or other files. Let's do the same for all of our other views
 
@@ -84,7 +84,7 @@ Link to Bootstrap5 docs
 
 We will start by using the CDN for now and put it in the `<head>` section of our `boilerplate.ejs`
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img3.jpg?raw=true)
 
 We will also include these two script tags underneath the `<%- body %>` of our `boilerplate.ejs`  if we wanted to work with navbars, popups, modals, etc.
 
@@ -103,7 +103,7 @@ Let's edit our `boilerplate.ejs` to format our page
 </main>
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img4.jpg?raw=true)
 
 ## 3. Navbar Partial
 
@@ -127,7 +127,7 @@ We will have this code as our navbar and will paste this in our `boilerplate.ejs
 </nav>
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img5.jpg?raw=true)
 
 We will make a new directory called _partials_ in our _views_ directory  and we'll call our new file `navbar.ejs`. In our `boilerplate.ejs`, we will have a new line of code. This means that our navbar is included in our boilerplate
 
@@ -150,7 +150,7 @@ We will make a `footer.ejs` in our *partials* folder
 </footer>
 ```
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img6.jpg?raw=true)
 
 To make our footer go down, we will add a class to the `<body>` of our boilerplate
 
@@ -164,7 +164,7 @@ and in our footer, we will add this
 <footer class="footer bg-dark py-3 mt-auto">
 ```
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img7.jpg?raw=true)
 
 ## 5. Adding Images
 
@@ -231,11 +231,11 @@ Now let's go into our `show.ejs` to display the image, description, and price
 <p><strong>Price:</strong> $<%= campground.price %> </p>
 ```
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img9.jpg?raw=true)
 
 A problem that we have is everytime we refresh the page, a new image appears. We can fix that later
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img10.jpg?raw=true)
 
 ## 6. Styling Campground Index
 
@@ -255,7 +255,7 @@ We will not make an `<li>` in our `index.ejs`. Instead we will make a Bootstrap 
 
 So far it's not looking great because they all have the same image
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img11.jpg?raw=true)
 
 Let's add a card title and description to it
 
@@ -281,7 +281,7 @@ Let's add a card title and description to it
 <% } %>
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img12.jpg?raw=true)
 
 
 ## 6. Styling the "New Campground" Form
@@ -309,7 +309,7 @@ We will be styling the "new campground" form, which is located inside of `new.ej
 </div>
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img13.jpg?raw=true)
 
 ### 6.2 Bootstrap Form Classes
 
@@ -338,7 +338,7 @@ As you can see, there are class values with `form-label`, `form-text`, etc. Let'
 </div>
 ```
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img14.jpg?raw=true)
 
 The input field automatically scales to the size of the window. Let's do the same for the location. In additon, bootstrap recommends adding a margin bottom to each of the fields. Lastly, we will make out button look nicer
 
@@ -365,7 +365,7 @@ The input field automatically scales to the size of the window. Let's do the sam
 </div>
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img15.jpg?raw=true)
 
 **PRO TIP:** in VS Code, to select every instance of a word when editing a file, use CTRL+D
 
@@ -385,7 +385,7 @@ Now we will add a field for image URL and description. Note that the description
 </div>
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img16.jpg?raw=true)
 
 Now we also need a price field.
 
@@ -399,17 +399,17 @@ Now we also need a price field.
 </div>
 ```
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img17.jpg?raw=true)
 
 ### 6.4 Testing Out Our Form
 
 And lastly, let's test out our form to see if it works
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img18.jpg?raw=true)
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img19.jpg?raw=true)
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img20.jpg?raw=true)
 
 
 ## 7. Styling Edit Form
@@ -456,9 +456,9 @@ For this part, we are just copying what we had from the `new.ejs` form and chang
 
 Note that in the pics below, the top form is what we had before. We are just keeping it there temporarily to see if the new form works (which it does)
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img21.jpg?raw=true)
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img22.jpg?raw=true)
 
 ## 8. Styling Show Page
 
@@ -491,4 +491,4 @@ We will be using Bootstrap's card component to make our Show page
 </div>
 ```
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/41-YelpCamp-Styles/img-for-notes/img23.jpg?raw=true)
