@@ -282,3 +282,131 @@ Let's add a card title and description to it
 ```
 
 ![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img12.jpg?raw=true)
+
+
+## 6. Styling the "New Campground" Form
+
+### 6.1 Centering
+
+We will be styling the "new campground" form, which is located inside of `new.ejs`. We will add some new `<div>` tags with Boostrap classes and nest our form in them. This will help center our form
+
+```html
+<div class="row">
+    <h1 class="text-center">New Campground</h1>
+    <div class="col-6 offset-3">
+        <form action="/campgrounds" method="post">
+            <div>
+                <label for="title">Title</label>
+                <input type="text" name="campground[title]" id="title">
+            </div>
+            <div>
+                <label for="location">Location</label>
+                <input type="text" name="campground[location]" id="location">
+            </div>
+            <button>Add Campground</button>
+        </form>
+    </div>
+</div>
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img13.jpg?raw=true)
+
+### 6.2 Bootstrap Form Classes
+
+Forms in Bootstrap 5 have their own section, so let's see what they put
+
+```html
+<form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+
+...
+
+ <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+```
+
+As you can see, there are class values with `form-label`, `form-text`, etc. Let's try using them
+
+```html
+<div>
+    <label class="form-label" for="title">Title</label>
+    <input class="form-control" type="text" name="campground[title]" id="title">
+</div>
+```
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img14.jpg?raw=true)
+
+The input field automatically scales to the size of the window. Let's do the same for the location. In additon, bootstrap recommends adding a margin bottom to each of the fields. Lastly, we will make out button look nicer
+
+```html
+<% layout('layouts/boilerplate') %> 
+<div class="row">
+    <h1 class="text-center">New Campground</h1>
+    <div class="col-6 offset-3">
+        <form action="/campgrounds" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" name="campground[title]" id="title">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" type="text" name="campground[location]" id="location">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-success">Add Campground</button>
+            </div>
+        </form>
+        <a href="/campgrounds">All Campgrounds</a>
+    </div>
+</div>
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img15.jpg?raw=true)
+
+**PRO TIP:** in VS Code, to select every instance of a word when editing a file, use CTRL+D
+
+### 6.3 Adding More Input Fields
+
+Now we will add a field for image URL and description. Note that the description will use `<textarea>` instead
+
+```html
+...
+<div class="mb-3">
+    <label class="form-label" for="image">Image URL</label>
+    <input class="form-control" type="text" name="campground[image]" id="location">
+</div>
+<div class="mb-3">
+    <label class="form-label" for="description">Description</label>
+    <textarea class="form-control" type="text" name="campground[description]" id="description"></textarea>
+</div>
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img16.jpg?raw=true)
+
+Now we also need a price field.
+
+```html
+ <div class="mb-3">
+    <label class="form-label" for="price">Campground Price</label>
+    <div class="input-group">
+        <span class="input-group-text" id="price-label">$</span>
+        <input type="text" id="price" class="form-control" placeholder="0.00" aria-label="0" aria-describedby="price-label" name="campground[price]">
+    </div>
+</div>
+```
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img17.jpg?raw=true)
+
+### 6.4 Testing Out Our Form
+
+And lastly, let's test out our form to see if it works
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img18.jpg?raw=true)
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img19.jpg?raw=true)
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img20.jpg?raw=true)
