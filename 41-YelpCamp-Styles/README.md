@@ -410,3 +410,53 @@ And lastly, let's test out our form to see if it works
 ![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img19.jpg?raw=true)
 
 ![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img20.jpg?raw=true)
+
+
+## 7. Styling Edit Form
+
+For this part, we are just copying what we had from the `new.ejs` form and changing some of the attributes. Mostly it's just adding the `value` tag so that the form is prefilled with data
+
+```html
+<% layout('layouts/boilerplate') %> 
+<div class="row">
+    <h1 class="text-center">Edit Campground</h1>
+    <div class="col-6 offset-3">
+        <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="post">
+            <div class="mb-3">
+                <label class="form-label" for="title">Title</label>
+                <input class="form-control" type="text" name="campground[title]" id="title" value="<%=campground.title%>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" type="text" name="campground[location]" id="location" value="<%=campground.location%>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="image">Image URL</label>
+                <input class="form-control" type="text" name="campground[image]" id="image" value="<%=campground.image%>">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="price">Campground Price</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="price-label">$</span>
+                    <input type="text" id="price" class="form-control" placeholder="0.00" aria-label="0" aria-describedby="price-label" name="campground[price]" value="<%=campground.price%>">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea class="form-control" type="text" name="campground[description]" id="description"><%= campground.description %> </textarea>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-info text-white">Update Campground</button>
+            </div>
+        </form>
+        <a href="/campgrounds/<%= campground._id %> ">Back to Campground</a>
+    </div>
+</div>
+```
+
+Note that in the pics below, the top form is what we had before. We are just keeping it there temporarily to see if the new form works (which it does)
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img21.jpg?raw=true)
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/41-YelpCamp-Styles/41-YelpCamp-Styles/img-for-notes/img22.jpg?raw=true)
+
