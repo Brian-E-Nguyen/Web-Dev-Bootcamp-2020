@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
     res.send('Home!');
 });
 
-app.get('/dogs', (req, res) => {
+app.get('/dogs', (req, res) => {d
     res.send('WOOF WOOF');
 });
 
@@ -55,6 +55,15 @@ app.get('/secret', verifyPassword, (req, res) => {
 
 app.use((req, res) => {
     res.status(404).send('NOT FOUND')
+});
+
+app.use((err, req, res, next) => {
+    console.log('***********************************')
+    console.log('**************ERROR****************')
+    console.log('***********************************')
+    // res.status(500).send('OH BOY, WE GOT AN ERROR!!!!!!')
+    // next(err);
+    console.log(err);
 });
 
 app.listen(portNumber, () => {
