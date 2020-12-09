@@ -120,3 +120,104 @@ Error: Wrong password
 ```
 
 We would get the stacktrace of it. Now let's actually pass in `err` into `next(err)`, where it will pass it on to the next error handling middleware
+
+## 3. Our Custom Error Class
+
+### 3.1 Basic Info
+
+The main frustration with errors is that there is no one way to handle errors. There are many structures and patterns that do emerge, and one of them is to define your own error class. The reason for this is that you would want to respond with some particular status code or message depending on what the error is. There are many different status codes that would need to use. For example, we could send a 401 status code telling the user that they are unauthorized to access a page
+
+```js
+const verifyPassword = (req, res, next) => {
+    const {password} = req.query;
+    if(password === 'chickens') {
+        next();
+    }
+    // res.send('SORRY WRONG PASSWORD');
+    res.status(401);
+    throw new Error('Wrong password')
+}
+```
+
+### 3.2 Custom AppError Class
+
+It would be complicated to write errors over and over again. Let's make a new file called `AppError.js` and define our classes in there
+
+```js
+class AppError extends Error {
+    constructor(message, status) {
+        super();
+        this.message = message;
+        this.status = status;
+    }
+}
+```
+
+Now we will use our custom class inside of our `verifyPassword()`
+
+```js
+const verifyPassword = (req, res, next) => {
+    const {password} = req.query;
+    if(password === 'chickens') {
+        next();
+    }
+    throw new AppError('Password required', 401);
+    // res.send('SORRY WRONG PASSWORD');
+    // res.status(401);
+    // throw new Error('Wrong password')
+}
+```
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img5.jpg?raw=true)
+
+Express automatically tells if the status code is between 400 and 500, and will use this to respond with certain headers. Every error has an associated stack.
+
+```js
+app.use((err, req, res, next) => {
+    const {status} = err;
+    res.status(status).send('ERROR!!!!!!!!!!!')
+});
+```
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img6.jpg?raw=true)
+
+The problem is not all errors have their own status codes. If we go to `/error`, we are not throwing an app error, but rather a syntax error
+
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img7.jpg?raw=true)
+
+We can give the status a default value and it will work 
+
+```js
+app.use((err, req, res, next) => {
+    const {status} = err;
+    res.status(status).send('ERROR!!!!!!!!!!!')
+});
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img8.jpg?raw=true)
+
+
+We can also destructure the error message so that we can send it
+
+```js
+app.use((err, req, res, next) => {
+    const {status = 500, message = 'Something went wrong'} = err;
+    res.status(status).send(message)
+});
+```
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img9.jpg?raw=true)
+
+
+### 3.3 Another Example
+
+Let's use a 403 Forbidden response. Difference between that and 401 is that 401 can't tell who the person is, while 403 means we know who you are, but you are denied access
+
+```js
+app.get('/admin', (req, res) => {
+    throw new AppError('You are not an admin!', 403);
+});
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img10.jpg?raw=true)
