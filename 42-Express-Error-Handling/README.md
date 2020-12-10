@@ -461,4 +461,93 @@ app.post('/products', wrapAsync(async (req, res, next) => {
 }));
 ```
 
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img19.jpg?raw=true)
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img20.jpg?raw=true)
+
+
 This helpful function allows us to have cleaner code and to do less coding. Eventually we would have to move this in another file that has a bunch of helper functions, but for now, we'll put it in the `index.js`
+
+## 7. Differentiating Mongoose Errors
+
+### 7.1 Basics
+
+Mongoose has a bunch of errors that can be thrown. What if we wanted to have some more custom feedback instead of doing `res.send()`? For example, when we search for a product by its ID, mongoose will take that ID and turn it into an object ID. If we use a value in a GET request that couldn't be turned into an ID, then we get this error message:
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img21.jpg?raw=true)
+
+Note that sometimes we don't get this error message. I believe it casts the value into an object depending on its length
+
+There are distinct types of errors in Mongoose. In fact, every error has a property of `name`. Let's create our own middleware function that helps us see the error message
+
+```js
+app.use((err, req, res, next) => {
+    console.log(err.name);
+    next(err);
+});
+```
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+CastError
+```
+
+And now let's see what happens if we put invalid data in a form
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+ValidationError
+```
+
+### 7.2 Handling Mongoose Errors
+
+This section is not focused on what to do with these errors, but rather letting you know that there are many errors that we need to handle. If we did wanted to do something, it could look like this
+
+```js
+const handleValidationErr = err => {
+    console.dir(err);
+    return err;
+}
+
+app.use((err, req, res, next) => {
+    console.log(err.name);
+    if (err.name === 'ValidationError') err = handleValidationErr(err)
+    next(err);
+});
+```
+
+And this is what would happen if we create an invalid product
+
+```
+ errors: {
+    name: ValidatorError: Path `name` is required.
+        at validate (C:\Users\BRIAN\Desktop\Web-Dev-Bootcamp-2020\42-Express-Error-Handling\AsyncErrors\node_modules\mongoose\lib\schematype.js:1222:13)
+```
+
+We have access to the `errors` object which we can use.
+
+We can also have custom error messages inside of our product schema
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Name cannot be blank']
+    },
+...
+```
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img22.jpg?raw=true)
+
+We can improve on the `handleValidationError` to use the `AppError`
+
+```js
+const handleValidationError = err => {
+    console.dir(err);
+    return new AppError(`Validation Failed...${err}`, 400);
+}
+```
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img23.jpg?raw=true)
