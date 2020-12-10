@@ -221,3 +221,92 @@ app.get('/admin', (req, res) => {
 ```
 
 ![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img10.jpg?raw=true)
+
+## 4. Handling Async Errors
+
+### 4.1 Basics
+
+We will be using our Farmstand app when we talked about Express with Mongoose. Note that we are changing the database to `farmStand2` in the mongoose connection URL just so that we don't mess with the original dataset
+
+There are many things that could go wrong in our Farmstand app, like blank forms, invalid ID's, etc. But remember that all of this is async. Let's import our `AppError.js` and create our error middleware
+
+```js
+app.use((err, req, res, next) => {
+    const {status = 500, message = 'Something went wrong'} = err;
+    res.status(status).send(message)
+});
+```
+
+In our product creation route, let's add a new AppError handler and test it out
+
+```js
+app.get('/products/new', (req, res) => {
+    throw new AppError('NOT ALLOWED', 401)
+    // res.render('products/new', {categories})
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img11.jpg?raw=true)
+
+In our `app.get('/products/:id')`, if we are looking for a product that does not exist, then we would get this
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img12.jpg?raw=true)
+
+Mongoose will not throw an error if a product does not exist. In that case, we can throw our own simple error
+
+```js
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+        throw new AppError('Product not found', 404);
+    }
+    res.render('products/show', {product});
+});
+```
+
+### 4.2 Side Problems
+
+There's a problem with this though. Look what happens when we try to find a product that doesn't exist:
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+(node:9056) UnhandledPromiseRejectionWarning: Error: Product not found
+    at C:\Users\BRIAN\Desktop\Web-Dev-Bootcamp-2020\42-Express-Error-Handling\AsyncErrors\index.js:53:15
+```
+
+We get this in our console but we are forever stuck in a loop trying to reach the error page. With how async functions work with Express, we would have to pass the `AppError` into `next()`
+
+```js
+app.get('/products/:id', async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+        next(new AppError('Product not found', 404));
+    }
+    res.render('products/show', {product});
+});
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img13.jpg?raw=true)
+
+
+But then in our console, we are getting an error from EJS
+
+```
+Cannot read property 'name' of null
+```
+
+We just need to return `next` (or do if/else) so that we don't get anything in the console, because the `res.render()` executes no matter what happens,
+
+```js
+app.get('/products/:id', async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+        return next(new AppError('Product not found', 404));
+    }
+    res.render('products/show', {product});
+});
+```
