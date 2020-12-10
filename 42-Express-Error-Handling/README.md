@@ -310,3 +310,98 @@ app.get('/products/:id', async (req, res, next) => {
     res.render('products/show', {product});
 });
 ```
+
+## 5. Handling More Async Functions
+
+### 5.1 Handling Invalid Product Creation
+
+At the moment in our async functions, we're checking for a couple of conditions to see if we have a product in our DB. This is great for errors if we want to check on our own. But what about errors that come from mongoose or messed up code? Let's take a look at our products model for example
+
+```js
+const productSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    category: {
+        type: String,
+        lowercase: true,
+        enum: ['fruit', 'vegetable', 'dairy']
+    }
+});
+```
+
+As you can see, we set required tags for some of the keys. If we don't provide any data when filling out the create product form, then the it will throw a ValidationError. This error is happening in our POST request. What we can do in an async function is wrap code around in a try/catch block. *Note:* always remember to add the parameter `next`
+
+```js
+app.post('/products', async (req, res, next) => {
+    try {
+        const newProduct = new Product(req.body);
+        await newProduct.save();
+        res.redirect(`/products/${newProduct._id}`);
+    }
+    catch(err) {
+        next(err);
+    }
+});
+```
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img14.jpg?raw=true)
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img15.jpg?raw=true)
+
+
+
+### 5.2 Updating A Product
+
+The same thing applies to updating a product
+
+```js
+app.put('/products/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findByIdAndUpdate(id, req.body, {runValidators: true, new: true});
+        res.redirect(`/products/${product._id}`)
+    }
+    catch (err) {
+        next(err)
+    }
+});
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img16.jpg?raw=true)
+
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img17.jpg?raw=true)
+
+
+### 5.3 Routes With AppError
+
+On the routes with AppError, we would use something like the code below to throw any errors
+
+```js
+return next(new AppError('Product not found', 404));
+```
+
+However, since we are using try/catch, we would have to change the code just a bit by using `throw` instead of `return`
+
+```js
+app.get('/products/:id/edit', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+        res.render('products/edit', {product, categories});
+    }
+    catch(err) {
+        next(e)
+    }
+});
+```
