@@ -405,3 +405,60 @@ app.get('/products/:id/edit', async (req, res, next) => {
     }
 });
 ```
+
+## 6. Defining an Async Utility
+
+From the previous section, it was annoying to write a bunch of try/catch blocks, handlers, and middleware in every route. What we can do is to define a function that we pass the entire callback to. Let's work with this route as an example
+
+```js
+app.get('/products/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+        res.render('products/show', {product})
+    }
+    catch (err) {
+        next(err);
+    }
+});
+```
+
+We will remove the try/catch blocks and define a new function called `wrapAsync`
+
+```js
+function wrapAsync(funct) {
+    return function(req, res, next) {
+        funct(req, res, next).catch(err => next(err));
+    }
+}
+```
+
+We want to make a function to wrap our async function so we don't have to type try/catch, `next`, `err`, etc. This function returns another function and this new function will simply execute whatever function we pass in it, and it will run `.catch()` if there is an error. So now, our new GET products code will look like this
+
+```js
+app.get('/products/:id', wrapAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+    if (!product) {
+        throw new AppError('Product not found', 404);
+    }
+    res.render('products/show', {product})
+}));
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img18.jpg?raw=true)
+
+Another example when creating a new product
+
+```js
+app.post('/products', wrapAsync(async (req, res, next) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.redirect(`/products/${newProduct._id}`);
+}));
+```
+
+This helpful function allows us to have cleaner code and to do less coding. Eventually we would have to move this in another file that has a bunch of helper functions, but for now, we'll put it in the `index.js`
