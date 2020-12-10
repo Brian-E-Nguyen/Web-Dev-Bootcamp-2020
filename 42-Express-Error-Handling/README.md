@@ -4,7 +4,7 @@
 
 ### 1.1 Built-In Error Handler Info
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img1.jpg?raw=true)
 
 We've imported our `index.js` from section 40: Middleware so we can makes some changes to it in this section. When we talk about errors in Express, there are different kinds of groups. A lot of the times, the errors will come as a result of incomplete data, bad connection with DB's or API's, etc. The apps that we create will often interact with external sources, which could lead to errors that you don't anticipate. These errors can also be caused by the user as well, such as when they don't fill out a form correctly
 
@@ -18,7 +18,7 @@ app.get('/error', (req,res) => {
 
 In this case, `chicken` does not exist. Let's see what happens when we go to `/error`
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img2.jpg?raw=true)
 
 Remember that we got a response. It happens to be an HTML response of the stacktrace with HTML tags and a 500 Internal Server Error. Note that we didn't specify that we wanted to respond with these aspects. What we are encountering is the default Express error handling 
 
@@ -39,7 +39,7 @@ const verifyPassword = (req, res, next) => {
 
 Now let's go to `/secret` and see what happens 
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img3.jpg?raw=true)
 
 ## 2. Defining Custom Error Handlers
 
@@ -92,7 +92,7 @@ app.use((err, req, res, next) => {
 });
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img4.jpg?raw=true)
 
 ### 2.2 Using next()
 
@@ -168,7 +168,7 @@ const verifyPassword = (req, res, next) => {
 }
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img5.jpg?raw=true)
 
 Express automatically tells if the status code is between 400 and 500, and will use this to respond with certain headers. Every error has an associated stack.
 
@@ -179,12 +179,12 @@ app.use((err, req, res, next) => {
 });
 ```
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img6.jpg?raw=true)
 
 The problem is not all errors have their own status codes. If we go to `/error`, we are not throwing an app error, but rather a syntax error
 
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img7.jpg?raw=true)
 
 We can give the status a default value and it will work 
 
@@ -195,7 +195,7 @@ app.use((err, req, res, next) => {
 });
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img8.jpg?raw=true)
 
 
 We can also destructure the error message so that we can send it
@@ -207,7 +207,7 @@ app.use((err, req, res, next) => {
 });
 ```
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img9.jpg?raw=true)
 
 
 ### 3.3 Another Example
@@ -220,7 +220,7 @@ app.get('/admin', (req, res) => {
 });
 ```
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img10.jpg?raw=true)
 
 ## 4. Handling Async Errors
 
@@ -246,11 +246,11 @@ app.get('/products/new', (req, res) => {
 });
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img11.jpg?raw=true)
 
 In our `app.get('/products/:id')`, if we are looking for a product that does not exist, then we would get this
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img12.jpg?raw=true)
 
 Mongoose will not throw an error if a product does not exist. In that case, we can throw our own simple error
 
@@ -289,7 +289,7 @@ app.get('/products/:id', async (req, res, next) => {
 });
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img13.jpg?raw=true)
 
 
 But then in our console, we are getting an error from EJS
@@ -351,9 +351,9 @@ app.post('/products', async (req, res, next) => {
 });
 ```
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img14.jpg?raw=true)
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img15.jpg?raw=true)
 
 
 
@@ -374,10 +374,10 @@ app.put('/products/:id', async (req, res, next) => {
 });
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img16.jpg?raw=true)
 
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img17.jpg?raw=true)
 
 
 ### 5.3 Routes With AppError
@@ -449,7 +449,7 @@ app.get('/products/:id', wrapAsync(async (req, res, next) => {
 }));
 ```
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img18.jpg?raw=true)
 
 Another example when creating a new product
 
@@ -461,9 +461,9 @@ app.post('/products', wrapAsync(async (req, res, next) => {
 }));
 ```
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img19.jpg?raw=true)
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img20.jpg?raw=true)
 
 
 This helpful function allows us to have cleaner code and to do less coding. Eventually we would have to move this in another file that has a bunch of helper functions, but for now, we'll put it in the `index.js`
@@ -474,7 +474,7 @@ This helpful function allows us to have cleaner code and to do less coding. Even
 
 Mongoose has a bunch of errors that can be thrown. What if we wanted to have some more custom feedback instead of doing `res.send()`? For example, when we search for a product by its ID, mongoose will take that ID and turn it into an object ID. If we use a value in a GET request that couldn't be turned into an ID, then we get this error message:
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img21.jpg?raw=true)
 
 Note that sometimes we don't get this error message. I believe it casts the value into an object depending on its length
 
@@ -539,7 +539,7 @@ const productSchema = new mongoose.Schema({
 ...
 ```
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img22.jpg?raw=true)
 
 We can improve on the `handleValidationError` to use the `AppError`
 
@@ -550,4 +550,4 @@ const handleValidationError = err => {
 }
 ```
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/42-Express-Error-Handling/42-Express-Error-Handling/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/42-Express-Error-Handling/img-for-notes/img23.jpg?raw=true)
