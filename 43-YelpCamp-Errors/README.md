@@ -146,3 +146,53 @@ app.post('/campgrounds', async(req, res) => {
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
 
 In the next section, we will have our own error class so that we don't need to put try/catch blocks in every single request code, which would take up a lot of space
+
+## 3. Defining ExpressError Class
+
+We will have a new folder called _utils_ where we will have our helper classes, and in that folder we will have our new `ExpressError.js` file
+
+```js
+// ExpressError.js
+class ExpressError extends Error {
+    constructor(message, statusCode) {
+        super();
+        this.message = message;
+        this.statusCode = statusCode;
+    }
+}
+
+module.exports = ExpressError;
+```
+
+Now we will have another file for our catcher function called `catchAsync.js`
+
+```js
+//catchAsync.js
+module.exports = funct => {
+    return (req, res, next) => {
+        funct(req, res, next).catch(next);
+    }
+}
+```
+
+Be sure to require both of these files in our `app.js`. Now our new POST request will look like this
+
+```js
+const catchAsync = require('./utils/catchAsync');
+...
+app.post('/campgrounds', catchAsync(async(req, res, next) => {
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+
+```
+
+Right now we are not doing anything distinctively for each error, but let's start there and test it out
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img12.jpg?raw=true)
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
+
+
+And now we'll apply the function to the rest of the async functions
