@@ -325,3 +325,91 @@ In development mode, it's a good idea to include the stacktrace of the error
 ```
 
 ![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img22.jpg?raw=true)
+
+## 6. JOI Schema Validations
+
+### 6.1 JOI Intro
+
+The last thing we will do is validate our campground data when we post or update them. The way that we are doing it is on the server-side right now. Our only real validation right now is if we are missing the data. We could post just the title and leave everything off for example. We can write our validations ourselves, but it'll take a lot of time to write, and if we have more fields, that will just take more time. We will use a tool called _JOI_, which is a JavaScript validation tool
+
+Link to the docs
+- https://joi.dev/api/?v=17.3.0
+
+Here is an example. Basically you define some schema in JS, and we can set constraints for each of the fields
+
+```js
+const Joi = require('joi');
+
+const schema = Joi.object({
+    username: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+
+    password: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+
+...
+```
+
+### 6.2 Editing Our POST Route
+
+To install JOI, run `npm i joi`. We will require this in our `app.js`, and then we will define our schema in our POST route. **NOTE:** this is not a Mongoose schema. This will validate our data before we attempt to save it with Mongoose
+
+```js
+app.post('/campgrounds', catchAsync(async(req, res, next) => {
+    // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required,
+            price: Joi.number().required().min(0)
+        }).required()
+    })
+    const result = campgroundSchema.validate(req.body);
+    console.log(result);
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+Let's test this out by sending blank data in our form
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img23.jpg?raw=true)
+
+**NOTE:** not sure why it's saying 'YOU DONKEY'
+
+```
+{
+  value: { comment: 'YOU DONKEY' },
+  error: [Error [ValidationError]: "campground" is required] {
+    _original: { comment: 'YOU DONKEY' },
+    details: [ [Object] ]
+  }
+}
+```
+
+Now let's add on to our code to throw an error when validation fails
+
+```js
+app.post('/campgrounds', catchAsync(async(req, res, next) => {
+    // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0)
+        }).required()
+    })
+    // New piece of code
+    const {error} = campgroundSchema.validate(req.body);
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400)
+    }
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
