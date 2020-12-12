@@ -262,3 +262,66 @@ app.post('/campgrounds', catchAsync(async(req, res, next) => {
 ```
 
 ![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img17.jpg?raw=true)
+
+## 5. Defining Error Template
+
+### 5.1 Basic Template
+
+We will create a new view called `error.ejs`
+
+```html
+<% layout('layouts/boilerplate') %> 
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Error!</h4>
+    <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+    <hr>
+    <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+</div>
+```
+
+Then we will use that in our `app.use()`
+
+```js
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    res.status(statusCode).render('error');
+});
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img18.jpg?raw=true)
+
+Note that we will always get this error when we make an error, like using Postman to send invalid data
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img19.jpg?raw=true)
+
+### 5.2 Including the Error Message and Stacktrace
+
+In our `app.use()`, what we could do instead of destructuring is pass the entire error in the template so that we don't have a default message and status. Then from there, we can update our `error.ejs` to include that error message
+
+```js
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    if(!err.message) {
+        err.message = 'Oh no! Something went wrong!';
+    }
+    res.status(statusCode).render('error', {err});
+});
+```
+
+```html
+<h4 class="alert-heading"><%= err.message %> </h4>
+```
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img20.jpg?raw=true)
+
+And this is what happens when we have invalid campground data
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img21.jpg?raw=true)
+
+In development mode, it's a good idea to include the stacktrace of the error
+
+```html
+<p><%= err.stack %> </p>
+```
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img22.jpg?raw=true)
