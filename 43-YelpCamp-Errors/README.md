@@ -195,4 +195,70 @@ Right now we are not doing anything distinctively for each error, but let's star
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
 
 
-And now we'll apply the function to the rest of the async functions
+And now we'll apply the function to the rest of the async functions. Note that the code below is our "catch all" middleware, so what we could do is write a bunch of if statements to handle certain errors, but we'll worry about that later
+
+```js
+app.use((err, req, res, next) => {
+    res.send('Oh boy, something went wrong')
+})
+```
+
+## 4. More Errors
+
+In this section, we will have more opportunities to use our `ExpressError` class
+
+### 4.1 Bad URL's
+
+If we request a URL that dooesn't exist, then we can put this at the very end of our routes. This is for every path. Remember that the order of this route is very important and will only run if nothing else is matched before it
+
+```js
+app.all('*', (req, res, next) => {
+    res.send('404!!!!')
+});
+```
+
+Let's go to some route that doesn't exist
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img13.jpg?raw=true)
+
+We can make use of our ExpressError class
+
+```js
+app.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404));
+});
+
+app.use((err, req, res, next) => {
+    const {statusCode = 500, message = 'Something went wrong'} = err;
+    res.status(statusCode).send(message);
+});
+```
+
+We are passing the `ExpressError` as `err` in the `app.use()`. Now let's go to some that doesn't exist
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img14.jpg?raw=true)
+
+Now if we go to a campground that doesn't exist, we would get this instead
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img15.jpg?raw=true)
+
+We're not providing a fancier message for this, but the good news is that we are handling it well, because you see that the status code is 500
+
+### 4.2 Form Errors
+
+Let's try to submit a form with invalid data. Even though we have form validations, that doesn't stop someone from making a request through Postman. Let's see what happens
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img16.jpg?raw=true)
+
+It went ahead and made a blank campground. We can fix this by adding a check to see if there's any values in our request body by using and if statement
+
+```js
+app.post('/campgrounds', catchAsync(async(req, res, next) => {
+    if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img17.jpg?raw=true)
