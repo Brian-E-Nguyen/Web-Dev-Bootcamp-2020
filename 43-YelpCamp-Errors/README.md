@@ -413,3 +413,85 @@ app.post('/campgrounds', catchAsync(async(req, res, next) => {
 }));
 ```
 
+## 7. JOI Middleware Validations
+
+### 7.1 Validation Function
+
+```js
+app.post('/campgrounds', catchAsync(async(req, res, next) => {
+    // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            location: Joi.string().required(),
+            description: Joi.string().required()
+        }).required()
+    })
+...
+```
+
+We will move the schema out of the route and into a middleware function so that we can use it anywhere
+
+```js
+// app.js
+const validateCampground = (req, res, next) => {
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            location: Joi.string().required(),
+            description: Joi.string().required()
+        }).required()
+    })
+    const {error} = campgroundSchema.validate(req.body);
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400)
+    }
+    else {
+        next();
+    }
+}
+```
+
+Then we can pass in the function as a parameter in our POST route
+
+```js
+app.post('/campgrounds', validateCampground, catchAsync(async(req, res, next) => {
+    // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img24.jpg?raw=true)
+
+It'll be better if we notify the user at the top of the form if there's an error instead of taking them to another weird page, but this is fine for now. Let's add that function to our PUT request and test it out
+
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img25.jpg?raw=true)
+
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img26.jpg?raw=true)
+
+### 7.2 Schema File
+
+The last thing worth doing is moving the `campgroundSchema` into its own file so we can have schemas somewhere else later on. We will call this `schemas.js`
+
+```js
+const Joi = require('joi')
+
+module.exports.campgroundSchema = Joi.object({
+    campground: Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0),
+        image: Joi.string().required(),
+        location: Joi.string().required(),
+        description: Joi.string().required()
+    }).required()
+});
+```
+
+Everything should still work after that
