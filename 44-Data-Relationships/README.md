@@ -222,3 +222,157 @@ CONNECTION OPEN!!!
   __v: 1
 }
 ```
+
+## 4. One to Many
+
+We saw an example of a **one to many** relationship in the previous section, but we are calling it **one to few** because the structure where we are embedding a subdocument is relatively small. 
+
+One to many is when we have a medium-sized data approach. In this, we don't directly embed data in our parent document. Instead we store it somewhere else
+
+```js
+{
+    farmName: 'Full Belly Farms',
+    location: 'Guinda, CA',
+    produce: [
+        ObjectId('393710068367'),
+        ObjectId('127077426675'),
+        ObjectId('439568144127'),
+    ]
+}
+```
+
+### 4.1 Products Model
+
+Let's make a new file called `farm.js` in our _Models_ directory and define our child model _products_
+
+```js
+const mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost:27017/relationshipDemo', {useNewUrlParser: true, useUnifiedTopology: true})
+    .then(() =>{
+        console.log('CONNECTION OPEN!!!')
+    })
+    .catch(error => {
+        console.log('OH NO, ERROR!!!!');
+        console.log(error)
+    });
+
+const productSchema = new mongoose.Schema({
+    name: String,
+    price: Number,
+    season: {
+        type: String,
+        enum: ['Spring', 'Summer', 'Fall', 'Winter']
+    }
+});
+
+const Product = mongoose.model('Product', productSchema);
+
+Product.insertMany([
+    {name: 'Goddess Melon', price: 4.99, season: 'Summer'},
+    {name: 'Sugar Baby Watermelon', price: 4.99, season: 'Summer'},
+    {name: 'Asparagus', price: 3.99, season: 'Spring'},
+]);
+```
+
+```
+> db.products.find()
+{ "_id" : ObjectId("5fd6800d3aebdb43b8d47994"), "name" : "Goddess Melon", "price" : 4.99, "season" : "Summer", "__v" : 0 }
+{ "_id" : ObjectId("5fd6800d3aebdb43b8d47995"), "name" : "Sugar Baby Watermelon", "price" : 4.99, "season" : "Summer", "__v" : 0 }
+{ "_id" : ObjectId("5fd6800d3aebdb43b8d47996"), "name" : "Asparagus", "price" : 3.99, "season" : "Spring", "__v" : 0 }
+```
+
+### 4.2 Farm Model
+
+The next thing we will set up is our farm model so that it will reference our products model. The way this works is that we don't reference product ID by a string. Model comes with its own type called `ObjectID`
+
+The most important key is `ref`. This tells Mongoose what model to use.
+
+```js
+const mongoose = require('mongoose');
+const {Schema} = mongoose;
+...
+const farmSchema = new Schema({
+    name: String,
+    city: String,
+    products: [{type: Schema.Types.ObjectId, ref: 'Product'}]
+});
+
+const Farm = mongoose.model('Farm', farmSchema);
+```
+
+Now let's make a function to create and save a farm
+
+```js
+
+const makeFarm = async() => {
+    const farm = new Farm({
+        name: 'Full Belly Farms',
+        city: 'Guinda, CA'
+    });
+    const melon = await Product.findOne({name: 'Goddess Melon'});
+    farm.products.push(melon);
+    console.log(farm)
+}
+
+makeFarm();
+```
+
+Now you may think pushing the melon into products would be problematic since you are pushing an entire product since we have this in our farm schema
+
+```js
+const farmSchema = new Schema({
+    name: String,
+    city: String,
+    // this part
+    products: [{type: Schema.Types.ObjectId, ref: 'Product'}]
+});
+```
+
+But let's try it out by console logging it
+
+```
+$ node Models/farm.js
+CONNECTION OPEN!!!
+{
+  products: [
+    {
+      _id: 5fd6800d3aebdb43b8d47994,
+      name: 'Goddess Melon',
+      price: 4.99,
+      season: 'Summer',
+      __v: 0
+    }
+  ],
+  _id: 5fd683d547b84f2c1032efcd,
+  name: 'Full Belly Farms',
+  city: 'Guinda, CA'
+}
+```
+
+It looks like we push the entire product, but this is just a behavior from mongoose. Let's take a look at Mongo. We are only saving the ObjectID
+
+```
+> db.farms.find()
+{ "_id" : ObjectId("5fd6843b20ed672164c11a98"), "products" : [ ObjectId("5fd6800d3aebdb43b8d47994") ], "name" : "Full Belly Farms", "city" : "Guinda, CA", "__v" : 0 
+}
+```
+
+### 4.3 Extra: Adding Product to Farm
+
+
+```js
+const addProduct = async () => {
+    const farm = await Farm.findOne({name: 'Full Belly Farms'});
+    const watermelon = await Product.findOne({name: 'Sugar Baby Watermelon'});
+    farm.products.push(watermelon);
+    await farm.save();
+    console.log(farm)
+}
+
+addProduct();
+```
+
+```
+> db.farms.find()
+{ "_id" : ObjectId("5fd6843b20ed672164c11a98"), "products" : [ ObjectId("5fd6800d3aebdb43b8d47994"), ObjectId("5fd6800d3aebdb43b8d47995") ], "name" : "Full Belly Farms", "city" : "Guinda, CA", "__v" : 1 }
+```
