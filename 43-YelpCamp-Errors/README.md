@@ -6,7 +6,7 @@
 
 If we were to create a campground without putting any client-side validations, this is what it would look like after we create it:
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img1.jpg?raw=true)
 
 One thing that we can do on the form is to use the native HTML `required` tag on each `<input>` tags
 
@@ -14,7 +14,7 @@ One thing that we can do on the form is to use the native HTML `required` tag on
 <input class="form-control" type="text" name="campground[title]" id="title" required>
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img2.jpg?raw=true)
 
 This works, but it's not very pretty. What if we wanted the text field to highlight red if there's invalid data? We don't have the option to customize this if we use the `required` tag. Also it depends on the browser. It's not centralized across all browsers
 
@@ -78,11 +78,11 @@ Right now you are still able to create a campground without any validation, but 
 
 Now here's what it would look like when we try to submit a form with invalid data
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img3.jpg?raw=true)
 
 And when we do type in valid data, the textbox turns green
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img4.jpg?raw=true)
 
 We can also provide valid feedback to the user with the class of `.valid-feedback`
 
@@ -95,23 +95,23 @@ We can also provide valid feedback to the user with the class of `.valid-feedbac
 ...
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img5.jpg?raw=true)
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img6.jpg?raw=true)
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img7.jpg?raw=true)
 
 
 We should also do the exact same thing for our Edit Campground form as well. Let's move our JS code into our boilerplate code so that we don't have to copy it every time
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img8.jpg?raw=true)
 
 
 ## 2. Basic Error Handler
 
 On our new/edit campgrounds form, if we were to type in a value for price that isn't able to be casted into a number, then our server would freak out because it's Mongoose that's trying to validate it
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img9.jpg?raw=true)
 
 
 ```
@@ -141,9 +141,9 @@ app.post('/campgrounds', async(req, res) => {
 });
 ```
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img10.jpg?raw=true)
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
 
 In the next section, we will have our own error class so that we don't need to put try/catch blocks in every single request code, which would take up a lot of space
 
@@ -190,9 +190,9 @@ app.post('/campgrounds', catchAsync(async(req, res, next) => {
 
 Right now we are not doing anything distinctively for each error, but let's start there and test it out
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img12.jpg?raw=true)
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img11.jpg?raw=true)
 
 
 And now we'll apply the function to the rest of the async functions. Note that the code below is our "catch all" middleware, so what we could do is write a bunch of if statements to handle certain errors, but we'll worry about that later
@@ -219,7 +219,7 @@ app.all('*', (req, res, next) => {
 
 Let's go to some route that doesn't exist
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img13.jpg?raw=true)
 
 We can make use of our ExpressError class
 
@@ -236,11 +236,11 @@ app.use((err, req, res, next) => {
 
 We are passing the `ExpressError` as `err` in the `app.use()`. Now let's go to some that doesn't exist
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img14.jpg?raw=true)
 
 Now if we go to a campground that doesn't exist, we would get this instead
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img15.jpg?raw=true)
 
 We're not providing a fancier message for this, but the good news is that we are handling it well, because you see that the status code is 500
 
@@ -248,7 +248,7 @@ We're not providing a fancier message for this, but the good news is that we are
 
 Let's try to submit a form with invalid data. Even though we have form validations, that doesn't stop someone from making a request through Postman. Let's see what happens
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img16.jpg?raw=true)
 
 It went ahead and made a blank campground. We can fix this by adding a check to see if there's any values in our request body by using and if statement
 
@@ -261,7 +261,7 @@ app.post('/campgrounds', catchAsync(async(req, res, next) => {
 }));
 ```
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img17.jpg?raw=true)
 
 ## 5. Defining Error Template
 
@@ -288,11 +288,11 @@ app.use((err, req, res, next) => {
 });
 ```
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img18.jpg?raw=true)
 
 Note that we will always get this error when we make an error, like using Postman to send invalid data
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img19.jpg?raw=true)
 
 ### 5.2 Including the Error Message and Stacktrace
 
@@ -312,11 +312,11 @@ app.use((err, req, res, next) => {
 <h4 class="alert-heading"><%= err.message %> </h4>
 ```
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img20.jpg?raw=true)
 
 And this is what happens when we have invalid campground data
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img21.jpg?raw=true)
 
 In development mode, it's a good idea to include the stacktrace of the error
 
@@ -324,7 +324,7 @@ In development mode, it's a good idea to include the stacktrace of the error
 <p><%= err.stack %> </p>
 ```
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img22.jpg?raw=true)
 
 ## 6. JOI Schema Validations
 
@@ -376,7 +376,7 @@ app.post('/campgrounds', catchAsync(async(req, res, next) => {
 
 Let's test this out by sending blank data in our form
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img23.jpg?raw=true)
 
 **NOTE:** not sure why it's saying 'YOU DONKEY'
 
@@ -468,13 +468,13 @@ app.post('/campgrounds', validateCampground, catchAsync(async(req, res, next) =>
 }));
 ```
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img24.jpg?raw=true)
 
 It'll be better if we notify the user at the top of the form if there's an error instead of taking them to another weird page, but this is fine for now. Let's add that function to our PUT request and test it out
 
-![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img25.jpg?raw=true)
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img25.jpg?raw=true)
 
-![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/43-YelpCamp-Errors/43-YelpCamp-Errors/img-for-notes/img26.jpg?raw=true)
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/43-YelpCamp-Errors/img-for-notes/img26.jpg?raw=true)
 
 ### 7.2 Schema File
 
