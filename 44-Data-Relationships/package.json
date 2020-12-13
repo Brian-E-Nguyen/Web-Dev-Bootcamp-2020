@@ -1,0 +1,15 @@
+{
+  "name": "44-Data-Relationships",
+  "version": "1.0.0",
+  "description": "When we say relationships with data, we have lots of different entities that we are storing data. Below is an example of Facebook's database in its early days. This is only a tiny fraction of what Facebook stores today. These data are connected in a different ways",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongoose": "^5.11.7"
+  }
+}
