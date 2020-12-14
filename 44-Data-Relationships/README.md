@@ -443,3 +443,163 @@ CONNECTION OPEN!!!
 ```
 
 Now we have our `products` array to contain all of our individual products
+
+## 6. One to "Bajillions"
+
+When you have lots of child classes or many associations to a thing, we would store a reference to the parent on the child document. This is a contrast to one-to-many, where we would store the children on parent documents.
+
+Doing this is similar to what we have seen, where we would use `ref`
+
+```js
+{
+    tweetText: 'i just crashed my car because i was tweeting. can i get some POGGERS in the chat?',
+    tags: ['stupid', 'omegalul'],
+    user: ObjectId('49815649201')
+}
+```
+
+### 6.1 Defining Schemas
+
+Let's make a new file called `tweet.js` in our _Models_ directory and define our schemas
+
+```js
+const userSchema = new Schema({
+    username: String,
+    age: Number
+});
+
+const tweetSchema = new Schema({
+    text: String,
+    likes: Number,
+    user: {type: Schema.Types.ObjectId, ref: 'User'}
+});
+
+const User = mongoose.model('User', userSchema);
+const Tweet = mongoose.model('Tweet', tweetSchema);
+```
+
+### 6.2 Populating Our DB
+
+Then we will have a function to populate our DB. Note that in our farm example, we can push an entire product into a farm, but mongoose would just store the ID
+
+```js
+const makeTweets = async () => {
+    const user = new User({username: 'nairb322', age: 61});
+    const tweet1 = new Tweet({text: 'i luv my chicken fam', likes: 0});
+    tweet1.user = user;
+    user.save();
+    tweet1.save();
+}
+
+makeTweets();
+```
+
+```
+> db.tweets.find()
+
+{ "_id" : ObjectId("5fd7c2150517b548e4dda2cd"), "text" : "i luv my chicken fam", "likes" : 0, "user" : ObjectId("5fd7c2150517b548e4dda2cc"), "__v" : 0 }
+```
+
+And in this example, we are storing the user's ObjectId. Let's try adding another tweet to the user
+
+```js
+const makeTweets = async () => {
+    // const user = new User({username: 'nairb322', age: 61});
+    const user = await User.findOne({username: 'nairb322'});
+    const tweet2 = new Tweet({text: 'REEEEEEEE', likes: 9999});
+    // storing the entire user
+    tweet2.user = user;
+    // user.save();
+    tweet2.save();
+}
+
+makeTweets();
+```
+
+```
+> db.tweets.find()
+
+{ "_id" : ObjectId("5fd7c2150517b548e4dda2cd"), "text" : "i luv my chicken fam", "likes" : 0, "user" : ObjectId("5fd7c2150517b548e4dda2cc"), "__v" : 0 }
+{ "_id" : ObjectId("5fd7c2d69d7c821d38aa89ff"), "text" : "REEEEEEEE", "likes" : 9999, "user" : ObjectId("5fd7c2150517b548e4dda2cc"), "__v" : 0 }
+```
+
+Both of the tweets have a reference to the ObjectId
+
+### 6.3 Querying 
+
+Let's try this querying function out to see what we get
+
+```js
+const findTweet = async () => {
+    const tweet = await Tweet.findOne({});
+    console.log(tweet);
+}
+
+findTweet();
+```
+
+```
+$ node Models/tweet.js
+CONNECTION OPEN!!!
+{
+  _id: 5fd7c2150517b548e4dda2cd,
+  text: 'i luv my chicken fam',
+  likes: 0,
+  user: 5fd7c2150517b548e4dda2cc,
+  __v: 0
+}
+```
+
+When we are querying our DB from Mongoose to find tweets, we can populate the user using the `populate` function. **IMPORTANT:** the parameter passed in is the name of the _field_ in our `tweetSchema`, not the name of the model
+
+```js
+const findTweet = async () => {
+    const tweet = await Tweet.findOne({})
+        .populate('user');
+    console.log(tweet);
+}
+
+findTweet();
+```
+
+```
+$ node Models/tweet.js
+CONNECTION OPEN!!!
+{
+  _id: 5fd7c2150517b548e4dda2cd,
+  text: 'i luv my chicken fam',
+  likes: 0,
+  user: {
+    _id: 5fd7c2150517b548e4dda2cc,
+    username: 'nairb322',
+    age: 61,
+    __v: 0
+  },
+  __v: 0
+}
+```
+
+We can get even fancier by populating certain fields. In the example below, we are specifying that we only want to populate the `user` field with usernames
+
+```js
+const findTweet = async () => {
+    const tweet = await Tweet.findOne({})
+        .populate('user', 'username');
+    console.log(tweet);
+}
+
+findTweet();
+```
+
+```
+$ node Models/tweet.js
+CONNECTION OPEN!!!
+{
+  _id: 5fd7c2150517b548e4dda2cd,
+  text: 'i luv my chicken fam',
+  likes: 0,
+  user: { _id: 5fd7c2150517b548e4dda2cc, username: 'nairb322' },
+  __v: 0
+}
+```
+
