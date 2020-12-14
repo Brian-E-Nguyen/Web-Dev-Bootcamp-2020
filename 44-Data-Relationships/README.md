@@ -376,3 +376,70 @@ addProduct();
 > db.farms.find()
 { "_id" : ObjectId("5fd6843b20ed672164c11a98"), "products" : [ ObjectId("5fd6800d3aebdb43b8d47994"), ObjectId("5fd6800d3aebdb43b8d47995") ], "name" : "Full Belly Farms", "city" : "Guinda, CA", "__v" : 1 }
 ```
+
+## 5. Mongoose Populate
+
+Let's see what happens when we run this code
+
+```js
+Farm.findOne({name: 'Full Belly Farms'}).then(farm => console.log(farm))
+```
+
+```
+$ node Models/farm.js
+CONNECTION OPEN!!!
+{
+  products: [ 5fd6800d3aebdb43b8d47994, 5fd6800d3aebdb43b8d47995 ],
+  _id: 5fd6843b20ed672164c11a98,
+  name: 'Full Belly Farms',
+  city: 'Guinda, CA',
+  __v: 1
+}
+```
+
+We have the products array where we have the ID's. Often what we want is the data filled in for us, to take the ID's and fetch the product details, and then fill it in the array. This is where the `ref` keyword comes in from our `farmSchema`
+
+```js
+const farmSchema = new Schema({
+    name: String,
+    city: String,
+    products: [{type: Schema.Types.ObjectId, ref: 'Product'}]
+});
+```
+
+The `ref` keyword allows us to call a method called `populate`, Mongoose will take the ID that has been stored in our array and replace them with the products' details. Let's add that method and test it out
+
+```js
+Farm.findOne({name: 'Full Belly Farms'})
+    .populate('populate')
+    .then(farm => console.log(farm))
+```
+
+```
+$ node Models/farm.js
+CONNECTION OPEN!!!
+{
+  products: [
+    {
+      _id: 5fd6800d3aebdb43b8d47994,
+      name: 'Goddess Melon',
+      price: 4.99,
+      season: 'Summer',
+      __v: 0
+    },
+    {
+      _id: 5fd6800d3aebdb43b8d47995,
+      name: 'Sugar Baby Watermelon',
+      price: 4.99,
+      season: 'Summer',
+      __v: 0
+    }
+  ],
+  _id: 5fd6843b20ed672164c11a98,
+  name: 'Full Belly Farms',
+  city: 'Guinda, CA',
+  __v: 1
+}
+```
+
+Now we have our `products` array to contain all of our individual products
