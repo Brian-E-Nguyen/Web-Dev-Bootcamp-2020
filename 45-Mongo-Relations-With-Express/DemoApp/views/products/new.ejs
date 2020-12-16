@@ -7,11 +7,11 @@
 </head>
 <body>
     <h1>Add A Product</h1>
-    <form action="/products" method="post">
+    <form action="/farms/<%=id%>/products" method="post">
         <label for="name">Product Name</label>
         <input type="text" name="name" placeholder="Product Name" id="name">
         <label for="price">Price (Unit)</label>
-        <input type="number" name="price" placeholder="Product Name" id="price">
+        <input type="number" name="price" placeholder="Product Price" id="price">
         <label for="category">Select Category</label>
         <select name="category" id="category">
             <% for(let category of categories) {%> 

@@ -227,3 +227,147 @@ Now let's create our show page
 ```
 
 ![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img7.jpg?raw=true)
+
+
+## 4. Creating Products For A Farm
+
+### 4.1 Intro
+
+We will focus on creating a product for a specific farm. This has a lot to do with our farm relationships. What we have right now with creating a new product is just for creating a standalone product. We are not associating it with a farm as of now
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img8.jpg?raw=true)
+
+There are some ways we can do this. We could have a dropdown menu of all the farms and you can select from there, but what if there are hundreds or thousands of farms? That wouldn't be a good idea. What we could do on the farm show page is have a link that says "Add New Product" and we will be able to add our products to have an association with that farm. 
+
+### 4.2 Defining Our Routes
+
+The most important part for this section is that our routes will include the farm ID inside of it. Here is how we will lay out our requests
+
+```
+GET
+/farms/:farm_id/products/new
+
+POST
+/farms/:farm_id/products
+```
+
+#### 4.2.1 GET Request
+
+The first request will be to render the form for this one farm, then we will send a POST request to the next path. The reason for this is because we want the farm ID, and we want to know what farm the product is associated with. There are other ways to do this, but this is a common way to do this. Below is our GET route
+
+```js
+app.get('/farms/:id/products/new', (req, res) => {
+    res.render('products/new');
+});
+```
+
+There's a problem with this. Let's take a look at the form in `new.ejs`. Look at what the `<form>` tag says
+
+```html
+<form action="/products" method="post">
+```
+
+We are submitting this to `/products`, but now we want to submit to `/farms/products` with our new routes. Let's first set up our GET request
+
+```js
+app.get('/farms/:id/products/new', (req, res) => {
+    const {id} = req.params;
+    res.render('products/new', {categories, id});
+});
+```
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img9.jpg?raw=true)
+
+And if you notice, the path we're on is correct. We do have the ID for the particular farm that we are adding to. Let's modify our form's action so that we can submit our product to the farm associated with it
+
+```js
+<form action="/farms/<%=id%>/products" method="post">
+```
+
+You can see in the inspecter that we have the farm ID in our route
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img10.jpg?raw=true)
+
+#### 4.2.2 POST Request
+
+Now we will make our POST request that will handle the information that we send. 
+
+```js
+app.post('/farms/:id/products', (req, res) => {
+    res.send(req.body);
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img11.jpg?raw=true)
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img12.jpg?raw=true)
+
+### 4.3 Saving Our Product
+
+Now let's actually save our product. We have the field on our `productSchema`, which references a farm. We will look up the farm itself and use it for saving. For now, let's use this code to test it out
+
+```js
+app.post('/farms/:id/products', async (req, res) => {
+    const {id} = req.params;
+    const farm = await Farm.findById(id);
+    const {name, price, category} = req.body;
+    const product = new Product(req.body);
+    res.send(farm);
+});
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img13.jpg?raw=true)
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img14.jpg?raw=true)
+
+Now we actually connect the product with the farm. Remember that we have a two-way association with the product and the farm,, so we can do this
+
+```js
+app.post('/farms/:id/products', async (req, res) => {
+    const {id} = req.params;
+    const farm = await Farm.findById(id);
+    const {name, price, category} = req.body;
+    const product = new Product(req.body);
+    // two-way association
+    farm.products.push(product);
+    product.farm = farm;
+    res.send(farm);
+});
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img15.jpg?raw=true)
+
+Now let's actually save our product and farm
+
+```js
+app.post('/farms/:id/products', async (req, res) => {
+    const {id} = req.params;
+    const farm = await Farm.findById(id);
+    const {name, price, category} = req.body;
+    const product = new Product(req.body);
+    farm.products.push(product);
+    product.farm = farm;
+    // saving our data
+    await farm.save();
+    await product.save();
+    res.send(farm);
+});
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img15.jpg?raw=true)
+
+This is what it looks like in Mongoose, where the entire product is stored, but what does it look like in Mongo?
+
+```
+> db.farms.find()
+
+{ "_id" : ObjectId("5fda6c49a9eab448dcf6dec2"), "products" : [ ObjectId("5fda7ddfa90f525cd8b88024") ], "name" : "Full Belly Farms", "city" : "Guinda", "email" : "fbfarms@gmail.com", "__v" : 1 }
+```
+
+It only stores the product ID. Let's do a `db.products.find()`
+
+```
+> db.products.find() 
+
+{ "_id" : ObjectId("5fda7ddfa90f525cd8b88024"), "name" : "Melon", "price" : 5, "category" : "fruit", "farm" : ObjectId("5fda6c49a9eab448dcf6dec2"), "__v" : 0 } 
+```
