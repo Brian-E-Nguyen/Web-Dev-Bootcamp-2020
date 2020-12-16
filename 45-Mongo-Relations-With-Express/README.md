@@ -184,3 +184,46 @@ Now let's try creating our new farm
 ![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img5.jpg?raw=true)
 
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img6.jpg?raw=true)
+
+
+## 3. Farms Show Page
+
+### 3.1 Route
+
+In this section, we will just quickly set up our show page for a specific farm. Let's set up a GET request, and we would want an async handler because we are finding that farm in our DB
+
+```js
+app.get('/farms/:id', async (req, res) => {
+    const farm = await Farm.findById(req.params.id);
+    res.render('farms/show', {farm})
+});
+```
+
+### 3.2 Slighly Modifing farms/index.ejs
+
+Right now in our `index.ejs`, we are only showing farm names, but they don't have a link tag associated with them. Let's add the tags in our `index.ejs` so that when we click on them, it takes us to the farm show page
+
+```html
+<ul>
+    <% for(let farm of farms) { %> 
+        <li><a href="/farms/<%=farm._id%> "><%= farm.name %></a></li>
+    <% } %>
+</ul>
+```
+
+### 3.3 Creating Our Show Page
+
+Now let's create our show page
+
+```html
+<body>
+    <h1><%= farm.name %></h1>
+    <ul>
+        <li>City: <%= farm.city %> </li>
+        <li>Email: <%= farm.email %> </li>
+    </ul>
+    <a href="/farms">All Farms</a>
+</body>
+```
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img7.jpg?raw=true)
