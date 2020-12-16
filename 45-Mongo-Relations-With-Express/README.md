@@ -91,3 +91,96 @@ const farmSchema = new Schema({
 ```
 
 Now this isn't to say that this is the best relationship to have. There are better ways, but this works for our current use case
+
+## 2. Creating New Farms
+
+So we'd like to create a newform that we render where a user can create a new farm. We'll make a GET request for displaying farms and for creating one. This is where we will have a form that we can submit. As you notice, our `index.js` is very crowded, and soon we'll learn a way of fixing this or moving all of these routes into different places with Express Router
+
+### 2.1 Farm Form
+
+Note that when we are just rendering a form, it doesn't need to be an async function
+
+```js
+app.get('/farms/new', (req, res) => {
+    res.render('farms/new')
+});
+```
+
+Now we will make the form for our farm. This is what it would look like in our `new.ejs`
+
+```html
+<h1>Add A Farm</h1>
+<form action="/farms" method="post">
+    <div>
+        <label for="name">Farm Name</label>
+        <input type="text" name="name" placeholder="Farm Name" id="name">
+    </div>
+    <div>
+        <label for="city">City</label>
+        <input type="text" name="city" placeholder="Farm City" id="city">
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="email" name="email" placeholder="Email" id="email">
+    </div>
+    
+    <button>Submit</button>
+</form>
+<a href="/farms">Cancel</a>
+```
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img2.jpg?raw=true)
+
+### 2.2 Farm POST Request
+
+Now we will make a POST request for submitting a farm. This will be an async function because we are making a new model and saving it asynchronously. We are using the current `res.send()` to test out if we have successfully sent our data
+
+```js
+app.post('/farms', async(req, res) => {
+    res.send(req.body)
+});
+```
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img3.jpg?raw=true)
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img4.jpg?raw=true)
+
+
+So now we need to instantiate and save a new farm. Let's require our farm model in our file and modify our POST route
+
+```js
+app.post('/farms', async(req, res) => {
+    const farm = new Farm(req.body);
+    await farm.save();
+    res.redirect('/farms');
+});
+```
+
+### 2.3 Farm Page
+
+Now we will make our farm route and page
+
+```js
+app.get('/farms', async (req, res) => {
+    const farms = await Farm.find({});
+    res.render('farms/index', {farms})
+});
+```
+
+```html
+<!-- index.ejs -->
+<body>
+    <h1>All Farms</h1>
+    <ul>
+        <% for(let farm of farms) { %> 
+            <li><%= farm.name %></li>
+        <% } %>
+    </ul>
+</body>
+```
+
+Now let's try creating our new farm
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img5.jpg?raw=true)
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img6.jpg?raw=true)

@@ -6,7 +6,7 @@ const portNumber = 3000;
 const methodOverride = require('method-override');
 
 const Product = require('./models/product');
-
+const Farm = require('./models/farm');
 mongoose.connect('mongodb://localhost:27017/farmStandTake2', {useNewUrlParser: true, useUnifiedTopology: true})
     .then(() =>{
         console.log('MONGO CONNECTION OPEN!!!')
@@ -20,6 +20,33 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+
+/*
+--------------
+FARM ROUTES
+--------------
+*/
+
+app.get('/farms', async (req, res) => {
+    const farms = await Farm.find({});
+    res.render('farms/index', {farms})
+});
+
+app.get('/farms/new', (req, res) => {
+    res.render('farms/new')
+});
+
+app.post('/farms', async(req, res) => {
+    const farm = new Farm(req.body);
+    await farm.save();
+    res.redirect('/farms');
+});
+
+/*
+--------------
+PRODUCTS ROUTES
+--------------
+*/
 
 const categories = ['fruit', 'vegetable', 'dairy'];
 
