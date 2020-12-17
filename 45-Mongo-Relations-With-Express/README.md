@@ -371,3 +371,184 @@ It only stores the product ID. Let's do a `db.products.find()`
 
 { "_id" : ObjectId("5fda7ddfa90f525cd8b88024"), "name" : "Melon", "price" : 5, "category" : "fruit", "farm" : ObjectId("5fda6c49a9eab448dcf6dec2"), "__v" : 0 } 
 ```
+
+## 5. Finishing Touches
+
+### 5.1 UX Fixes
+
+The first thing that we want to fix is that we're sending a response of HTML directly back from a POST request, and we don't want to do that, so instead of `res.send()`, let's redirect to the individual farm page
+
+```js
+app.post('/farms/:id/products', async (req, res) => {
+    const {id} = req.params;
+    const farm = await Farm.findById(id);
+    const {name, price, category} = req.body;
+    const product = new Product(req.body);
+    farm.products.push(product);
+    product.farm = farm;
+    await farm.save();
+    await product.save();
+    res.redirect(`/farms/${id}`);
+});
+```
+
+So now when we add a new product, we should also add a link so we can get to this page, so let's do that on our show page
+
+```html
+<h1><%= farm.name %></h1>
+<ul>
+    <li>City: <%= farm.city %> </li>
+    <li>Email: <%= farm.email %> </li>
+</ul>
+<a href="/farms/<%=farm._id%>/products/new">Add Farm</a>
+<a href="/farms">All Farms</a>
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img16.jpg?raw=true)
+
+### 5.2 Displaying Farm's Products
+
+Now let's try adding an item to this farm. Note that when we do add this, we don't see it show up on our farm page, but we can see it on the All Products page
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img17.jpg?raw=true)
+
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img18.jpg?raw=true)
+
+So now let's list all of the products for each farm's page. First we need to see what data we have in our `farm` variable from this route
+
+```js
+app.get('/farms/:id', async (req, res) => {
+    const farm = await Farm.findById(req.params.id);
+    console.log(farm)
+    res.render('farms/show', {farm})
+});
+```
+
+```
+{
+  products: [ 5fda7ddfa90f525cd8b88024, 5fdbac873107654844100595 ],
+  _id: 5fda6c49a9eab448dcf6dec2,
+  name: 'Full Belly Farms',
+  city: 'Guinda',
+  email: 'fbfarms@gmail.com',
+  __v: 2
+}
+```
+
+We have an array of ID's, so we will make sure that we populate the products in our farm
+
+```js
+app.get('/farms/:id', async (req, res) => {
+    const farm = await Farm.findById(req.params.id)
+        .populate('products');
+    console.log(farm);
+    res.render('farms/show', {farm})
+});
+```
+
+```
+{
+  products: [
+    {
+      _id: 5fda7ddfa90f525cd8b88024,
+      name: 'Melon',
+      price: 5,
+      category: 'fruit',
+      farm: 5fda6c49a9eab448dcf6dec2,
+      __v: 0
+    },
+    {
+      _id: 5fdbac873107654844100595,
+      name: 'Quail Eggs',
+      price: 4,
+      category: 'dairy',
+      farm: 5fda6c49a9eab448dcf6dec2,
+      __v: 0
+    }
+  ],
+  _id: 5fda6c49a9eab448dcf6dec2,
+  name: 'Full Belly Farms',
+  city: 'Guinda',
+  email: 'fbfarms@gmail.com',
+  __v: 2
+}
+```
+
+So now it's up to use what we actually want to display for each product. Let's set this up in our farm show page
+
+```html
+<h2>Products</h2>
+<ul>
+    <% for( let product of farm.products ) { %>
+        <li><%= product.name %> </li>
+    <% } %> 
+</ul>
+```
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img19.jpg?raw=true)
+
+### 5.3 Displaying Farm Name When Adding Product
+
+When we add a product, the header just says "Add A Product". We don't know what farm we are adding it to. Let's add some changes to our GET route by finding the farm by ID
+
+```js
+app.get('/farms/:id/products/new', async (req, res) => {
+    const {id} = req.params;
+    const farm = await Farm.findById(id);
+    res.render('products/new', {categories, farm});
+});
+```
+
+And then let's add the name of the farm in our header tag. We are also changing the form action from `id` to `farm._id` since we are passing in the farm object
+
+```html
+<h1><%= farm.name %> </h1>
+<h2>Add A Product</h2>
+<form action="/farms/<%=farm._id%>/products" method="post">
+...
+</form>
+```
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img20.jpg?raw=true)
+
+
+### 5.4 Link to Individual Products
+
+Let's put this in our farm show page so that we can go to each product's link
+
+```html
+<ul>
+    <% for( let product of farm.products ) { %>
+        <li><a href="/products/<%= product._id %>"> <%= product.name %></a></li>
+    <% } %> 
+</ul>
+```
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img21.jpg?raw=true)
+
+### 5.5 Show Farm in Product Page
+
+Let's show the farm in the product page and make it a link to the farm. What we want to do is populate the farm field on our product
+
+```js
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params;
+    // adding .populate()
+    const product = await Product.findById(id)
+        .populate('farm', 'name');
+    console.log(product);
+    res.render('products/show', {product});
+});
+```
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img22.jpg?raw=true)
+
+And now let's put the link in our product show page
+
+```html
+<ul>
+...
+    <li><a href="/farms/<%= product.farm._id %>"><%= product.farm.name %></a> </li>
+</ul>
+```
