@@ -4,7 +4,7 @@
 
 We will reuse our Farmstand app from Section 37, where we talked about Mongoose with Express. Note that our new connection will be `mongodb://localhost:27017/farmStandTake2`. There should be nothing in our DB right now
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img1.jpg?raw=true)
 
 What we want to do for this app is to integrate farms, so each product is associated with a farm. So now we will have some models and routes for farms. Let's first start with our farm model in our new `farm.js` file
 
@@ -129,7 +129,7 @@ Now we will make the form for our farm. This is what it would look like in our `
 <a href="/farms">Cancel</a>
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img2.jpg?raw=true)
 
 ### 2.2 Farm POST Request
 
@@ -141,9 +141,9 @@ app.post('/farms', async(req, res) => {
 });
 ```
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img3.jpg?raw=true)
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img4.jpg?raw=true)
 
 
 So now we need to instantiate and save a new farm. Let's require our farm model in our file and modify our POST route
@@ -181,9 +181,9 @@ app.get('/farms', async (req, res) => {
 
 Now let's try creating our new farm
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img5.jpg?raw=true)
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img6.jpg?raw=true)
 
 
 ## 3. Farms Show Page
@@ -226,7 +226,7 @@ Now let's create our show page
 </body>
 ```
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img7.jpg?raw=true)
 
 
 ## 4. Creating Products For A Farm
@@ -235,7 +235,7 @@ Now let's create our show page
 
 We will focus on creating a product for a specific farm. This has a lot to do with our farm relationships. What we have right now with creating a new product is just for creating a standalone product. We are not associating it with a farm as of now
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img8.jpg?raw=true)
 
 There are some ways we can do this. We could have a dropdown menu of all the farms and you can select from there, but what if there are hundreds or thousands of farms? That wouldn't be a good idea. What we could do on the farm show page is have a link that says "Add New Product" and we will be able to add our products to have an association with that farm. 
 
@@ -276,7 +276,7 @@ app.get('/farms/:id/products/new', (req, res) => {
 });
 ```
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img9.jpg?raw=true)
 
 And if you notice, the path we're on is correct. We do have the ID for the particular farm that we are adding to. Let's modify our form's action so that we can submit our product to the farm associated with it
 
@@ -286,7 +286,7 @@ And if you notice, the path we're on is correct. We do have the ID for the parti
 
 You can see in the inspecter that we have the farm ID in our route
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img10.jpg?raw=true)
 
 #### 4.2.2 POST Request
 
@@ -298,9 +298,9 @@ app.post('/farms/:id/products', (req, res) => {
 });
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img11.jpg?raw=true)
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img12.jpg?raw=true)
 
 ### 4.3 Saving Our Product
 
@@ -316,9 +316,9 @@ app.post('/farms/:id/products', async (req, res) => {
 });
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img13.jpg?raw=true)
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img14.jpg?raw=true)
 
 Now we actually connect the product with the farm. Remember that we have a two-way association with the product and the farm,, so we can do this
 
@@ -335,7 +335,7 @@ app.post('/farms/:id/products', async (req, res) => {
 });
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img15.jpg?raw=true)
 
 Now let's actually save our product and farm
 
@@ -354,7 +354,7 @@ app.post('/farms/:id/products', async (req, res) => {
 });
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img15.jpg?raw=true)
 
 This is what it looks like in Mongoose, where the entire product is stored, but what does it look like in Mongo?
 
@@ -404,16 +404,16 @@ So now when we add a new product, we should also add a link so we can get to thi
 <a href="/farms">All Farms</a>
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img16.jpg?raw=true)
 
 ### 5.2 Displaying Farm's Products
 
 Now let's try adding an item to this farm. Note that when we do add this, we don't see it show up on our farm page, but we can see it on the All Products page
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img17.jpg?raw=true)
 
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img18.jpg?raw=true)
 
 So now let's list all of the products for each farm's page. First we need to see what data we have in our `farm` variable from this route
 
@@ -486,7 +486,7 @@ So now it's up to use what we actually want to display for each product. Let's s
 </ul>
 ```
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img19.jpg?raw=true)
 
 ### 5.3 Displaying Farm Name When Adding Product
 
@@ -510,7 +510,7 @@ And then let's add the name of the farm in our header tag. We are also changing 
 </form>
 ```
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img20.jpg?raw=true)
 
 
 ### 5.4 Link to Individual Products
@@ -525,7 +525,7 @@ Let's put this in our farm show page so that we can go to each product's link
 </ul>
 ```
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img21.jpg?raw=true)
 
 ### 5.5 Show Farm in Product Page
 
@@ -542,7 +542,7 @@ app.get('/products/:id', async (req, res) => {
 });
 ```
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img22.jpg?raw=true)
 
 And now let's put the link in our product show page
 
@@ -627,9 +627,9 @@ farmSchema.post('findOneAndDelete', async function(farm) {
 })
 ```
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img23.jpg?raw=true)
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/45-Mongo-Relations-With-Express/img-for-notes/img24.jpg?raw=true)
 
 ```
 APP IS LISTENING ON PORT 3000
