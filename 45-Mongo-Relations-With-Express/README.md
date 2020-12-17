@@ -552,3 +552,87 @@ And now let's put the link in our product show page
     <li><a href="/farms/<%= product.farm._id %>"><%= product.farm.name %></a> </li>
 </ul>
 ```
+
+## 6. Deletion Mongoose Middleware
+
+When we have related models, what happens when you delete something, like a farm? What happens to the products? Let's take a look at some real apps. For reddit, when a user deletes their account, their posts are still intact; just that their username shows as 'deleted'. On Twitter, when a user deletes their account, all of their tweets get deleted. It's really how we want to structure our app
+
+In our example, when we delete a farm, we will also delete the products. Let's set up a DELETE route
+
+```js
+app.delete('/farms/:id', async (req, res) => {
+    const farm = await Farm.findByIdAndDelete(req.params.id);
+    res.redirect('/farms');
+});
+```
+
+Now let's set up our delete button in our farm show page
+
+```html
+ <form action="/farms/<%=farm._id%>?_method=DELETE" method="post">
+    <button>Delete</button>
+</form>
+```
+
+Before we delete anything, let's make sure the DELETE request actually works
+
+```JS
+app.delete('/farms/:id', async (req, res) => {
+    console.log('DELETING!!!!!!!')
+    // const farm = await Farm.findByIdAndDelete(req.params.id);
+    res.redirect('/farms');
+});
+```
+
+So when we click on the delete button on the farm page, we will see the 'DELETING' on the console
+
+So there's a couple of ways we can approach this. One is where we take the farm information and delete all of the products in the farm. That works, but there's another way to do this, which is useful when we have larger apps. We could write a bunch of code, but let's use Mongoose Middleware instead. First we would do this in our `farm.js` file 
+
+```js
+farmSchema.pre('findOneAndDelete', async function(data) {
+    console.log('PRE MIDDLEWARE');
+    console.log(data);
+});
+
+farmSchema.post('findOneAndDelete', async function(data) {
+    console.log('POST MIDDLEWARE');
+    console.log(data);
+});
+```
+
+Let's test this out by deleting a farm
+
+```
+PRE MIDDLEWARE
+[Function]
+POST MIDDLEWARE
+{
+  products: [],
+  _id: 5fdbbfe91e7c9829645bc653,
+  name: 'Delete Me Farms',
+  city: 'Deleteville',
+  email: 'delete@delete.com',
+  __v: 0
+}
+```
+
+The data that we passed in was not real data. It was a function. Inside of the pre-middleware, we don't have access to the farm, but in the post, we do. Let's remove the pre-middleware and modify our post
+
+```js
+farmSchema.post('findOneAndDelete', async function(farm) {
+    if(farm.products.length) {
+        const result = await Product.deleteMany({_id: {$in: farm.products}});
+        console.log(result);
+    }
+})
+```
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img23.jpg?raw=true)
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/45-Mongo-Relations-With-Express/45-Mongo-Relations-With-Express/img-for-notes/img24.jpg?raw=true)
+
+```
+APP IS LISTENING ON PORT 3000
+MONGO CONNECTION OPEN!!!
+{ n: 3, ok: 1, deletedCount: 3 }
+```
