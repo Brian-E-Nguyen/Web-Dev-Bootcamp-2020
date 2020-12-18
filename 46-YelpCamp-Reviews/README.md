@@ -111,3 +111,113 @@ And here's what it looks like when we post a review. As you can see, we have rev
 ...
 ```
 
+## 4. Validating Reviews
+
+### 4.1 Modifying Our Form
+
+We will add some basic validation for our review form. We'll start by adding client-side validation so that we can't submit an empty review.
+
+For the input range, they're going to have a default value already, so there's no need to add the `required` tag. But we will need it for the `<textarea>` field. But then remember, we have to do this weird thing where we tell the form not to validate with HTML; we are letting our JavaScript code inside of our `boilerplate.js` to do that, so we need to add `validated-form` inside of the value of `class`
+
+```html
+<form action="/campgrounds/<%=campground._id%>/reviews" class="mb-3 validated-form" method="POST" novalidate>
+    ...
+    <div class="mb-3">
+        <label class="form-label" for="body">Review</label>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+    </div>
+    <button class="btn btn-success">Submit</button>
+</form>
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img4.jpg?raw=true)
+
+And we can add the validation feedback right under the `<textarea>`
+
+```html
+<form action="/campgrounds/<%=campground._id%>/reviews" class="mb-3 validated-form" method="POST" novalidate>
+    ...
+    <div class="mb-3">
+        <label class="form-label" for="body">Review</label>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+        <div class="valid-feedback">
+            <p>Looks good!</p>
+        </div>
+    </div>
+    <button class="btn btn-success">Submit</button>
+</form>
+```
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img5.jpg?raw=true)
+
+### 4.2 Joi Review Schema
+
+Remember that we still need a way to prevent making requests that would circumvent using the form, which could lead to empty fields, like using Postman. Let's make a new Joi review object inside of our `schemas.js` file
+
+```js
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+        rating: Joi.number().required(),
+        body: Joi.string().required()
+    }).required()
+});
+```
+
+### 4.3 Middleware Function
+
+Now we will import it into our `app.js` and set up a function to validate our data
+
+```js
+const {campgroundSchema, reviewSchema} = require('./schemas.js');
+...
+const validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400)
+    }
+    else {
+        next();
+    }
+};
+```
+
+And then in our POST review route, we will add that middleware function so it will validate our review before it gets posted
+
+```js
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync( async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+### 4.4 Validation Testings
+
+Now let's test everything out. Grab the URL from the campground page and append `/reviews` to it. Let's try so send blank data
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img6.jpg?raw=true)
+
+Let's edit our ratings field so that it has a min and max number, then try putting a number outside of the range, then inside of it
+
+```js
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+        rating: Joi.number().required()
+            .min(1)
+            .max(5),
+        body: Joi.string().required()
+    }).required()
+});
+```
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img7.jpg?raw=true)
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img8.jpg?raw=true)
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img9.jpg?raw=true)
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img10.jpg?raw=true)
