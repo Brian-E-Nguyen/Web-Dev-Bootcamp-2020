@@ -33,3 +33,37 @@ const CampgroundSchema = new Schema({
     ]
 });
 ```
+
+## 2. Adding The Review Form
+
+We will be putting our form inside of the campground show page. It wont be a separate route, although we do need a route to submit it. Let's make a starter form and see what it looks like
+
+```html
+<form action="">
+    <div class="mb-3">
+        <label for="body">Review</label>
+        <textarea name="review[body]" id="body" cols="30" rows="10"></textarea>
+    </div>
+</form>
+```
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img1.jpg?raw=true)
+
+Let's add a lot more to it so that it looks nicer
+
+```html
+<h2>Leave a Review</h2>
+<form action="" class="mb-3">
+    <div class="mb-3">
+        <label class="form-label" for="">Rating</label>
+        <input class="form-range" type="range" min="1" max="5" name="review[name]" id="rating">
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="body">Review</label>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"></textarea>
+    </div>
+    <button class="btn btn-success">Submit</button>
+</form>
+```
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img2.jpg?raw=true)
