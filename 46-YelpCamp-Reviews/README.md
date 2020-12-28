@@ -319,3 +319,66 @@ Let's add a little bit more to the reviews so that it looks nicer
 Instead of inputting the reviews at the bottom, let's move it to the right of the campground card. We will plan on doing a 50/50 split between the two columns. First we will remove the `offset-3` in `<div class="col-6 offset-3">` so that the campground card is no longer in the middle, then we will move the review in the other `col-6`.
 
 ![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img14.jpg?raw=true)
+
+## 7. Deleting Reviews
+
+Next up, we will add a delete button for each review. Right now, nobody owns a review and we can delete every review we see; we'll add something in the future so that only the owner of the review can delete their reviews
+
+Let's set up a simple delete route, and the path will include the review ID
+
+```js
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    res.send('DELETE ME!!!!');
+}));
+```
+
+The reason why we need the campground ID is that we want to remove the reference to whatever the review is in the campground, and we want to remove the review itself
+
+Now let's set up the delete "form" on our show page, just inside of our review card. We don't need any validators since this is not an actual form
+
+```html
+<% for( let review of campground.reviews ) { %>
+<div class="card mb-3">
+    <div class="card-body">
+    <h5 class="card-title">Rating: <%= review.rating %> </h5>
+    <p class="card-text">Review: <%= review.body %> </p>
+    <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>" method="post">
+        <button class="btn btn-sm btn-danger">  
+        Delete
+        </button>
+    </form>
+    </div>
+</div>
+<% } %>
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img15.jpg?raw=true)
+
+Since we are using method-override, we would need the query string at the end of our route
+
+```html
+<form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
+    <button class="btn btn-sm btn-danger">  
+    Delete
+    </button>
+</form>
+```
+
+So right now we are not deleting anything, but when we click on the Delete button, we should get redirected
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img16.jpg?raw=true)
+
+Let's fix our route so that it deletes our review. This is a two way operation, where we delete the review itself, and in the campgrounds, we remove the reference to the review. We will use a Mongo operator called `$pull`, which removes from an array all instances of a value or values that match a specific condition
+
+```js
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const {id, reviewId} = req.params;
+    await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`)
+}));
+```
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img17.jpg?raw=true)
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img18.jpg?raw=true)
