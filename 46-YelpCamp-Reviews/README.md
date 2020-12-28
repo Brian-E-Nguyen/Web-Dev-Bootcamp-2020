@@ -56,7 +56,7 @@ Let's add a lot more to it so that it looks nicer
 <form action="" class="mb-3">
     <div class="mb-3">
         <label class="form-label" for="">Rating</label>
-        <input class="form-range" type="range" min="1" max="5" name="review[name]" id="rating">
+        <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
     </div>
     <div class="mb-3">
         <label class="form-label" for="body">Review</label>
@@ -221,3 +221,60 @@ module.exports.reviewSchema = Joi.object({
 ![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img9.jpg?raw=true)
 
 ![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img10.jpg?raw=true)
+
+
+## 5. Displaying Reviews
+
+If we go to our show page for camps, we don't have access to any reviews. What is in our reviews array is just a bunch of object ID's. What we need to do is to populate our campground with ID's. Let's modify our GET request for a specifc campground to populate it with reviews
+
+```js
+app.get('/campgrounds/:id', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+        .populate('reviews');
+    console.log(campground);
+    res.render('campgrounds/show', {campground});
+}));
+```
+
+```
+{
+  reviews: [
+    {
+      _id: 5fdd04ba5f32105f5cf9091d,
+      body: 'Too crowded but very pretty',
+      __v: 0
+    },
+    {
+      _id: 5fdd050f2c78485bc45657e8,
+      body: 'Too crowded, but very pretty',
+      __v: 0
+    },
+    {
+      _id: 5fdd1776db545462202c2dfc,
+      rating: 1,
+      body: 'AHHHHHHHHHHHHHHHHHHHHH',
+      __v: 0
+    }
+  ],
+  _id: 5fcd408fb5c2db3a2c4944dc,
+  location: 'Albany, New York',
+  title: 'Maple Mule Camp',
+  image: 'https://source.unsplash.com/collection/483251',
+  description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?',
+  price: 12,
+  __v: 3
+}
+```
+
+Now we see that we have our reviews. Now what we need to do inside of our campground show page is to loop over all of the reviews. We'll add this code just below our form
+
+```js
+<% for( let review of campground.reviews ) { %>
+<div class="mb-3">
+    <p>Rating: <%= review.rating %> </p>
+    <p>Review: <%= review.body %> </p>
+</div>
+<% } %>
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img11.jpg?raw=true)
