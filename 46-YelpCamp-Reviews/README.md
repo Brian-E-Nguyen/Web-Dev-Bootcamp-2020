@@ -278,3 +278,44 @@ Now we see that we have our reviews. Now what we need to do inside of our campgr
 ```
 
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img11.jpg?raw=true)
+
+## 6. Styling Reviews
+
+### 6.1 Using Bootstrap Classes
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img12.jpg?raw=true)
+
+We have these reviews for a campground but it's really hard to tell them apart. Let's add a border around each one using the `card` class provided by Bootstrap. We will wrap this around the existing HTML tags for the review
+
+```html
+<% for( let review of campground.reviews ) { %>
+<div class="card mb-3">
+    <div class="card-body">
+    <p>Rating: <%= review.rating %> </p>
+    <p>Review: <%= review.body %> </p>
+    </div>
+</div>
+<% } %>
+```
+
+Let's add a little bit more to the reviews so that it looks nicer
+
+```html
+<% for( let review of campground.reviews ) { %>
+<div class="card mb-3">
+    <div class="card-body">
+    <h5 class="card-title">Rating: <%= review.rating %> </h5>
+    <p class="card-text">Review: <%= review.body %> </p>
+    </div>
+</div>
+<% } %>
+```
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img2.jpg?raw=true)
+
+
+### 6.2 Reorganizing Reviews
+
+Instead of inputting the reviews at the bottom, let's move it to the right of the campground card. We will plan on doing a 50/50 split between the two columns. First we will remove the `offset-3` in `<div class="col-6 offset-3">` so that the campground card is no longer in the middle, then we will move the review in the other `col-6`.
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img14.jpg?raw=true)
