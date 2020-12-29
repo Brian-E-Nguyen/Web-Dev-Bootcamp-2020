@@ -382,3 +382,78 @@ app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => 
 ![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img17.jpg?raw=true)
 
 ![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img18.jpg?raw=true)
+
+## 8. Campground Delete Middleware
+
+So the last thing we need to tackle is deleting reviews associated with the campground when you delete the campground itself. Otherwise, the reviews will just stay present in our DB. For example, let's delete this campground with these reviews present in it. When we look at our DB after, the reviews will still be there
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img19.jpg?raw=true)
+
+```
+{ "_id" : ObjectId("5feb7972b18b770094c6fd49"), "rating" : 3, "body" : "EEEEEEEEEEEEE", "__v" : 0 }
+{ "_id" : ObjectId("5feb7973b18b770094c6fd4b"), "rating" : 3, "body" : "EEEEEEEEEEEEE", "__v" : 0 }
+{ "_id" : ObjectId("5feb7975b18b770094c6fd4c"), "rating" : 3, "body" : "EEEEEEEEEEEEE", "__v" : 0 }
+{ "_id" : ObjectId("5feb7976b18b770094c6fd4d"), "rating" : 3, "body" : "EEEEEEEEEEEEE", "__v" : 0 }
+{ "_id" : ObjectId("5feb7977b18b770094c6fd4e"), "rating" : 3, "body" : "EEEEEEEEEEEEE", "__v" : 0 }
+```
+
+We're gonna do something pretty similar to what we did with our farms and products, where we have our delete cascade with our data. We would want to do this with Mongoose middleware, and we will set this up in our model file `campground.js`
+
+```JS
+CampgroundSchema.post('findOneAndDelete', async function() {
+    console.log('DELETED!!!!!!!!!!');
+});
+```
+
+Now let's delete a campground and see if it works
+
+```
+SERVING ON PORT 3000
+Database connected
+DELETED!!!!!!!!!!
+```
+
+So what we want to do in this middleware is to take the document that was deleted and check to see if it was deleted
+
+```js
+CampgroundSchema.post('findOneAndDelete', async function(doc) {
+    console.log(doc);
+});
+```
+
+```
+Database connected
+{
+  reviews: [],
+  _id: 5fcd408fb5c2db3a2c4944de,
+  location: 'Caldwell, Idaho',
+  title: 'Maple Group Camp',
+  image: 'https://source.unsplash.com/collection/483251',
+  description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?',
+  price: 19,
+  __v: 0
+}
+```
+
+So this campground was deleted, but it was also passed to our middleware function, and if there were any reviews, they would be in the `reviews` array, and we would delete those reviews. Here's how we would do that 
+
+```js
+CampgroundSchema.post('findOneAndDelete', async function(doc) {
+    if (doc) {
+        await Review.remove({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+});
+```
+
+This is saying that we would remove all reviews where their ID field is in our document that was just deleted in its `reviews` array. Let's try this out
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img20.jpg?raw=true)
+
+```
+> db.reviews.find()
+...
+```
