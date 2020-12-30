@@ -47,7 +47,7 @@ We will be putting our form inside of the campground show page. It wont be a sep
 </form>
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img1.jpg?raw=true)
 
 Let's add a lot more to it so that it looks nicer
 
@@ -66,7 +66,7 @@ Let's add a lot more to it so that it looks nicer
 </form>
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img2.jpg?raw=true)
 
 ## 3. Creating Reviews
 
@@ -101,7 +101,7 @@ app.post('/campgrounds/:id/reviews', catchAsync( async (req, res) => {
 
 And here's what it looks like when we post a review. As you can see, we have review object ID's inside of the `reviews` array. We have  **NOTE:** there are two reviews in there because I did successfully post a review at first but the page redirect had some bugs
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img3.jpg?raw=true)
 
 
 ```
@@ -130,7 +130,7 @@ For the input range, they're going to have a default value already, so there's n
 </form>
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img4.jpg?raw=true)
 
 And we can add the validation feedback right under the `<textarea>`
 
@@ -148,7 +148,7 @@ And we can add the validation feedback right under the `<textarea>`
 </form>
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img5.jpg?raw=true)
 
 ### 4.2 Joi Review Schema
 
@@ -199,7 +199,7 @@ app.post('/campgrounds/:id/reviews', validateReview, catchAsync( async (req, res
 
 Now let's test everything out. Grab the URL from the campground page and append `/reviews` to it. Let's try so send blank data
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img6.jpg?raw=true)
 
 Let's edit our ratings field so that it has a min and max number, then try putting a number outside of the range, then inside of it
 
@@ -214,13 +214,13 @@ module.exports.reviewSchema = Joi.object({
 });
 ```
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img7.jpg?raw=true)
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img8.jpg?raw=true)
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img9.jpg?raw=true)
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img10.jpg?raw=true)
 
 
 ## 5. Displaying Reviews
@@ -277,13 +277,13 @@ Now we see that we have our reviews. Now what we need to do inside of our campgr
 <% } %>
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img11.jpg?raw=true)
 
 ## 6. Styling Reviews
 
 ### 6.1 Using Bootstrap Classes
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img12.jpg?raw=true)
 
 We have these reviews for a campground but it's really hard to tell them apart. Let's add a border around each one using the `card` class provided by Bootstrap. We will wrap this around the existing HTML tags for the review
 
@@ -311,14 +311,14 @@ Let's add a little bit more to the reviews so that it looks nicer
 <% } %>
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img2.jpg?raw=true)
 
 
 ### 6.2 Reorganizing Reviews
 
 Instead of inputting the reviews at the bottom, let's move it to the right of the campground card. We will plan on doing a 50/50 split between the two columns. First we will remove the `offset-3` in `<div class="col-6 offset-3">` so that the campground card is no longer in the middle, then we will move the review in the other `col-6`.
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img14.jpg?raw=true)
 
 ## 7. Deleting Reviews
 
@@ -352,7 +352,7 @@ Now let's set up the delete "form" on our show page, just inside of our review c
 <% } %>
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img15.jpg?raw=true)
 
 Since we are using method-override, we would need the query string at the end of our route
 
@@ -366,7 +366,7 @@ Since we are using method-override, we would need the query string at the end of
 
 So right now we are not deleting anything, but when we click on the Delete button, we should get redirected
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img16.jpg?raw=true)
 
 Let's fix our route so that it deletes our review. This is a two way operation, where we delete the review itself, and in the campgrounds, we remove the reference to the review. We will use a Mongo operator called `$pull`, which removes from an array all instances of a value or values that match a specific condition
 
@@ -379,15 +379,15 @@ app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => 
 }));
 ```
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img17.jpg?raw=true)
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img18.jpg?raw=true)
 
 ## 8. Campground Delete Middleware
 
 So the last thing we need to tackle is deleting reviews associated with the campground when you delete the campground itself. Otherwise, the reviews will just stay present in our DB. For example, let's delete this campground with these reviews present in it. When we look at our DB after, the reviews will still be there
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img19.jpg?raw=true)
 
 ```
 { "_id" : ObjectId("5feb7972b18b770094c6fd49"), "rating" : 3, "body" : "EEEEEEEEEEEEE", "__v" : 0 }
@@ -451,7 +451,7 @@ CampgroundSchema.post('findOneAndDelete', async function(doc) {
 
 This is saying that we would remove all reviews where their ID field is in our document that was just deleted in its `reviews` array. Let's try this out
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/46-YelpCamp-Reviews/46-YelpCamp-Reviews/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/46-YelpCamp-Reviews/img-for-notes/img20.jpg?raw=true)
 
 ```
 > db.reviews.find()
