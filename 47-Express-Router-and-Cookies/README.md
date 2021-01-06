@@ -236,3 +236,65 @@ If we were to go to the dev tools and to the _Application_ tab, there's a sectio
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img6.jpg?raw=true)
 
 If you go to most big websites, there will be more cookies that will track your information
+
+## 4. Sending Cookies
+
+We're going to see how we can use Express to set a cookie and then also pass, parse, or retrieve cookies. Let's work in a new folder called _CookiesDemo_ and create a new  `index.js` file. Remember to install Express inside of that folder
+
+```JS
+// index.js
+
+const express = require('express');
+const app = express();
+
+app.get('/greet', (req, res) => {
+    res.send('HEY THERE!!!!!!!!')
+});
+
+app.listen(3000, () => {
+    console.log('SERVING!!!!!!')
+});
+```
+
+So far no cookies are involved. Let's set up a route that involves cookies. Both `res` and `req` have a method called `.cookie()`. 
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img7.jpg?raw=true)
+
+
+```js
+const express = require('express');
+const app = express();
+...
+app.get('/setname', (req, res) => {
+    res.cookie('name', 'stevie chicks')
+});
+```
+
+What we're doing is we are setting the name and sending it back as part of the response, but that's not the response itself and rather only part of it. Let's add a `res.send()`
+
+```js
+app.get('/setname', (req, res) => {
+    res.cookie('name', 'stevie chicks')
+    res.send('OK SENT YOU A COOKIE')
+});
+```
+
+Now when we go the `/setname` route, we get our cookie
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img8.jpg?raw=true)
+
+When we visit different parts of our app, the browser will save that cookie so that it will keep track of who we are. If we test this out on Postman, it can also show us the cookies
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img9.jpg?raw=true)
+
+We can also send more than 1 cookie as well
+
+```js
+app.get('/setname', (req, res) => {
+    res.cookie('name', 'stevie chicks');
+    res.cookie('animal', 'shrimp');
+    res.send('OK SENT YOU A COOKIE')
+});
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img10.jpg?raw=true)
