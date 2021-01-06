@@ -226,3 +226,13 @@ router.get('/topsecret', (req, res) => {
 ```
 
 This is saying that all routes inside of `admin.js` will use this router. Now we are able to go to routes that aren't admin ones. When we do go to an admin route, then the middleware will prevent us
+
+## 3. Introducing Cookies
+
+**Cookies** are little bits of information that are stored in a user's web browser when browsing a particular website. Once a cookie is sent, a user's browser will send the cookie on every subsequent request to the site. Cookies allow use to make HTTP stateful. Basically, cookies are used as an identifier for a specific user
+
+If we were to go to the dev tools and to the _Application_ tab, there's a section under _Storage_ where we have access to the _Cookies_ tab
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img6.jpg?raw=true)
+
+If you go to most big websites, there will be more cookies that will track your information
