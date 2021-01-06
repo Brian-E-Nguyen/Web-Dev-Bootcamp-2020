@@ -135,3 +135,94 @@ const dogRoutes = require('./routes/dogs');
 
 app.use('/dogs', shelterRoutes);
 ```
+
+## 2. Express Router & Middleware
+
+### 2.1 Creating the Middlware
+
+When we set up our router, the actual router object, we can assign or add on our specific routes, like GET, POST, DELETE, etc, just like we do to the `app`. But we can also add in our own middleware, just like we do to the `app` itself. We can set up our own middleware that will only apply to particular routes in our `router` object.
+
+Let's create a new file called `admin.js` in our _routes_ folder
+
+```JS
+// admin.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/topsecret', (req, res) => {
+    res.send('THIS IS TOP SECRET');
+});
+
+router.get('/deleteeverything', (req, res) => {
+    res.send('OK DELETED IT ALL');
+});
+
+module.exports = router;
+```
+
+Now we will set up our middleware in our `index.js`. Not that this is not real AuthN
+
+```js
+// index.js
+
+const adminRoutes = require('./routes/admin');
+...
+app.use((req, res, next) => {
+    if (req.query.isAdmin) {
+        next();
+    }
+    res.send('NOT AN ADMIN')
+});
+
+app.use('/admin', adminRoutes);
+```
+
+Let's comment out the middleware first to see if our routes are working
+
+```js
+// index.js
+
+const adminRoutes = require('./routes/admin');
+...
+// app.use((req, res, next) => {
+//     if (req.query.isAdmin) {
+//         next();
+//     }
+//     res.send('NOT AN ADMIN')
+// });
+
+app.use('/admin', adminRoutes);
+```
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img3.jpg?raw=true)
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img4.jpg?raw=true)
+
+Now if we add the middleware back in, we see this
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img5.jpg?raw=true)
+
+### 2.2 Improving Our Middleware
+
+Our middleware works now. And if we were to add `?isAdmin=true` at the end of the URL, then we get so have access to admin routes. The problem is that if we were to go to any route, then the middleware will execute every time, which always displays 'NOT AN ADMIN'. Rather than defining a middleware in `index.js`, we could write a standalone function and pass them into each route, but an even better option is to move that middleware in our `admin.js` and use `router.use()` instead of `app.use()`
+
+```js
+// router.js
+const express = require('express');
+const router = express.Router();
+
+router.use((req, res, next) => {
+    if (req.query.isAdmin) {
+        next();
+    }
+    res.send('NOT AN ADMIN')
+});
+
+router.get('/topsecret', (req, res) => {
+    res.send('THIS IS TOP SECRET');
+});
+
+...
+```
+
+This is saying that all routes inside of `admin.js` will use this router. Now we are able to go to routes that aren't admin ones. When we do go to an admin route, then the middleware will prevent us
