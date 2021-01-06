@@ -298,3 +298,39 @@ app.get('/setname', (req, res) => {
 ```
 
 ![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img10.jpg?raw=true)
+
+## 5. Cookie Parser Middleware
+
+In `/greet`, we want to find the name of the current user. We would get it in req.cookies and you would need to parse it. Unfortunately, Express doesn't come with its own parser, so you wouldd need to download a package called `cookie-parser`. Then we will import it into our `index.js`. Inside of our `/greet` route, we will print out the cookies to test it out
+
+```js
+const express = require('express');
+const app = express();
+
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+app.get('/greet', (req, res) => {
+    console.log(req.cookies)
+    res.send('HEY THERE!!!!!!!!')
+});
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img11.jpg?raw=true)
+
+Those cookies that we sent are automatically stored in our browser. We can even manually edit the cookies if we want to; the browser doesn't care who or where it was made or sent from 
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img12.jpg?raw=true)
+
+Let's now extract our values from the cookies so that we can use them
+
+```js
+app.get('/greet', (req, res) => {
+    const {name = 'anon'} = req.cookies;
+    res.send(`Hey there, ${name}`);
+});
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img13.jpg?raw=true)
+
+So matter where we go in our browser, even if we close the app and reopen it, our cookies will be saved
