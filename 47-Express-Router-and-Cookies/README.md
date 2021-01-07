@@ -301,7 +301,7 @@ app.get('/setname', (req, res) => {
 
 ## 5. Cookie Parser Middleware
 
-In `/greet`, we want to find the name of the current user. We would get it in req.cookies and you would need to parse it. Unfortunately, Express doesn't come with its own parser, so you wouldd need to download a package called `cookie-parser`. Then we will import it into our `index.js`. Inside of our `/greet` route, we will print out the cookies to test it out
+In `/greet`, we want to find the name of the current user. We would get it in req.cookies and you would need to parse it. Unfortunately, Express doesn't come with its own parser, so you wouldd need to download a package called *cookie-parser*. Then we will import it into our `index.js`. Inside of our `/greet` route, we will print out the cookies to test it out
 
 ```js
 const express = require('express');
@@ -334,3 +334,54 @@ app.get('/greet', (req, res) => {
 ![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img13.jpg?raw=true)
 
 So matter where we go in our browser, even if we close the app and reopen it, our cookies will be saved
+
+## 6. Signing Cookies
+
+### 6.1 General Info
+
+The *cookie-parser* package allows us to enable signed cookie support by passing a `secret` string, which assigns a `req.secret` so it may be used by other middleware. So what is this talking about? The idea of signing something is to verify its integrity. Think of it like a wax seal on a letter. When you send a letter to someone, if that wax seal isn't broken, then you know that the integrity of the letter is still intact. Signing a cookie means that we will have a secret code and then a weird looking version of our cookie to the client. Then on the client side, that weird looking version will be sent back just like any cookie. But on the server side, our cookie parser will tell us of any of the cookies have been tampered with. It's all about making sure that the original data that we sent to the client, then to the browser, is still the data being sent back to us
+
+### 6.2 Creating Our Signed Cookie
+
+Let's demonstrate this with a new route. But before we do anything, if we want to use signed cookies and have *cookie-parser* support that, we need to pass in a secret inside of our *cookie-parser* middleware
+
+```js
+app.use(cookieParser('thisismysecret'));
+
+app.get('/getsignedcookie', (req, res) => {
+    res.cookie('fruit', 'grape', {signed: true})
+    res.send('OK SIGNED UR COOKIE')
+});
+```
+
+The string passed into `cookieParser()` is used to sign the cookies. In the new route, we added a third argument of `signed: true`. This is how we sign a cookie using *cookie-parser*. Let's see what happens when we go to this route
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img14.jpg?raw=true)
+
+It's not about hiding the data, it's about verifying the integrity of the data. To unsign it and verify that it actually worked, let's make another route and go to it
+
+```js
+app.get('/verifyfruit', (req, res) => {
+    console.log(req.signedCookies);
+    res.send(req.signedCookies);
+});
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img15.jpg?raw=true)
+
+We don't see fruit displayed on our console or app, but we still have it in our cookies. Fruit is actually stored in `req.signedCookies`. Express had this so it's easier to distinguish signed and unsigned cookies. Let's change our code to accesss the signed cookies
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img16.jpg?raw=true)
+
+
+### 6.3 Tampering With Signed Cookies
+
+What if we try to tamper the signed fruit? Let's change the value of it to 'apple' and see what happens
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img17.jpg?raw=true)
+
+We have successfully changed the value of it. But what if we get our original signed cookie, tamper with it, and go to `/verifyfruit`? Let's change the value of it to `s%3Aapple.LMNZojp%2FiR9Tsj50P0ysA22deJjrP0awUK0S8R3lTUk`
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img18.jpg?raw=true)
+
+*cookie-parser* recognizes that the cookie has been tampered with, so the signed-cookie's value is set to `false`
