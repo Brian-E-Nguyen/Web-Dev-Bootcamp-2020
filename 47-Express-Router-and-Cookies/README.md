@@ -385,3 +385,60 @@ We have successfully changed the value of it. But what if we get our original si
 ![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img18.jpg?raw=true)
 
 *cookie-parser* recognizes that the cookie has been tampered with, so the signed-cookie's value is set to `false`
+
+## 7. OPTIONAL: HMAC Signing
+
+### 7.1 General Info
+
+In this section, we will go over how the cookie signing works behind the scenes. Cookie signing uses the algorithm called **HMAC** (sometimes expanded as either **keyed-hash message authentication code** or **hash-based message authentication code**). We set up a message authentication code that is supposed to verify the *integrity* and the *authenticity* of a cookie. Integrity and authenticity are different, in that the former would be that the data is unchanged and the latter is that it came from the same source
+
+### 7.2 Testing With the HMAC Generator
+
+The goal is to take a cookie (but it doesn't always have to be a cookie, like bitcoin) and sign it. Below is the algorithm that the package *cookie-signature* uses, which is *cookie-parser* depends on
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img19.jpg?raw=true)
+
+Let's try this out with an online HMAC generator / tester tool
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img20.jpg?raw=true)
+
+We will save the output for later. The way we verify the signature is that if you look at the source code of unsigned, it requires the signed value and the secret
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img21.jpg?raw=true)
+
+
+So what the algorithm will do is extract the data from the left and right side of the value
+
+```
+s%3Aapple.LMNZojp%2FiR9Tsj50P0ysA22deJjrP0awUK0S8R3lTUk
+```
+
+In this case, `s%3A` and `LMNZojp%2FiR9Tsj50P0ysA22deJjrP0awUK0S8R3lTUk` will be extracted. Then, `apple` will be signed with the exact same secret and it's going to make sure we get the same output. 
+
+### 7.3 Comparing Our Outputs
+
+The last thing the function does is compare if we get the same HMAC result 
+
+```
+ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
+ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
+```
+
+If they're the same, then the cookie hasn't been tampered with. Else, it has been tampered. Even if we slightly changed our string, like changing it to 'Bananapudding' with a captial B
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img22.jpg?raw=true)
+
+
+```
+ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
+32c2c0feb254767578f3e20c68dcd56272bc9eff5b709899d755bb9b1385ddde
+```
+
+Or we can keep the same string but change the secret key. Let's remove the last 'e' inside the word 'secret'
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img23.jpg?raw=true)
+
+```
+ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
+aaa593ba5f93e2ebab1ac9c282a94791cbeff9ec7b5d8ac6b9093c3e61751e99
+```
