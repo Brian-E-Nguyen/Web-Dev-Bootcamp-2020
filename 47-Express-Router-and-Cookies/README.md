@@ -2,7 +2,7 @@
 
 This section will be dealing with Express Router and cookies, which are actually completely different topics, but they're small enough to be combined into this section
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img1.jpg?raw=true)
 
 ## 1. Express Router Info
 
@@ -105,7 +105,7 @@ app.use('/breeder', shelterRoutes);
 // NOTE: the existing paths are not modified
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img2.jpg?raw=true)
 
 Let's do a dog route file as another example
 
@@ -194,13 +194,13 @@ const adminRoutes = require('./routes/admin');
 app.use('/admin', adminRoutes);
 ```
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img3.jpg?raw=true)
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img4.jpg?raw=true)
 
 Now if we add the middleware back in, we see this
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img5.jpg?raw=true)
 
 ### 2.2 Improving Our Middleware
 
@@ -233,7 +233,7 @@ This is saying that all routes inside of `admin.js` will use this router. Now we
 
 If we were to go to the dev tools and to the _Application_ tab, there's a section under _Storage_ where we have access to the _Cookies_ tab
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img6.jpg?raw=true)
 
 If you go to most big websites, there will be more cookies that will track your information
 
@@ -258,7 +258,7 @@ app.listen(3000, () => {
 
 So far no cookies are involved. Let's set up a route that involves cookies. Both `res` and `req` have a method called `.cookie()`. 
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img7.jpg?raw=true)
 
 
 ```js
@@ -281,11 +281,11 @@ app.get('/setname', (req, res) => {
 
 Now when we go the `/setname` route, we get our cookie
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img8.jpg?raw=true)
 
 When we visit different parts of our app, the browser will save that cookie so that it will keep track of who we are. If we test this out on Postman, it can also show us the cookies
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img9.jpg?raw=true)
 
 We can also send more than 1 cookie as well
 
@@ -297,7 +297,7 @@ app.get('/setname', (req, res) => {
 });
 ```
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img10.jpg?raw=true)
 
 ## 5. Cookie Parser Middleware
 
@@ -316,11 +316,11 @@ app.get('/greet', (req, res) => {
 });
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img11.jpg?raw=true)
 
 Those cookies that we sent are automatically stored in our browser. We can even manually edit the cookies if we want to; the browser doesn't care who or where it was made or sent from 
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img12.jpg?raw=true)
 
 Let's now extract our values from the cookies so that we can use them
 
@@ -331,7 +331,7 @@ app.get('/greet', (req, res) => {
 });
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img13.jpg?raw=true)
 
 So matter where we go in our browser, even if we close the app and reopen it, our cookies will be saved
 
@@ -356,7 +356,7 @@ app.get('/getsignedcookie', (req, res) => {
 
 The string passed into `cookieParser()` is used to sign the cookies. In the new route, we added a third argument of `signed: true`. This is how we sign a cookie using *cookie-parser*. Let's see what happens when we go to this route
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img14.jpg?raw=true)
 
 It's not about hiding the data, it's about verifying the integrity of the data. To unsign it and verify that it actually worked, let's make another route and go to it
 
@@ -367,22 +367,22 @@ app.get('/verifyfruit', (req, res) => {
 });
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img15.jpg?raw=true)
 
 We don't see fruit displayed on our console or app, but we still have it in our cookies. Fruit is actually stored in `req.signedCookies`. Express had this so it's easier to distinguish signed and unsigned cookies. Let's change our code to accesss the signed cookies
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img16.jpg?raw=true)
 
 
 ### 6.3 Tampering With Signed Cookies
 
 What if we try to tamper the signed fruit? Let's change the value of it to 'apple' and see what happens
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img17.jpg?raw=true)
 
 We have successfully changed the value of it. But what if we get our original signed cookie, tamper with it, and go to `/verifyfruit`? Let's change the value of it to `s%3Aapple.LMNZojp%2FiR9Tsj50P0ysA22deJjrP0awUK0S8R3lTUk`
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img18.jpg?raw=true)
 
 *cookie-parser* recognizes that the cookie has been tampered with, so the signed-cookie's value is set to `false`
 
@@ -396,15 +396,15 @@ In this section, we will go over how the cookie signing works behind the scenes.
 
 The goal is to take a cookie (but it doesn't always have to be a cookie, like bitcoin) and sign it. Below is the algorithm that the package *cookie-signature* uses, which is *cookie-parser* depends on
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img19.jpg?raw=true)
 
 Let's try this out with an online HMAC generator / tester tool
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img20.jpg?raw=true)
 
 We will save the output for later. The way we verify the signature is that if you look at the source code of unsigned, it requires the signed value and the secret
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img21.jpg?raw=true)
 
 
 So what the algorithm will do is extract the data from the left and right side of the value
@@ -426,7 +426,7 @@ ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
 
 If they're the same, then the cookie hasn't been tampered with. Else, it has been tampered. Even if we slightly changed our string, like changing it to 'Bananapudding' with a captial B
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img22.jpg?raw=true)
 
 
 ```
@@ -436,7 +436,7 @@ ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
 
 Or we can keep the same string but change the secret key. Let's remove the last 'e' inside the word 'secret'
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/47-Express-Router-and-Cookies/47-Express-Router-and-Cookies/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/47-Express-Router-and-Cookies/img-for-notes/img23.jpg?raw=true)
 
 ```
 ed80a04e9ad0462a8c7805877f784945ee1b7a91a835c39abaad9e3186b3ecea
