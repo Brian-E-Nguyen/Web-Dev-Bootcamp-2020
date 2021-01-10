@@ -85,3 +85,38 @@ Whenever we refresh the page, our viewcount of that page will increase, but our 
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img6.jpg?raw=true)
 
 Note that if you were to go to this route on a different browser, the count resets. Why? Because everything is stored on each separately
+
+## 3. More Express Session
+
+In this section, we will get more practice with Express Sessions and also remove the deprecation warnings in the console. We will modify our middleware with this code so remove the deprecation waranings
+
+```js
+app.use(session({secret: 'thisisnotagoodsecret', resave: false, saveUninitialized: false}));
+```
+
+Now let's make two new routes called `/register` and `/greet`
+
+```js
+app.get('/register', (req, res) => {
+    const {username = 'Anon'} = req.query;
+    req.session.username = username;
+    res.redirect('/greet');
+});
+
+app.get('/greet', (req, res) => {
+    const {username} = req.session;
+    res.send(`Welcome back ${username}`);
+});
+```
+
+`/greet` won't be happy if we go to that route without first going to `/register`; it will just say `undefined`. Let's go to the `/register` route
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img7.jpg?raw=true)
+
+Now let's change the query string so that we have our own custom username
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img8.jpg?raw=true)
+
+The browser now stored the username 'Brian', so every time we go to `/greet`, the page will display our username
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img9.jpg?raw=true)
