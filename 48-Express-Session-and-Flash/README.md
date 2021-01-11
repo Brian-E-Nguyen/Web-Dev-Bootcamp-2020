@@ -189,3 +189,22 @@ __AUTHOR NOTE:__ for some reason, I get an error saying that `req.flash()` needs
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img11.jpg?raw=true)
 
 ![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img12.jpg?raw=true)
+
+## 5. Res.locals & Flash
+
+When we use `req.flash()`, it's annoying that we would have to type out all of this code
+
+```js
+res.render('farms/index', {farms, messages: req.flash('success')})
+```
+
+It's not bad if it's just on the index, but if we needed this on multiple routes, then it would get tedious. What we can do is set up a middleware. This will allow us to set up a response object in such a way that in every template and view, we will have access to messages. The response object has a message called `res.locals()`, which is an object that contains responses local variables scoped to the request, and therefore available only to the view(s) rendered during that request / response cycle (if any)
+
+```js
+app.use((req, res, next) => {
+    res.locals.messages = req.flash('success');
+    next();
+});
+```
+
+The success message still works properly after setting up this middleware
