@@ -120,3 +120,72 @@ Now let's change the query string so that we have our own custom username
 The browser now stored the username 'Brian', so every time we go to `/greet`, the page will display our username
 
 ![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img9.jpg?raw=true)
+
+## 4. Intro to Flash
+
+### 4.1 Basic Information
+
+Next up, we've got a topic that is kind of related to sessions and cookies, or it at least depends on sessions, but it's really just a package. This package is called _connect-flash_. The idea of a flash is basically a place in the session to flash a message to a user, like a success, confirmation, or failure message. It's usually after some action and typically before you redirect somewhere. For example, if we submitted a form and we made a new farm in our farm app, a little message would display that says something likle "Successfully created farm." But when we refresh the page, we want that message to go away. This is where a tool like _connect-flash_ comes in 
+
+### 4.2 Setting Up Our App
+
+Let's import our farm app to work with this and we'll name the new directory _FlashDemo_
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img10.jpg?raw=true)
+
+Now we will install _connect-flash_ with `npm i connect-flash`. Note that _connect-flash_ depends on _express-session_ so we need to install that as well
+
+```js
+// index.js
+const express = require('express');
+const app = express();
+const path = require('path');
+const mongoose = require('mongoose');
+const session = require('express');
+const flash = require('connect-flash');
+...
+const sessionOptions = {secret: 'thisisnotagoodsecret', resave: false, saveUninitialized: false};
+app.use(session(sessionOptions));
+app.use(flash());
+...
+```
+
+### 4.3 Using req.flash()
+
+Now that we've imported _connect-flash_, all request objects now has a method called `req.flash()`. Let's use this after we have successfully created a farm, which will be inside of our POST request 
+
+```js
+app.post('/farms', async(req, res) => {
+    const farm = new Farm(req.body);
+    await farm.save();
+    // new code
+    req.flash('success', 'Successfully made a farm')
+    res.redirect('/farms');
+});
+```
+
+The first parameter is the key / type of message (we can call this whatever we want), and the second parameter is the actual message. We are actually not going to see this message at all just yet because this is adding information into the session. In order to access it out, we just call `req.flash()` when we're rendering something and then passing the key
+
+```js
+app.get('/farms', async (req, res) => {
+    const farms = await Farm.find({});
+    res.render('farms/index', {farms, messages: req.flash('success')})
+});
+```
+
+Now we will go into our `index.ejs` and render the success message
+
+```html
+<!-- index.ejs -->
+<body>
+    <%= messages %> 
+    <h1>All Farms</h1>
+```
+
+Let's try this out when making a new farm.
+
+__AUTHOR NOTE:__ for some reason, I get an error saying that `req.flash()` needs to have sessions in order for it to work. I can't seem to fix this, even though I already have _express-session_ installed
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img11.jpg?raw=true)
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img12.jpg?raw=true)
