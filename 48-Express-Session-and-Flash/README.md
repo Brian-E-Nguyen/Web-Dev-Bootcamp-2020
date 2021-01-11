@@ -12,11 +12,11 @@ So why not just use cookies? One thing is that cookies have a maximum size in yo
 
 The idea of a session is that we store information on the server-side and then we send a little cookie back to the client that says "here's the key and ID to unlock your session"
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img1.jpg?raw=true)
 
 Here's a diagram to understand how sessions work. *Data store* is not the same as a database. In it, we will store shopping cart info for various users currently on our site, even if they don't have an account or not logged in. So instead of storing shopping cart information that is associated with a user inside of a database, we will have a session with an ID that will be associated with shopping cart information. 
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img2.jpg?raw=true)
 
 The browser then uses that information on subsequent requests
 
@@ -48,11 +48,11 @@ app.listen(3000, () => {
 
 So now how does session work? Inside of any route or middleware, inside of the `req` object, we will now have a `session` property available. Let's go to our new route
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img3.jpg?raw=true)
 
 As you can see, we have a cookie called 'connect.sid', which is shortened from Connect Session ID. We receive a cookie that corresponds to some little spot in memory in the session just for me. If we were to delete that cookie and come back to that route, we would receive a new cookie value
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img4.jpg?raw=true)
 
 Below is the comparison of the cookies that was present before and our new one
 
@@ -80,9 +80,9 @@ When we `req.session`, we can add on other properties to it. `req.session.count`
 
 Whenever we refresh the page, our viewcount of that page will increase, but our cookie will stay the same 
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img5.jpg?raw=true)
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img6.jpg?raw=true)
 
 Note that if you were to go to this route on a different browser, the count resets. Why? Because everything is stored on each separately
 
@@ -111,15 +111,15 @@ app.get('/greet', (req, res) => {
 
 `/greet` won't be happy if we go to that route without first going to `/register`; it will just say `undefined`. Let's go to the `/register` route
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img7.jpg?raw=true)
 
 Now let's change the query string so that we have our own custom username
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img8.jpg?raw=true)
 
 The browser now stored the username 'Brian', so every time we go to `/greet`, the page will display our username
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img9.jpg?raw=true)
 
 ## 4. Intro to Flash
 
@@ -131,7 +131,7 @@ Next up, we've got a topic that is kind of related to sessions and cookies, or i
 
 Let's import our farm app to work with this and we'll name the new directory _FlashDemo_
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img10.jpg?raw=true)
 
 Now we will install _connect-flash_ with `npm i connect-flash`. Note that _connect-flash_ depends on _express-session_ so we need to install that as well
 
@@ -186,9 +186,9 @@ Let's try this out when making a new farm.
 
 __AUTHOR NOTE:__ for some reason, I get an error saying that `req.flash()` needs to have sessions in order for it to work. I can't seem to fix this, even though I already have _express-session_ installed
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img11.jpg?raw=true)
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/48-Express-Session-and-Flash/48-Express-Session-and-Flash/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/48-Express-Session-and-Flash/img-for-notes/img12.jpg?raw=true)
 
 ## 5. Res.locals & Flash
 
