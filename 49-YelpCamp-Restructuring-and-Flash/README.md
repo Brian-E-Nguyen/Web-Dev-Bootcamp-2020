@@ -73,4 +73,85 @@ const validateCampground = (req, res, next) => {
 };
 ```
 
-## 1. Breaking Out Review Routes
+## 2. Breaking Out Review Routes
+
+### 2.1 Fixing Our Routes
+
+We will repeat a similar process for our reviews. This one will be a lot simpler since we only have 2 review routes. Let's make a `reviews.js` file in our _routes_ folder
+
+```js
+const express = require('express');
+const router = express.Router();
+
+router.post('/campgrounds/:id/reviews', validateReview, catchAsync( async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+
+router.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const {id, reviewId} = req.params;
+    await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`)
+}));
+
+module.exports = router;
+```
+
+And in our `app.js`, we will use this middleware for our routes
+
+```js
+const reviews = require('./routes/reviews');
+...
+app.use('/campgrounds/:id/reviews', reviews);
+```
+
+This is what our imports in our `reviews.js` schema should look liek
+
+```js
+const express = require('express');
+const router = express.Router();
+
+const Campground = require('../models/campgrounds');
+const Review = require('../models/review');
+
+const {reviewSchema} = require('../schemas.js');
+
+const ExpressError = require('../utils/ExpressError');
+const catchAsync = require('../utils/catchAsync');
+```
+
+### 2.2 Running Into a New Error
+
+So now when we create a review, we run into a new error
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img1.jpg?raw=true)
+
+Let's take a look at our POST request. It isn't able to find an ID. This happens with Express router because it likes to keep things separate. 
+
+```js
+router.post('/', validateReview, catchAsync( async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+To fix this, we will have to edit our router by passing in a parameter in it
+
+```js
+const router = express.Router({mergeParams: true});
+```
+
+Now all of the params in `app.js` will be merged with the ones in `reviews.js`
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img2.jpg?raw=true)
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img3.jpg?raw=true)
