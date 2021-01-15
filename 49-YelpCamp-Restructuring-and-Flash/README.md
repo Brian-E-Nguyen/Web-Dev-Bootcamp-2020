@@ -231,3 +231,72 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useFindAndModify: false
 });
 ```
+
+## 4. Configuring Session
+
+### 4.1 Setting Up Session
+
+In this section, we're adding Express Session in our application. There are two reasons for having sessions in our app: 
+
+1. to implement Flash so that we can show temporary messages to the user
+2. we'll be adding authentication
+
+Let's download Express Session into our YelpCamp app and require it in `app.js`
+
+```js
+const session = require('express-session');
+
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+}
+app.use(session(sessionConfig))
+```
+
+There will be a lot of stuff that we can configure with session, but we will come back to that. Once we get our app running, we will have some changes coming, like security, memory store, etc. Let's test the session out by running the app. When we make a request, we get our own session ID, just to prove that it's working
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img8.jpg?raw=true)
+
+### 4.2 Adding to sessionConfig
+
+Now what we're gonna do is add some fancier options to `sessionConfig`. We will have the cookie expire in a week
+
+```js
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        // 1000 milliseconds in a second
+        // 60 seconds in a minute
+        // 60 minutes in an hour
+        // 24 hours in a day
+        // 7 days in a week
+        // This cookie will expire in a week
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+And now when we look at the cookie, we see that it has a new value in the _Expires_ tab, which tells us that the cookie will expire in a week from now. One of the reasons why we want this is because we don't want a user to stay logged in for a long time
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img9.jpg?raw=true)
+
+We will also set HttpOnly to this cookie. HttpOnly means that if this flag is included on a cookie, the cookie cannot be accessed through client-side scripts. It's an added layer of security It's already set to true by default in the browser, but let's ensure that it always happens.
+
+```js
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img10.jpg?raw=true)
