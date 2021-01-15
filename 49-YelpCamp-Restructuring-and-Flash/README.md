@@ -300,3 +300,75 @@ const sessionConfig = {
 ```
 
 ![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img10.jpg?raw=true)
+
+## 5. Setting Up Flash
+
+### 5.1 Installing Flash and Modifying Route
+
+Let's add in Flash so that we can show temporary messages to the user. These can happen when the user:
+
+1. Create, update, or delete a review
+2. Create, update, or delete a campground
+3. (Un)successfully authenticate themselves
+
+So we need to first install _connect-flash_ and require it in our `app.js`
+
+```js
+const flash = require('connect-flash');
+...
+app.use(flash());
+```
+
+To remind you how this works, we should be able to flash something by calling `req.flash()` and passing in a key with its value. Let's test this out in our POST request of our campgrounds
+
+```js
+router.post('/', validateCampground, catchAsync(async(req, res, next) => {
+    // if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400);
+    const campground = new Campground(req.body.campground);
+    await campground.save();
+    req.flash('success', 'Successfully made a new campground!')
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+Now we just need to display that information in our template. Let's use our GET route that gets a campgroud by ID
+
+```js
+router.get('/:id', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+        .populate('reviews');
+    res.render('campgrounds/show', {campground, msg: req.flash('success')});
+}));
+```
+
+### 5.2 Template Middleware
+
+But as you remember in the last course, there's an easier way to do that. We can set up a middleware that will just take everything on every request and will add to the template. Let's go into our `app.js` and define a middleware before our route handlers
+
+```js
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    next();
+});
+```
+
+This middleware will allow us to have access to our templates autoimatically; we don't have to pass them through. This is why we set up this middleware on every request.
+
+Now let's go into our boilerplate and do something basic to start
+
+```html
+<main class="container mt-5">
+    <%= success %> 
+    <%- body %> 
+</main>
+```
+
+Let's make a new campground to see if it works
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img11.jpg?raw=true)
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img12.jpg?raw=true)
+
+Now if we were to refresh the page, the message will not pop up
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img13.jpg?raw=true)
