@@ -129,7 +129,7 @@ const catchAsync = require('../utils/catchAsync');
 
 So now when we create a review, we run into a new error
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img1.jpg?raw=true)
 
 Let's take a look at our POST request. It isn't able to find an ID. This happens with Express router because it likes to keep things separate. 
 
@@ -152,9 +152,9 @@ const router = express.Router({mergeParams: true});
 
 Now all of the params in `app.js` will be merged with the ones in `reviews.js`
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img2.jpg?raw=true)
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img3.jpg?raw=true)
 
 
 ## 3. Serving Static Assets
@@ -175,7 +175,7 @@ And inside of our `boilerplate.js`, we will have this line of code
 
 If we try to load a page, we get this error
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img4.jpg?raw=true)
 
 This is because we need to tell Express to load static files. We can do that in `app.js` with this line of code
 
@@ -185,7 +185,7 @@ app.use(express.static('public'));
 
 Now let's test this out
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img5.jpg?raw=true)
 
 ### 3.2 Moving Bootstrap Code
 
@@ -197,7 +197,7 @@ Cool it works. Let's delete the line of code in our `boilerplate.js`. Next thing
 
 When we start building our _public_ folder, it's a good idea to separate the file types into subfolders. We will put our `validateForms.js` into a _js_ folder
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img6.jpg?raw=true)
 
 So now we have to change our path in our script tag
 
@@ -207,7 +207,7 @@ So now we have to change our path in our script tag
 
 And now, our form validations should work
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img7.jpg?raw=true)
 
 Let's go the extra mile and use `path.join` in our `express.static()` code
 
@@ -256,7 +256,7 @@ app.use(session(sessionConfig))
 
 There will be a lot of stuff that we can configure with session, but we will come back to that. Once we get our app running, we will have some changes coming, like security, memory store, etc. Let's test the session out by running the app. When we make a request, we get our own session ID, just to prove that it's working
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img8.jpg?raw=true)
 
 ### 4.2 Adding to sessionConfig
 
@@ -282,7 +282,7 @@ const sessionConfig = {
 
 And now when we look at the cookie, we see that it has a new value in the _Expires_ tab, which tells us that the cookie will expire in a week from now. One of the reasons why we want this is because we don't want a user to stay logged in for a long time
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img9.jpg?raw=true)
 
 We will also set HttpOnly to this cookie. HttpOnly means that if this flag is included on a cookie, the cookie cannot be accessed through client-side scripts. It's an added layer of security It's already set to true by default in the browser, but let's ensure that it always happens.
 
@@ -299,7 +299,7 @@ const sessionConfig = {
 }
 ```
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img10.jpg?raw=true)
 
 ## 5. Setting Up Flash
 
@@ -365,13 +365,13 @@ Now let's go into our boilerplate and do something basic to start
 
 Let's make a new campground to see if it works
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img11.jpg?raw=true)
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img12.jpg?raw=true)
 
 Now if we were to refresh the page, the message will not pop up
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img13.jpg?raw=true)
 
 ## 6. Flash Success Partial
 
@@ -397,7 +397,7 @@ The thing is, we only want this to show up on the page if there is anything in s
 
 So now when we refresh the page, we always get this empty green alert, even if there's nothing there
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img14.jpg?raw=true)
 
 So now in our `flash.ejs`, let's add some logic that checks to see if `success` exists. `success` is an array, and if there's any messages inside of it
 
@@ -410,13 +410,13 @@ So now in our `flash.ejs`, let's add some logic that checks to see if `success` 
 <% } %>
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img15.jpg?raw=true)
 
 Let's make a new campground to test it out
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img16.jpg?raw=true)
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img17.jpg?raw=true)
 
 
 ### 5.2 Dismissing the Partial
@@ -435,7 +435,7 @@ Right now the message is not dismissable, so let's add that functionality. Insid
 
 Now when we make a new campground, we get the flash message with the 'X' option to dismiss it
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img18.jpg?raw=true)
 
 
 ### 6.3 More Flash Messages
@@ -452,9 +452,9 @@ router.put('/:id', validateCampground, catchAsync(async (req, res) => {
 }));
 ```
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img19.jpg?raw=true)
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img20.jpg?raw=true)
 
 
 And we can have a flash message for creating a new review
@@ -472,9 +472,9 @@ router.post('/', validateReview, catchAsync( async (req, res) => {
 }));
 ```
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img21.jpg?raw=true)
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img22.jpg?raw=true)
 
 And we should do the same thing when you delete a review and a campground. I'm not gonna put the demonstration of it because you already get the idea
 
@@ -508,7 +508,7 @@ app.use((req, res, next) => {
 
 So the first example of where something can go wrong is if we bookmarked a campground's link, then someone deletes that campground, then we go to that link, we get this on our page
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img23.jpg?raw=true)
 
 Let's take a look in our GET campground by ID route. It's saying that we are passing in an empty campground into our `res.render()` function
 
@@ -534,6 +534,6 @@ router.get('/:id', catchAsync(async (req, res) => {
 }));
 ```
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img24.jpg?raw=true)
 
 We can also put that campground checker when we attempt to edit a nonexistent campground
