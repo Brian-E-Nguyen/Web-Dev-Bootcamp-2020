@@ -477,3 +477,63 @@ router.post('/', validateReview, catchAsync( async (req, res) => {
 ![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img22.jpg?raw=true)
 
 And we should do the same thing when you delete a review and a campground. I'm not gonna put the demonstration of it because you already get the idea
+
+## 6. Flash Errors Partial
+
+Let's create a partial for any errors in our app. Inside of our `flash.ejs`, we will duplicate our existing 'success' code and replace it with `error`. We will need to add the `error` local variable in our middleware in our `app.js
+
+```js
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+
+```
+
+```html
+<!-- flash.ejs -->
+<% if (error && error.length) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+        ></button>
+    </div>
+<% } %>
+```
+
+So the first example of where something can go wrong is if we bookmarked a campground's link, then someone deletes that campground, then we go to that link, we get this on our page
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img23.jpg?raw=true)
+
+Let's take a look in our GET campground by ID route. It's saying that we are passing in an empty campground into our `res.render()` function
+
+```js
+router.get('/:id', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+        .populate('reviews');
+    res.render('campgrounds/show', {campground});
+}));
+```
+
+Let's modify it so that it first checks to see if the campground doesn't exist. If so, we will redirect the user to the campgrounds page and flash an error message
+
+```js
+router.get('/:id', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+        .populate('reviews');
+    if(!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds')
+    }
+    res.render('campgrounds/show', {campground});
+}));
+```
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img24.jpg?raw=true)
+
+We can also put that campground checker when we attempt to edit a nonexistent campground
