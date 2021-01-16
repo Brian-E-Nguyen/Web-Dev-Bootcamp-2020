@@ -372,3 +372,108 @@ Let's make a new campground to see if it works
 Now if we were to refresh the page, the message will not pop up
 
 ![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img13.jpg?raw=true)
+
+## 6. Flash Success Partial
+
+### 6.1 Creating Our Partial
+
+The next thing we'll do is set up a nice partial to spruce up our Flash, to make it look nicer for the user. We will use Bootstrap to create it in our new partials file called `flash.ejs`. This is what it contains:
+
+```html
+<!-- flash.ejs -->
+<div class="alert alert-success" role="alert">
+    <%= success %> 
+</div>
+```
+
+The thing is, we only want this to show up on the page if there is anything in success. So we could just begin on our boilerplate file by always including that template
+
+```html
+<main class="container mt-5">
+    <%- include('../partials/flash') %> 
+    <%- body %> 
+</main>
+```
+
+So now when we refresh the page, we always get this empty green alert, even if there's nothing there
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img14.jpg?raw=true)
+
+So now in our `flash.ejs`, let's add some logic that checks to see if `success` exists. `success` is an array, and if there's any messages inside of it
+
+```html
+<!-- flash.ejs -->
+<% if (success && success.length) { %>
+    <div class="alert alert-success" role="alert">
+        <%=success%> 
+    </div>
+<% } %>
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img15.jpg?raw=true)
+
+Let's make a new campground to test it out
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img16.jpg?raw=true)
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img17.jpg?raw=true)
+
+
+### 5.2 Dismissing the Partial
+
+Right now the message is not dismissable, so let's add that functionality. Inside of our partial, we want to add the classes `alert-dismissible fade show` and we have to add a button to dismiss it. **IMPORTANT:** make sure all of the CDN links are updated. The previous one used in this course does not support the code below
+
+```html
+<!-- flash.ejs -->
+<% if (success && success.length) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%=success%> 
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<% } %>
+```
+
+Now when we make a new campground, we get the flash message with the 'X' option to dismiss it
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img18.jpg?raw=true)
+
+
+### 6.3 More Flash Messages
+
+The next thing we'll do is to make more flash messages for certain actions. So we have a success message when we create a campground; let's make one when we update a campground
+
+```js
+router.put('/:id', validateCampground, catchAsync(async (req, res) => {
+    const {id} = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground}, {new: true});
+    // new piece of code
+    req.flash('success', 'Successfully updated campground')
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img19.jpg?raw=true)
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img20.jpg?raw=true)
+
+
+And we can have a flash message for creating a new review
+
+```js
+router.post('/', validateReview, catchAsync( async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    // new piece of code
+    req.flash('success', 'Created new review!')
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img21.jpg?raw=true)
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/49-YelpCamp-Restructuring-and-Flash/49-YelpCamp-Restructuring-and-Flash/img-for-notes/img22.jpg?raw=true)
+
+And we should do the same thing when you delete a review and a campground. I'm not gonna put the demonstration of it because you already get the idea
