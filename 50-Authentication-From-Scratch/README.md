@@ -43,3 +43,42 @@ The outputs of the hashing function is always the same size
 When someone logs in with this username and password, we run the password through the hash function that we used to store the hashed password and compare those two
 
 ![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img5.jpg?raw=true)
+
+## 3. Cyptographic Hashing Functions
+
+Hashing functions are a broad use of functions. There are many different kinds out there and they don't all have to do with passwords. Below is an example of a hypothetical hash function, taken from Wikipedia. It takes an input and turns it into a 2-digit number from 0 to 15. This is a very simple version that has 16 possible outputs. It doesn't matter what your username or password is; the result will be one out of the possible 16 outputs, so it wouldn't take long for someone to guess the password
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img6.jpg?raw=true)
+
+When we talk about ***cryptographic* hashing functions**, we care about password safety. 
+
+### 3.1 One-Way Hash Function, Which is Infeasible to Invert
+
+It can be pretty tricky to wrap your head around this. In math, absolute value will take any number, positive or negative, and return the positive value of it. In JavaScript, `Math.abs()` is an example of a one-way function. If we pass in a variable that contains a number, the function will return the positive value of it. The thing is, we don't know if that variable is positive or negative
+
+```js
+> Math.abs(x)
+< 100
+```
+
+Was the input 100 or -100? You cannot tell me definitively what the number was (it was actually -100).
+
+### 3.2 Small Change in Input Yields Large Change in Output
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img5.jpg?raw=true)
+
+Let's take a look at the password. If we we're to change it from 'lizard987' to 'lizard989', that should be a very large change in the output. You shouldn't be able to tell if two passwords are similar to each other just by looking at their hashed outputs. Below is an example of how slight changes in inputs yield completely different outputs
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img6.jpg?raw=true)
+
+### 3.3 Deterministic - Same Input Yields Same Output
+
+It would defeat the purpose of the hash function if we don't get the same output with the same input. If that happens, we can't compare the password, which is then hashed, that the user uses to log in with the one stored in the DB
+
+### 3.4 Unlikely to Find 2 Outputs With The Same Value
+
+When we say 'unlikely,' we mean 'very very very unlikely' but it's still possible to have a collision. Like 1 / (2^88) chance
+
+### 3.5 Password Hash Functions are Deliberately SLOW
+
+We want something that takes time because if we have a fast one, it'll be easy for people to brute-force their way in. Slow ones take a lot longer. There are ones that are fast, but those are not for passwords, like digital signing. 
