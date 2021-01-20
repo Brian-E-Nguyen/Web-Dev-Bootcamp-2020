@@ -69,7 +69,7 @@ Was the input 100 or -100? You cannot tell me definitively what the number was (
 
 Let's take a look at the password. If we we're to change it from 'lizard987' to 'lizard989', that should be a very large change in the output. You shouldn't be able to tell if two passwords are similar to each other just by looking at their hashed outputs. Below is an example of how slight changes in inputs yield completely different outputs
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img6.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img7.jpg?raw=true)
 
 ### 3.3 Deterministic - Same Input Yields Same Output
 
@@ -82,3 +82,37 @@ When we say 'unlikely,' we mean 'very very very unlikely' but it's still possibl
 ### 3.5 Password Hash Functions are Deliberately SLOW
 
 We want something that takes time because if we have a fast one, it'll be easy for people to brute-force their way in. Slow ones take a lot longer. There are ones that are fast, but those are not for passwords, like digital signing. 
+
+## 4. Password Salts
+
+### 4.1 Background; Pre-salt
+
+1. A person can use the same password across different websites
+2. Various people share the same password on a given website
+3. There are only a couple hashing algorithms that are suitable for storing passwords; there aren't many out there
+
+The hashing algorithm that we'll be using is called _Bcrypt_
+
+Let's pretend that we're taking passwords, hashing them, and storing them in a DB. We have the password 'monkey' in the DB and its hashed version. We used the SHA 256 algorithm to make the hashed password. Then someone else has a more secured password
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img8.jpg?raw=true)
+
+Let's duplicate the more secured password's hashed version, and let's remove the passwords so that this acts like we are looking in an actual DB, where passwords aren't stored
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img9.jpg?raw=true)
+
+Let's say that we're a hacker and trying to figure out what the passwords are. Just by looking at the hashed passwords, we can maybe guess if the outputs are generated from Bcrypt. We can use Bcrypt and go through any of the commonly used passwords. If we are able to access one's account using a common password, then we know the password for many other users. 
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img10.jpg?raw=true)
+
+That's a big issue. And there's another separate issue, which is if somebody knows we're using Bcrypt ahead of time, there's nothing stopping the hackers from taking Bcrypt, that list, and running each password through and getting the outputs. They could create something known as a _reverse lookup table_, where it's a file or a data structure that has something like our DB mapped to monkey
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img11.jpg?raw=true)
+
+### 4.2 Info on Salts
+
+**Password salts** are an extra step that we take to make it harder to reverse engineer a password. It's a random value to the password before we hash it. It helps ensure unique hashes and mitigate common attacks. Let's say we have a password 'findingnemo'., We will take that password and concatenate it with some password salt. Let's have 'LOL' as a salt and hash it. Remember that when you make a small change in the input, you get a very different output
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img12.jpg?raw=true)
+
+We include the salt in the hashed output or we store the salt separately. We have to know that salt because when a user comes to log into our website, they provide their password, we will have to add the salt back into their password and hash it. Another reason we use salts is that if people share the same password, we can generate a different salt each time, and the hashed password will be different
