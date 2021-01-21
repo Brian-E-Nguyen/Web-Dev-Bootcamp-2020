@@ -267,6 +267,18 @@ const express = require('express');
 const app = express();
 const User = require('./models/user');
 
+mongoose.connect('mongodb://localhost:27017/authDemo', {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}).then(() => {
+    console.log('MONGOOSE CONNECTION OPEN')
+}).catch(err => {
+    console.log('OH NO MONGO CONNECTION ERROR!!!!!!!!!!!!!!!!!!!!');
+    console.log(err)
+});
+
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
@@ -300,4 +312,66 @@ app.listen(3000, () => {
     </form>
 </body>
 ...
+```
+
+## 7. Auth Demo: Registering
+
+Now we need to figure out where the form will submit to. We will make a POST route called `/register`
+
+```js
+app.use(express.urlencoded({extended: true}));
+...
+app.post('/register', async (req, res) => {
+    res.send(req.body);
+});
+```
+
+And in our form, we will modify the action and include the POST method
+
+```html
+<form action="/register" method="POST">
+...
+</form>
+```
+
+Let's test this out by entering a username and password
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img14.jpg?raw=true)
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img15.jpg?raw=true)
+
+Now we want to take that new user and password and store it in the DB. But remember that we have to hash the password first before storing it. Let's modify our POST route so that we hash our password
+
+```js
+app.post('/register', async (req, res) => {
+    const {password, username} = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    res.send(hashedPassword);
+});
+```
+
+Let's try out logging in with the same username and password
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img16.jpg?raw=true)
+
+Now let's modify our POST route so it saves our user
+
+```js
+app.post('/register', async (req, res) => {
+    const {password, username} = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const user = new User({
+        username,
+        password: hashedPassword
+    });
+    await user.save();
+    res.redirect('/')
+});
+```
+
+Now let's input the same username and password and see what we get in our DB
+
+```
+> db.users.find({})
+{ "_id" : ObjectId("6009de8abe39be5b981c287c"), "username" : "brian", "password" : "$2b$12$3DXhIFPSKuzDSovoEP2dH.b0jHvq8VNYhlz0/o796jalkxT.bF8eS", "__v" : 0 }
 ```
