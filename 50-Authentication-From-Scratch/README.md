@@ -228,3 +228,76 @@ login('monkey', '$2b$12$KqjN7s4uOmqk/DAo6r98ge8VuoEU6PPcZqgAIfUPhJxlMpwDa1MF.')
 ```
 Successful login!
 ```
+
+## 6. Auth Demo Setup
+
+We will make a simple app called _AuthDemo_ where we have a couple of protected routes. There are a lot of things we will need beforehand
+
+- Bcrypt
+- EJS
+- Express
+- Mongoose
+
+We will make an `index.js` file, a _models_ directory, and a _views_ directory
+
+Let's create a `user.js` file in our _models_ directory
+
+```js
+const mongoose = require('mongoose');
+
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: [true, 'Username cannot be blank']
+    },
+    password: {
+        type: String,
+        required: [true, 'Password cannot be blank']
+    },
+});
+
+module.exports = mongoose.model('User', userSchema);
+```
+
+Just note that `password` is really the hashed password. Now let's set up our `index.js` and `register.ejs` files
+
+```JS
+// index.js
+const express = require('express');
+const app = express();
+const User = require('./models/user');
+
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+app.get('/register', (req, res) => {
+    res.render('register')
+});
+
+app.get('/secret', (req, res) => {
+    res.send('THIS IS SECRET. YOU CANNOT SEE ME UNLESS YOU ARE LOGGED IN!');
+})
+
+app.listen(3000, () => {
+    console.log('SERVING YOUR APP!')
+});
+```
+
+```html
+...
+<body>
+    <h1>SIGN UP</h1>
+    <form action="">
+        <div>
+            <label for="username"></label>
+            <input type="text" name="username" id="username" placeholder="Username">
+        </div>
+        <div>
+            <label for="password"></label>
+            <input type="password" name="password" id="password" placeholder="Password">
+        </div>
+        <button>Sign Up</button>
+    </form>
+</body>
+...
+```
