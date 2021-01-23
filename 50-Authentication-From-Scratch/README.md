@@ -488,3 +488,43 @@ Now when we log in successfully and go to this route, it will display correctly
 ![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img21.jpg?raw=true)
 
 The reason why we need to store the ID instead of saying using a boolean to tell whether a user is logged in or not is that sometings we need access to that ID. They can use their username or add in a new comment, etc.
+
+## 10. Auth Demo: Logout
+
+So all we need to do now to log someone out is to get rid of the user ID in the session. To log out, we'll remove `req.session.user_id` and set it to `null` and we need a route to do that
+
+```js
+app.post('/logout', (req,  res) => {
+    req.session.user_id = null;
+    res.redirect('/login');
+});
+```
+
+Let's make a new `secret.ejs` to have our logout button
+
+```html
+<!-- secret.ejs -->
+<h1>Secret Page!</h1>
+<form action="/logout" method="post">
+    <button>Sign Out</button>
+</form>
+```
+
+And we will modify our `/secret` route just a bit
+
+```js
+app.get('/secret', (req, res) => {
+    if(!req.session.user_id) {
+        return res.redirect('/login')
+    }
+    res.render('secret')
+});
+```
+
+Let's log in with valid credentials, and then we will see this page
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img22.jpg?raw=true)
+
+And when we log back out and go back to `/secret`, the page will just redirect us to `/login`
+
+Instead of using `req.session.user_id = null;`, we could use `res.session.destroy();` if you think it makes sense to destroy the entire cookie. But really all we need is just the ID
