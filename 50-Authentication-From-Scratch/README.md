@@ -440,3 +440,51 @@ Let's try logging in with 'brian' and 'monkey' since we already have that stored
 ![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img19.jpg?raw=true)
 
 ![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img20.jpg?raw=true)
+
+## 9. Auth Demo: Staying Logged In With Session
+
+We will now implement a feature so that the user stays logged in or their session expires. The goal of this part is to keep track of a user's login status, and this is where sessions come in. The way we would do this is to store the ID of someone who is logged in inside of our sessions. Let's import _express-session_ into our app
+
+```js
+const session = require('express-session');
+...
+app.use(session({secret: 'notagoodsecret'}));
+```
+
+Now all we need to do is when you successfully log in, we're adding something to the session. The session involves a cookie that we will send back to the user. Since we imported _express-session_, we now have a cookie in our browser. We can now use that cookie for our authentication
+
+```js
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    const user = await User.findOne({username});
+    const validPassword = await bcrypt.compare(password, user.password);
+    console.log(validPassword);
+    if(validPassword) {
+        // store the user's ID in the session
+        req.session.user_id = user._id;
+        res.send('WELCOME')
+    }
+    else {
+        res.send('TRY AGAIN')
+    }
+});
+```
+
+We should also add that new line of code after a user registers
+
+We have a `/secret` route, and we only want people who are logged in to see this route. To do this, we need to check if the `req.session.user_id` exists
+
+```js
+app.get('/secret', (req, res) => {
+    if(!req.session.user_id) {
+        res.redirect('/login')
+    }
+    res.send('THIS IS SECRET. YOU CANNOT SEE ME UNLESS YOU ARE LOGGED IN!');
+});
+```
+
+Now when we log in successfully and go to this route, it will display correctly
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img21.jpg?raw=true)
+
+The reason why we need to store the ID instead of saying using a boolean to tell whether a user is logged in or not is that sometings we need access to that ID. They can use their username or add in a new comment, etc.
