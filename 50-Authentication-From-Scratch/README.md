@@ -375,3 +375,68 @@ Now let's input the same username and password and see what we get in our DB
 > db.users.find({})
 { "_id" : ObjectId("6009de8abe39be5b981c287c"), "username" : "brian", "password" : "$2b$12$3DXhIFPSKuzDSovoEP2dH.b0jHvq8VNYhlz0/o796jalkxT.bF8eS", "__v" : 0 }
 ```
+
+## 8. Auth Demo: Login
+
+Let's start by creating our new GET route to display the login page
+
+```js
+app.get('/login', (req, res) => {
+    res.render('login')
+});
+```
+
+Let's steal what we have in `register.ejs` and edit a few lines of code to make our form. This file will be called `login.ejs`
+
+```html
+...
+<h1>Login</h1>
+<form action="/login" method="POST">
+    <div>
+        <label for="username"></label>
+        <input type="text" name="username" id="username" placeholder="Username">
+    </div>
+    <div>
+        <label for="password"></label>
+        <input type="password" name="password" id="password" placeholder="Password">
+    </div>
+    <button>Login</button>
+</form>
+```
+
+Now we would have to make a POST route for submitting our login data. We will have it display `req.body` just to test if it works
+
+```js
+app.post('/login', (req, res) => {
+    res.send(req.body);
+});
+```
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img17.jpg?raw=true)
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img18.jpg?raw=true)
+
+Now the first step when the user sends their credentials is to find their username. We've been doing a lot of "find things by ID," but in this case with users and authentication, no one gives their ID. Their usernames should be unique. Now we have to compare the password in the `req.body` to the hashed method
+
+```js
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    const user = await User.findOne({username});
+    const validPassword = await bcrypt.compare(password, user.password);
+    console.log(validPassword);
+    if(validPassword) {
+        res.send('WELCOME')
+    }
+    else {
+        res.send('TRY AGAIN')
+    }
+});
+```
+
+Note that if the username is correct but the password is wrong, and vice-versa, never tell the user that one of them is incorrect. You don't want to give any hints
+
+Let's try logging in with 'brian' and 'monkey' since we already have that stored in our DB, and then try it with invalid credentials
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img19.jpg?raw=true)
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img20.jpg?raw=true)
