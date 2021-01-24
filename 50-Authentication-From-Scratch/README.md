@@ -5,7 +5,7 @@ Most apps, or anything nowadays, have some sort of authentication. We will make 
 1. how does authN work, how to store passwords, what it means to salt a password etc.
 2. implementing authN in an Express app
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img1.jpg?raw=true)
 
 ## 1. Authentication vs. Authorization
 
@@ -30,25 +30,25 @@ The #1 rule for storing passwords is to **never store passwords as is, as text, 
 
 It doesn't matter what DB you are using: MySQL, Mongo, Postgres, etc. Imaginge this is Mongo as the password is. If anyone gets in your database, you're screwed. Not to mention thhat a lot of users reuse passwords from one app to the next. So if someone has one password, they can use that same password to access some other accounts from other apps
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img2.jpg?raw=true)
 
 The solution for this is hashing the password. Rather than storing a password in the database, we run the password through a **hashing function** first and then store the result in the database
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img3.jpg?raw=true)
 
 The outputs of the hashing function is always the same size
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img4.jpg?raw=true)
 
 When someone logs in with this username and password, we run the password through the hash function that we used to store the hashed password and compare those two
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img5.jpg?raw=true)
 
 ## 3. Cyptographic Hashing Functions
 
 Hashing functions are a broad use of functions. There are many different kinds out there and they don't all have to do with passwords. Below is an example of a hypothetical hash function, taken from Wikipedia. It takes an input and turns it into a 2-digit number from 0 to 15. This is a very simple version that has 16 possible outputs. It doesn't matter what your username or password is; the result will be one out of the possible 16 outputs, so it wouldn't take long for someone to guess the password
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img6.jpg?raw=true)
 
 When we talk about ***cryptographic* hashing functions**, we care about password safety. 
 
@@ -65,11 +65,11 @@ Was the input 100 or -100? You cannot tell me definitively what the number was (
 
 ### 3.2 Small Change in Input Yields Large Change in Output
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img5.jpg?raw=true)
 
 Let's take a look at the password. If we we're to change it from 'lizard987' to 'lizard989', that should be a very large change in the output. You shouldn't be able to tell if two passwords are similar to each other just by looking at their hashed outputs. Below is an example of how slight changes in inputs yield completely different outputs
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img7.jpg?raw=true)
 
 ### 3.3 Deterministic - Same Input Yields Same Output
 
@@ -95,25 +95,25 @@ The hashing algorithm that we'll be using is called _Bcrypt_
 
 Let's pretend that we're taking passwords, hashing them, and storing them in a DB. We have the password 'monkey' in the DB and its hashed version. We used the SHA 256 algorithm to make the hashed password. Then someone else has a more secured password
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img8.jpg?raw=true)
 
 Let's duplicate the more secured password's hashed version, and let's remove the passwords so that this acts like we are looking in an actual DB, where passwords aren't stored
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img9.jpg?raw=true)
 
 Let's say that we're a hacker and trying to figure out what the passwords are. Just by looking at the hashed passwords, we can maybe guess if the outputs are generated from Bcrypt. We can use Bcrypt and go through any of the commonly used passwords. If we are able to access one's account using a common password, then we know the password for many other users. 
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img10.jpg?raw=true)
 
 That's a big issue. And there's another separate issue, which is if somebody knows we're using Bcrypt ahead of time, there's nothing stopping the hackers from taking Bcrypt, that list, and running each password through and getting the outputs. They could create something known as a _reverse lookup table_, where it's a file or a data structure that has something like our DB mapped to monkey
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img11.jpg?raw=true)
 
 ### 4.2 Info on Salts
 
 **Password salts** are an extra step that we take to make it harder to reverse engineer a password. It's a random value to the password before we hash it. It helps ensure unique hashes and mitigate common attacks. Let's say we have a password 'findingnemo'., We will take that password and concatenate it with some password salt. Let's have 'LOL' as a salt and hash it. Remember that when you make a small change in the input, you get a very different output
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img12.jpg?raw=true)
 
 We include the salt in the hashed output or we store the salt separately. We have to know that salt because when a user comes to log into our website, they provide their password, we will have to add the salt back into their password and hash it. Another reason we use salts is that if people share the same password, we can generate a different salt each time, and the hashed password will be different
 
@@ -336,9 +336,9 @@ And in our form, we will modify the action and include the POST method
 
 Let's test this out by entering a username and password
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img14.jpg?raw=true)
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img15.jpg?raw=true)
 
 Now we want to take that new user and password and store it in the DB. But remember that we have to hash the password first before storing it. Let's modify our POST route so that we hash our password
 
@@ -352,7 +352,7 @@ app.post('/register', async (req, res) => {
 
 Let's try out logging in with the same username and password
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img16.jpg?raw=true)
 
 Now let's modify our POST route so it saves our user
 
@@ -412,9 +412,9 @@ app.post('/login', (req, res) => {
 });
 ```
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img17.jpg?raw=true)
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img18.jpg?raw=true)
 
 Now the first step when the user sends their credentials is to find their username. We've been doing a lot of "find things by ID," but in this case with users and authentication, no one gives their ID. Their usernames should be unique. Now we have to compare the password in the `req.body` to the hashed method
 
@@ -437,9 +437,9 @@ Note that if the username is correct but the password is wrong, and vice-versa, 
 
 Let's try logging in with 'brian' and 'monkey' since we already have that stored in our DB, and then try it with invalid credentials
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img19.jpg?raw=true)
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img20.jpg?raw=true)
 
 ## 9. Auth Demo: Staying Logged In With Session
 
@@ -485,7 +485,7 @@ app.get('/secret', (req, res) => {
 
 Now when we log in successfully and go to this route, it will display correctly
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img21.jpg?raw=true)
 
 The reason why we need to store the ID instead of saying using a boolean to tell whether a user is logged in or not is that sometings we need access to that ID. They can use their username or add in a new comment, etc.
 
@@ -523,7 +523,7 @@ app.get('/secret', (req, res) => {
 
 Let's log in with valid credentials, and then we will see this page
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img22.jpg?raw=true)
 
 And when we log back out and go back to `/secret`, the page will just redirect us to `/login`
 
@@ -644,7 +644,7 @@ userSchema.pre('save', function(next) {
 
 `this` refers to the user object instance. The middleware is replacing the password with the value set by `this.password`. The, `next()` will call `save`. Let's try signing up with both the username and password set to 'pig'
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img23.jpg?raw=true)
 
 ```
 > db.users.find({})
@@ -665,7 +665,7 @@ userSchema.pre('save', async function(next) {
 
 Let's test this out by registering new user with both values as 'bear'
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/50-Authentication-From-Scratch/img-for-notes/img24.jpg?raw=true)
 
 ```
 > db.users.find({})
