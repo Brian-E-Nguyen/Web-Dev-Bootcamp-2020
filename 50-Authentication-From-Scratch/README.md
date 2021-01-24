@@ -549,3 +549,128 @@ app.get('/secret', requireLogin, (req, res) => {
     res.render('secret')
 });
 ```
+
+## 12. Auth Demo: Refactoring To Model Methods
+
+### 12.1 Login
+
+Another thing we can do to refactor things is to move as much code out of the route handler as possible. We can add some logic to our models. Let's look at the POST route for login
+
+```js
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    const user = await User.findOne({username});
+    const validPassword = await bcrypt.compare(password, user.password);
+    console.log(validPassword);
+    if(validPassword) {
+        req.session.user_id = user._id;
+        res.redirect('/secret');
+    }
+    else {
+        res.redirect('/login');
+    }
+});
+```
+
+We're finding a user by username and then we're comparing to see if the password is correct in two steps. But we could move this onto a static method on the model, meaning a method we call on `User`.
+
+```js
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    User.findAndValidate(username, password);
+    // const user = await User.findOne({username});
+    const validPassword = await bcrypt.compare(password, user.password);
+    if(validPassword) {
+        req.session.user_id = user._id;
+        res.redirect('/secret');
+    }
+    else {
+        res.redirect('/login');
+    }
+});
+```
+
+We created a completely new static method called `User.findAndValidate();`, which would return `true` if the found user was correctly matched and had the correct password, or `false` or `undefined` to signify if it was invalid
+
+```js
+// user.js
+userSchema.statics.findAndValidate = async function(username, password) {
+    const foundUser = await this.findOne({username});
+    const isValid = await bcrypt.compare(password, foundUser.password);
+    return isValid ? foundUser : false;
+}
+```
+
+And now we will modify our POST route to reflect our changes
+
+```js
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    const foundUser = await User.findAndValidate(username, password);
+    if(foundUser) {
+        req.session.user_id = foundUser._id;
+        res.redirect('/secret');
+    }
+    else {
+        res.redirect('/login');
+    }
+});
+```
+
+Now login will work as intended
+
+### 12.2 Register
+
+When we register someone, we are hashing the password first then saving that. There's another approach we could do or make, which is to let mongoose model hash the password for us. We will remove some code in our POST `/register` route to simplify things
+
+```js
+app.post('/register', async (req, res) => {
+    const {password, username} = req.body;
+    const user = new User({username, password});
+    await user.save();
+    req.session.user_id = user._id;
+    res.redirect('/')
+});
+```
+
+Inside of our `user.js`, we will add this line of code just before exporting the model. This means that it will run some 
+
+```js
+userSchema.pre('save', function(next) {
+    this.password = 'NOT YOUR REAL PASSWORD'
+    next();
+});
+```
+
+`this` refers to the user object instance. The middleware is replacing the password with the value set by `this.password`. The, `next()` will call `save`. Let's try signing up with both the username and password set to 'pig'
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img23.jpg?raw=true)
+
+```
+> db.users.find({})
+
+{ "_id" : ObjectId("6009de8abe39be5b981c287c"), "username" : "brian", "password" : "$2b$12$3DXhIFPSKuzDSovoEP2dH.b0jHvq8VNYhlz0/o796jalkxT.bF8eS", "__v" : 0 }       
+{ "_id" : ObjectId("600c741dc287f6676c26ce8d"), "username" : "chicken", "password" : "$2b$12$zod7O0bc2PBDJjxwmLXmyeUxCJ5NF6Lki7MbwKJoVCE5aPN76yEui", "__v" : 0 }     
+{ "_id" : ObjectId("600dca4948bf5b5beccaa4a5"), "username" : "pig", "password" : "NOT YOUR REAL PASSWORD", "__v" : 0 }
+```
+
+Now we will use the hashing function in our middleware to hash our password
+
+```js
+userSchema.pre('save', async function(next) {
+    this.password = await bcrypt.hash(this.password, 12);
+    next();
+});
+```
+
+Let's test this out by registering new user with both values as 'bear'
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/50-Authentication-From-Scratch/50-Authentication-From-Scratch/img-for-notes/img24.jpg?raw=true)
+
+```
+> db.users.find({})
+
+...
+
+{ "_id" : ObjectId("600dcbd8a224466484ab9921"), "username" : "bear", "password" : "$2b$12$q0J2BQeIPTzbe/dOfrPmkeYkigQyA/aU8S5cL3RRrxyGieqecxX6S", "__v" : 0 }
+```
