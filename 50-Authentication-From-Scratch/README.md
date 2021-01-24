@@ -528,3 +528,24 @@ Let's log in with valid credentials, and then we will see this page
 And when we log back out and go back to `/secret`, the page will just redirect us to `/login`
 
 Instead of using `req.session.user_id = null;`, we could use `res.session.destroy();` if you think it makes sense to destroy the entire cookie. But really all we need is just the ID
+
+## 11. Auth Demo: Require Login Middleware
+
+We will write a simple middleware that will help us verify if someone is logged in or not, because we want to protect multiple endpoints
+
+```js
+const requireLogin = (req, res, next) => {
+    if (!req.session.user_id) {
+        return res.redirect('/login')
+    }
+    next();
+}
+```
+
+We can now use that function to protect our methods, and everything will work the same
+
+```js
+app.get('/secret', requireLogin, (req, res) => {
+    res.render('secret')
+});
+```
