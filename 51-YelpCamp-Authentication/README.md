@@ -40,3 +40,39 @@ module.exports = mongoose.model('User', UserSchema);
 ```
 
 The reason why we don't specify a username and a password in our `UserSchema` is that the `UserSchema.plugin(passportLocalMongoose)` will do that for us
+
+## 3. Configuring Passport
+
+Now we will configure our app to use Passport in our `app.js` file. The docs says make sure to use session before `passport.session()`
+
+```js
+// app.js
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
+
+...
+
+app.use(session(sessionConfig));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+```
+
+Let's create a route where we fake the creation of a user
+
+```js
+app.get('/fakeUser', async(req, res) => {
+    const user = new User({email: 'b@gmail.com', username: 'brianNNNN'});
+    const newUser = await User.register(user, 'chicken');
+    res.send(newUser);
+});
+```
+
+The `User.register()` method takes in an instance of a user and the password. It will then hash the password. Let's go to the `/fakeUser` route and see what we get
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img2.jpg?raw=true)
