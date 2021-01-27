@@ -76,3 +76,83 @@ app.get('/fakeUser', async(req, res) => {
 The `User.register()` method takes in an instance of a user and the password. It will then hash the password. Let's go to the `/fakeUser` route and see what we get
 
 ![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img2.jpg?raw=true)
+
+## 4. Register Form
+
+We will make a new form for our user routes. Let's first create a new `users.js` file in our _routes_ folder
+
+```js
+// users.js
+
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user');
+
+router.get('/register', (req, res) => {
+    res.render('users/register');
+});
+
+module.exports = router;
+```
+
+Then we will make a new folder called _users_ inside of our _routes_ directory. Inside of the _users_ folder, we will create a _register.ejs_ file with just an `<h1>` tag to test it out
+
+Next we will require the file in our `app.js`. Note that we decided to chnage the name of our variable routes by appending 'Routes' so that it's more clear
+
+```js
+const usersRoutes = require('./routes/users');
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
+
+app.use('/', usersRoutes);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
+```
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img3.jpg?raw=true)
+
+Now that the route works, let's add in our form for `register.ejs`
+
+```html
+<% layout('layouts/boilerplate') %> 
+<h1>Register</h1>
+<form action="/register" method="POST" class="validated-form" novalidate>
+    <div class="mb-3">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" name="username" id="username" required>
+        <div class="valid-feedback">
+            <p>Looks good!</p>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-control" type="email" name="email" id="email" required>
+        <div class="valid-feedback">
+            <p>Looks good!</p>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" type="password" name="password" id="password" required>
+        <div class="valid-feedback">
+            <p>Looks good!</p>
+        </div>
+    </div>
+    <button class="btn btn-success">Register</button>
+</form>
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img4.jpg?raw=true)
+
+Let's add in a POST route so we can test out sending our data
+
+```js
+// users.js
+router.post('/register', async(req, res) => {
+    res.send(req.body);
+});
+```
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img5.jpg?raw=true)
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img6.jpg?raw=true)

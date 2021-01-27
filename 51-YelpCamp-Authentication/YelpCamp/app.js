@@ -12,8 +12,9 @@ const User = require('./models/user');
 
 const portNumber = 3000;
 
-const campgrounds = require('./routes/campgrounds');
-const reviews = require('./routes/reviews');
+const usersRoutes = require('./routes/users');
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
@@ -76,8 +77,9 @@ app.get('/fakeUser', async(req, res) => {
     res.send(newUser);
 });
 
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews);
+app.use('/', usersRoutes);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
     res.render('home')
