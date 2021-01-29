@@ -156,3 +156,81 @@ router.post('/register', async(req, res) => {
 ![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img5.jpg?raw=true)
 
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img6.jpg?raw=true)
+
+## 5. Register Route Logic
+
+### 5.1 Basic Stuff
+
+Let's edit our register POST route so that it can actually save a new user. Remember that we don't need to pass in the password in the User object. The `register()` function will do that for us, and it will hash the password
+
+```js
+router.post('/register', async(req, res) => {
+    const {email, username, password} = req.body;
+    const user = new User({email, username});
+    const registeredUser = await User.register(user, password);
+    console.log(registeredUser);
+    req.flash('success','Welcome to YelpCamp!');
+    res.redirect('/campgrounds');
+});
+```
+
+Let's test this out to see if it works
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img7.jpg?raw=true)
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img8.jpg?raw=true)
+
+And we get this in our console:
+
+```
+{
+  _id: 6014644ae18c19056071bdb6,
+  email: 'tim@gmail.com',
+  username: 'tim',
+  salt: '2b618460a1e26e794555d10d71aa9371ca323f6af3fb972bdd6501b9a8ee5539',
+  hash: '6d7975090b7e18aa87be4bc13c045292d1d111eadcf38a017ca7fed7b6a48db87aa7998500938f4c53a2234b607c5acab09649046ce0518b14bef4334523fd83eec82bbd0cc0d4cef4aa578c7fa95b9321efbb7923cac616e8d12145998ccd3c1828a0cca2124960372b8bf75d348254bbe0f89cb7b4fd4bdadf7074f84308093fbab8456738b805bbf6e6a79733707dad5862d2e09ac5daddbcbbcac83afcc0d9890687252e2934e15907a99ae01ff90402b509c19031f3de3472b19ad1177107cb9bda19493504b48d4238440283fb7feea679017e900dd9d7c84af883a91ada4f00ec537ce1d00f5f948be2cf40b52823870c272d7a6d0e4318c0f376c185f12d88b3a4ac9f04614da71e1579e3b1fe721db64a027a2086926e114a314b262b1ac4a55ecce9a2d50f6a9892339fe0e5d01da8c46f54cef47ffa590ea54e444b5c69b31228dec922d02ce14301733619cbe93d2358b23ba23a29a2f1ef45997ddb9a2383ae57c45f87bf6b9aa0cbf7de9d00a626d1bc57d4ec2810235a9137dab6c06bbc6dcb5201f05aa91a1c140e316003968ede4159b57d8d7a3dc869f8e6adb1bcc1d52f6a0763cb2243052a43c6c9d0bfc4beb1cdbd206b84fa1122ebe2cfa84dab160db41941859f184928b396a9584d3ccc1394050e6b1443cc8976c2a6192bec994cfed6032f3ea0e6fe1688ba735290d0f98f48d63da2ef3ce35a',
+  __v: 0
+}
+```
+
+### 5.2 Improving Register Error UX
+
+There are things that can go wrong with our async functions, so we would need a function that would catch these problems. We already have a `catchAsync()` function in our _utils_ folder, so let's use that in our POST route
+
+```js
+router.post('/register', catchAsync(async(req, res) => {
+    const {email, username, password} = req.body;
+    const user = new User({email, username});
+    const registeredUser = await User.register(user, password);
+    console.log(registeredUser);
+    req.flash('success','Welcome to YelpCamp!');
+    res.redirect('/campgrounds');
+}));
+```
+
+But with our `catchAsync()` function, it's mostly a default error handler. This is what we will get if we register a user with a username that already exists
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img9.jpg?raw=true)
+
+This is not good user experience to redirect the user to another page and show this weird message. Instead, it'll be better if we flash. We will add our own try/catch block inside of this route
+
+```js
+router.post('/register', catchAsync(async(req, res) => {
+    try {
+        const {email, username, password} = req.body;
+        const user = new User({email, username});
+        const registeredUser = await User.register(user, password);
+        console.log(registeredUser);
+        req.flash('success','Welcome to YelpCamp!');
+        res.redirect('/campgrounds');
+    }
+    catch(err) {
+        req.flash('error', err.message);
+        res.redirect('register')
+    }
+}));
+```
+
+Now let's try registering a user that already exists
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img10.jpg?raw=true)
