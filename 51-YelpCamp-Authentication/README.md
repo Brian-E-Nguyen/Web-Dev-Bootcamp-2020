@@ -328,3 +328,29 @@ router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
 });
 ```
+
+## 8. Adding Logout
+
+We will give the user the ability to logout. It is very easy with Passport. There is a method added to our request object called `login()` and `logout()`. Let's make a route called `/logout`
+
+```js
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success', 'You have successfully logged out!');
+    res.redirect('/campgrounds')
+});
+```
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img14.jpg?raw=true)
+
+Let's add some links to our navbar partial for logging in or out so that the user doesn't have to type out the route to logout
+
+```html
+<div class="navbar-nav ms-auto">
+    <a class="nav-link" href="/login">Login</a>
+    <a class="nav-link" href="/register">Register</a>
+    <a class="nav-link" href="/logout">Logout</a>
+</div>
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img15.jpg?raw=true)
