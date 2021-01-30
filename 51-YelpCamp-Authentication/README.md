@@ -285,3 +285,46 @@ Let's try logging in with invalid credentials, then with valid ones
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img11.jpg?raw=true)
 
 ![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img12.jpg?raw=true)
+
+## 7. isLoggedIn Middleware
+
+Now that we have the ability to log in, let's protect one of our basic routes, like making a new campground. You can't submit a new campground unless you are currently signed in. So how are we going to do that? First, we need to check if someone is currently signed in or authenticated. When we made our authentication from scratch, we stored the user ID in the session. We could do something like that, but Passport gives us a helper method called `isAuthenticated()` to do that, and it's added to the request object itself
+
+Let's use this method in our 'new campground' route to test it out
+
+```js
+// campgrounds.js
+router.get('/new', (req, res) => {
+    if(!req.isAuthenticated()) {
+        req.flash('error', 'You must be signed in');
+        return res.redirect('/login');
+    }
+    res.render('campgrounds/new');
+});
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img13.jpg?raw=true)
+
+Once we are able to sign in, we are able to access the 'new campground' page. So far we're just only protecting itself; you can still send data through AJAX or Postman. What we could do now is move the new code into its own middleware function so that we can reuse it for other routes. Let's move our middleware into a separate file called `middleware.js` to make things easier
+
+```js
+module.exports.isLoggedIn = (req, res, next) => {
+    if(!req.isAuthenticated()) {
+        req.flash('error', 'You must be signed in');
+        return res.redirect('/login');
+    }
+    next();
+}
+```
+
+Now let's import that into `campgrounds.js` and use the function in our routes. Everything will work the same
+
+```js
+const {isLoggedIn} = require('../middleware');
+
+...
+
+router.get('/new', isLoggedIn, (req, res) => {
+    res.render('campgrounds/new');
+});
+```
