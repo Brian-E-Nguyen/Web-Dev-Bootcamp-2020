@@ -234,3 +234,54 @@ router.post('/register', catchAsync(async(req, res) => {
 Now let's try registering a user that already exists
 
 ![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img10.jpg?raw=true)
+
+## 6. Login Routes
+
+We will make two routes for login: serving our form and the logic of logging a user in. 
+
+### 6.1 Login Form
+
+Let's work with the form first. We will create a new file called `login.ejs` and take some of the form code from `register.ejs` and modify it a little bit. In this form, we don't need the email field because we only collect it when the user is registering; the user just needs to log in with their username and password
+
+```html
+<% layout('layouts/boilerplate') %> 
+<h1>Login</h1>
+<form action="/login" method="POST" class="validated-form" novalidate>
+    <div class="mb-3">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-control" type="text" name="username" id="username" required>
+        <div class="valid-feedback">
+            <p>Looks good!</p>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-control" type="password" name="password" id="password" required>
+        <div class="valid-feedback">
+            <p>Looks good!</p>
+        </div>
+    </div>
+    <button class="btn btn-success">Login</button>
+</form>
+```
+
+### 6.2 Route Logic
+
+Passport gives us a middleware called `passport.authenticate()`, which we pass in the strategy that we will use
+
+```js
+const passport = require('passport');
+
+...
+
+router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+    req.flash('success', 'Welcome back!');
+    res.redirect('/campgrounds');
+});
+```
+
+Let's try logging in with invalid credentials, then with valid ones
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img11.jpg?raw=true)
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img12.jpg?raw=true)
