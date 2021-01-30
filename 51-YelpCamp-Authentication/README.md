@@ -354,3 +354,69 @@ Let's add some links to our navbar partial for logging in or out so that the use
 ```
 
 ![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img15.jpg?raw=true)
+
+## 9. currentUser Helper
+
+### 9.1 Intro
+
+The next thing we want to do is show and hide the login, register, and logout links depending on whether the user is logged in or not. Passport gives us a a method called `isAuthenticated()`, but we actually want to retrieve the user object. There is something underneath the request object called `user`, which will contain info about the user. Let's print out the user to start
+
+```js
+module.exports.isLoggedIn = (req, res, next) => {
+    console.log('REQ.USER.....', req.user);
+    if(!req.isAuthenticated()) {
+        req.flash('error', 'You must be signed in');
+        return res.redirect('/login');
+    }
+    next();
+}
+```
+
+```
+SERVING ON PORT 3000
+Database connected
+REQ.USER..... undefined
+```
+
+Right now we are not signed in. Let's sign in and see what we get
+
+```
+REQ.USER..... {
+  _id: 6014644ae18c19056071bdb6,
+  email: 'tim@gmail.com',
+  username: 'tim',
+  __v: 0
+}
+```
+
+We get the user object that includes the email and the username. Thankfully, we don't get the hash or the salt. We never need to access them. 
+
+### 9.2 Navbar Logic
+
+If we want the navbar to show and hide links depending on a user's logged-in status, one option is to pass in `req.user` to the navbar or to whatever I'm rendering. That would suck though, since we would pass it in on every single request. Instead, we can go to `app.js`, where we are setting up our locals, we can set up a local for our current user. Now in all of our templates, we have access to the `user` object
+
+```js
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+```
+
+Let's go into our navbar and put some logic in to show routes depending on the user's logged-in status by using EJS
+
+```html
+<div class="navbar-nav ms-auto">
+    <% if (!currentUser) { %>
+    <a class="nav-link" href="/login">Login</a>
+    <a class="nav-link" href="/register">Register</a>
+    <% } else { %>
+    <a class="nav-link" href="/logout">Logout</a>
+    <% } %>
+</div>
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img16.jpg?raw=true)
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img17.jpg?raw=true)
