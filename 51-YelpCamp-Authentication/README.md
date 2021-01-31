@@ -449,3 +449,91 @@ Note that `passport.authenticate()` automatically invokes `req.login()`, but we 
 ![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img18.jpg?raw=true)
 
 ![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img19.jpg?raw=true)
+
+## 11. ReturnTo Behavior
+
+The final thing we should tackle regarding our authentication functionality is redirecting a user back to wherever they were trying to go. For example, if we try to edit a page when we're not signed in, we will be redirected to the login page. When we do log in successfully, it just takes us back to the index, and that's annoying. What we can do is keep track of where a user was initally requesting when verifying their login status. We can store the URL they are requesting. Let's store on the session so that we have some persistance between different requests
+
+### 11.1 Modifying isLoggedIn()
+
+In our `isLoggedIn()` function on our `middleware.js`, let's print out the path that the user is on
+
+```js
+// 
+module.exports.isLoggedIn = (req, res, next) => {
+    if(!req.isAuthenticated()) {
+        console.log(req.path, req.originalUrl)
+        req.flash('error', 'You must be signed in');
+        return res.redirect('/login');
+    }
+    next();
+}
+```
+
+Below is what we get if we go to the 'new campground' page when we're not logged in
+
+```
+/new /campgrounds/new
+```
+
+The first one is the path inside of the router in `campgrounds.js`; the second one is the original path. We would want to store the original, so we will store that in the session
+
+```js
+module.exports.isLoggedIn = (req, res, next) => {
+    if(!req.isAuthenticated()) {
+        req.session.returnTo = req.originalUrl;
+        req.flash('error', 'You must be signed in');
+        return res.redirect('/login');
+    }
+    next();
+}
+```
+
+In our local variables from our `app.js`, we will add a `console.log()` of our session so that you get an idea what's going on
+
+```js
+// app.js
+app.use((req, res, next) => {
+    console.log(req.session);
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+});
+```
+
+When we go to a route that is protected by authentication and when we're not logged in, we get this message
+
+```
+flash: { error: [ 'You must be signed in' ] },
+returnTo: '/campgrounds/new'
+```
+
+### 11.2 Modifying Login POST Route
+
+Then we will modify our POST login route so that we can redirect the user to the page that they were on before
+
+```js
+router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+    req.flash('success', 'Welcome back!');
+    const redirectUrl = req.session.returnTo || '/campgrounds';
+    res.redirect(redirectUrl);
+});
+```
+
+Let's try to edit a campground when we're not logged in. It first takes us to the login page, then when we successfully log in, it takes us to the edit page
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img20.jpg?raw=true)
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img21.jpg?raw=true)
+
+So after we redirect the user, we should delete the object that holds the URL
+
+```js
+router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), (req, res) => {
+    req.flash('success', 'Welcome back!');
+    const redirectUrl = req.session.returnTo || '/campgrounds';
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
+});
+```
