@@ -4,7 +4,7 @@
 
 We will work on integrating authentication and our user model into our YelpCamp app. This will take a while, because as we've learned with authentication, it's fairly complex, but not too bad. We've got to set up plenty of routes, forms, middleware, etc. Previously, we've used _Bcrypt_ to set up our authentication, but we're not doing that here; instead, we'll be using a tool called _Passport_, which is a popular library to add authentication into Node apps. What's different about this is that it lists different strategies or ways to log someone in.
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img1.jpg?raw=true)
 
 **Passport Docs**
 
@@ -75,7 +75,7 @@ app.get('/fakeUser', async(req, res) => {
 
 The `User.register()` method takes in an instance of a user and the password. It will then hash the password. Let's go to the `/fakeUser` route and see what we get
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img2.jpg?raw=true)
 
 ## 4. Register Form
 
@@ -109,7 +109,7 @@ app.use('/campgrounds', campgroundRoutes);
 app.use('/campgrounds/:id/reviews', reviewRoutes);
 ```
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img3.jpg?raw=true)
 
 Now that the route works, let's add in our form for `register.ejs`
 
@@ -142,7 +142,7 @@ Now that the route works, let's add in our form for `register.ejs`
 </form>
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img4.jpg?raw=true)
 
 Let's add in a POST route so we can test out sending our data
 
@@ -153,9 +153,9 @@ router.post('/register', async(req, res) => {
 });
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img5.jpg?raw=true)
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img6.jpg?raw=true)
 
 ## 5. Register Route Logic
 
@@ -176,9 +176,9 @@ router.post('/register', async(req, res) => {
 
 Let's test this out to see if it works
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img7.jpg?raw=true)
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img8.jpg?raw=true)
 
 And we get this in our console:
 
@@ -210,7 +210,7 @@ router.post('/register', catchAsync(async(req, res) => {
 
 But with our `catchAsync()` function, it's mostly a default error handler. This is what we will get if we register a user with a username that already exists
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img9.jpg?raw=true)
 
 This is not good user experience to redirect the user to another page and show this weird message. Instead, it'll be better if we flash. We will add our own try/catch block inside of this route
 
@@ -233,7 +233,7 @@ router.post('/register', catchAsync(async(req, res) => {
 
 Now let's try registering a user that already exists
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img10.jpg?raw=true)
 
 ## 6. Login Routes
 
@@ -282,9 +282,9 @@ router.post('/login', passport.authenticate('local', {failureFlash: true, failur
 
 Let's try logging in with invalid credentials, then with valid ones
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img11.jpg?raw=true)
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img12.jpg?raw=true)
 
 ## 7. isLoggedIn Middleware
 
@@ -303,7 +303,7 @@ router.get('/new', (req, res) => {
 });
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img13.jpg?raw=true)
 
 Once we are able to sign in, we are able to access the 'new campground' page. So far we're just only protecting itself; you can still send data through AJAX or Postman. What we could do now is move the new code into its own middleware function so that we can reuse it for other routes. Let's move our middleware into a separate file called `middleware.js` to make things easier
 
@@ -341,7 +341,7 @@ router.get('/logout', (req, res) => {
 });
 ```
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img14.jpg?raw=true)
 
 Let's add some links to our navbar partial for logging in or out so that the user doesn't have to type out the route to logout
 
@@ -353,7 +353,7 @@ Let's add some links to our navbar partial for logging in or out so that the use
 </div>
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img15.jpg?raw=true)
 
 ## 9. currentUser Helper
 
@@ -417,9 +417,9 @@ Let's go into our navbar and put some logic in to show routes depending on the u
 </div>
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img16.jpg?raw=true)
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img17.jpg?raw=true)
 
 ## 10. Fixing Register Route
 
@@ -446,9 +446,9 @@ router.post('/register', catchAsync(async(req, res) => {
 
 Note that `passport.authenticate()` automatically invokes `req.login()`, but we can't authenticate someone until we've created a user, so we have to use `req.login()` in this. So now after we register a user, we should be automatically logged in
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img18.jpg?raw=true)
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img19.jpg?raw=true)
 
 ## 11. ReturnTo Behavior
 
@@ -523,9 +523,9 @@ router.post('/login', passport.authenticate('local', {failureFlash: true, failur
 
 Let's try to edit a campground when we're not logged in. It first takes us to the login page, then when we successfully log in, it takes us to the edit page
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img20.jpg?raw=true)
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/51-YelpCamp-Authentication/img-for-notes/img21.jpg?raw=true)
 
 So after we redirect the user, we should delete the object that holds the URL
 
