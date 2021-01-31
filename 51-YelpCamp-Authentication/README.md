@@ -420,3 +420,32 @@ Let's go into our navbar and put some logic in to show routes depending on the u
 ![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img16.jpg?raw=true)
 
 ![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img17.jpg?raw=true)
+
+## 10. Fixing Register Route
+
+We have one more relatively minor but important detail to fix. When we register for an account, we are not logged in automatically. We would have to log in manually. Not a good experience. What we want to do is log the user in after they register, and the way that we do this is by using `req.login()`. We will fix our POST register route to include that function
+
+```js
+router.post('/register', catchAsync(async(req, res) => {
+    try {
+        const {email, username, password} = req.body;
+        const user = new User({email, username});
+        const registeredUser = await User.register(user, password);
+        req.login(registeredUser, err => {
+            if(err) return next(err);
+            req.flash('success','Welcome to YelpCamp!');
+            res.redirect('/campgrounds');
+        });
+    }
+    catch(err) {
+        req.flash('error', err.message);
+        res.redirect('register')
+    }
+}));
+```
+
+Note that `passport.authenticate()` automatically invokes `req.login()`, but we can't authenticate someone until we've created a user, so we have to use `req.login()` in this. So now after we register a user, we should be automatically logged in
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img18.jpg?raw=true)
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/51-YelpCamp-Authentication/51-YelpCamp-Authentication/img-for-notes/img19.jpg?raw=true)
