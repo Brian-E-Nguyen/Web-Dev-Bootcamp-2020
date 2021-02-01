@@ -139,3 +139,37 @@ Let's make a new account and create a campground to test it out
 ![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img3.jpg?raw=true)
 
 ![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img4.jpg?raw=true)
+
+## 2. Showing and Hiding Edit/Delete
+
+If we are signed in as Mimi for example, we still can delete or edit other's campgrounds. There's two things we can do
+
+1. Don't show the edit/delete buttons when viewing another user's campground. Only show them if we are the owner of that campground
+2. Protecting our PUT and DELETE routes
+
+Let's start with the first one by adding a conditional in our `show.ejs`
+
+```html
+<% if (currentUser && campground.author.equals(currentUser._id)) { %>
+<div class="card-body">
+    <a class="card-link btn btn-warning" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+    <form class="d-inline" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="post">
+        <button class="btn btn-danger">Delete</button>
+    </form>
+</div>
+<% } %> 
+```
+
+In the conditional, the reason why we have to check for `currentUser` is that if we didn't, and we look at the page when we are not signed in, then the whole thing will break.
+
+Now that we edited our template, let's try this out when we are not signed in, when we are signed in and viewing another one's campground, and when we are signed in and viewing our own campground
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img5.jpg?raw=true)
+
+Now we are signed in as 'mimi'
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img6.jpg?raw=true)
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img7.jpg?raw=true)
+
+There's still a problem where someone can still go to the backend and modify the campgrounds they don't own. We'll fix that in the next section
