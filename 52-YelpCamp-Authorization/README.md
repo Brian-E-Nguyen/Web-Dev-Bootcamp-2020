@@ -173,3 +173,40 @@ Now we are signed in as 'mimi'
 ![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img7.jpg?raw=true)
 
 There's still a problem where someone can still go to the backend and modify the campgrounds they don't own. We'll fix that in the next section
+
+## 3. Campground Permissions
+
+We can still send a DELETE / PUT request through Postman, or we can still use the URL to go to that route. Let's fix the update first. Before we update anything, we want to check to see if the campground has the same author ID as the current user's. 
+
+```js
+// campground.js
+router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
+    const {id} = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground}, {new: true});
+    req.flash('success', 'Successfully updated campground');
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+We would have to break this up. First, we need to find the campground; then, check to see if the campground's author is the same as the current user
+
+```js
+// campground.js
+router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
+    const {id} = req.params;
+    const campground = await Campground.findById(id);
+    if(!campground.author.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that');
+        return res.redirect(`/campgrounds/${id}`);
+    }
+    campground = await Campground.findByIdAndUpdate(id, {...req.body.campground}, {new: true});
+    req.flash('success', 'Successfully updated campground');
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img8.jpg?raw=true)
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img9.jpg?raw=true)
+
+We should also add this code into our DELETE route and the GET route where we view the edit form
