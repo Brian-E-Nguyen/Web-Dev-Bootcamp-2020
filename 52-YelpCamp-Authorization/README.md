@@ -292,3 +292,98 @@ And in our `reviews.js`, we would need to import that middleware
 // reviews.js
 const {validateReview} = require('../middleware');
 ```
+
+## 5. Reviews Permission
+
+### 5.1 `author` Field
+
+Now we will do a similar process that we did for campgrounds, but for reviews. We have to be logged in to see the review form and to make a review. Once a review is made, we want to connect that review to the person who owns it. We can start in the `reviewSchema` in our review model file by adding an `author` field
+
+```js
+// reviews.js
+const reviewSchema = new Schema({
+    body: String,
+    rating: Number,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
+});
+```
+
+### 5.2 Preventing Anonymous Users From Viewing Review Form
+
+Now let's go to the campgrounds show page router. If we're not logged in, we still want to see the reviews but not make a review. We will wrap that with EJS. We have access to our `currentUser` local variable, so we'll use that
+
+```html
+<% if(currentUser) { %> 
+<h2>Leave a Review</h2>
+    <form action="/campgrounds/<%=campground._id%>/reviews" class="mb-3 validated-form" method="POST" novalidate>
+        <div class="mb-3">
+        <label class="form-label" for="">Rating</label>
+        <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="body">Review</label>
+            <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
+            <div class="valid-feedback">
+            <p>Looks good!</p>
+            </div>
+        </div>
+        <button class="btn btn-success">Submit</button>
+    </form>
+<% } %> 
+```
+
+Now let's view a campground when we're not logged in
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img11.jpg?raw=true)
+
+### 5.3 Preventing Outside Requests
+
+Now let's prevent creating a review by sending a request. Inside of our `reviews.js`, we will require the `isLoggedIn` middleware
+
+```js
+// reviews.js
+const {validateReview, isLoggedIn} = require('../middleware');
+
+...
+
+router.post('/', isLoggedIn, validateReview, catchAsync( async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    req.flash('success', 'Created new review!');
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img12.jpg?raw=true)
+
+So after we create the new review, we will set the `review.author` to be `req.user._id`
+
+```js
+router.post('/', isLoggedIn, validateReview, catchAsync( async (req, res) => {
+    const campground = await Campground.findById(req.params.id);
+    const review = new Review(req.body.review);
+    // new line of code
+    review.author = req.user._id;
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+    req.flash('success', 'Created new review!');
+    res.redirect(`/campgrounds/${campground._id}`);
+}));
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img13.jpg?raw=true)
+
+And this is what we get when we search for reviews in our DB
+
+```
+> db.reviews.find({})
+
+{ "_id" : ObjectId("601c562d5236041de489929d"), "rating" : 5, "body" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "author" : ObjectId("6014644ae18c19056071bdb6"), "__v" : 0 }
+```
