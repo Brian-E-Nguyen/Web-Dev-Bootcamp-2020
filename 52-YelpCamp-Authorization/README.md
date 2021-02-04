@@ -210,3 +210,85 @@ router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) =
 ![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img9.jpg?raw=true)
 
 We should also add this code into our DELETE route and the GET route where we view the edit form
+
+## 4. Authorization Middleware
+
+### 4.1 isAuthor Middleware
+
+Let's take the new authorization code and put it into its own middleware. We will call the function `isAuthor()`. We will test this out on our 'edit campground' GET route
+
+```js
+const isAuthor = async(req, res, next) => {
+    const {id} = req.params;
+    const campground = await Campground.findById(id);
+    if(!campground.author.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that');
+        return res.redirect(`/campgrounds/${id}`);
+    }
+    next();
+}
+```
+
+```js
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async(req,res) => {
+    const {id} = req.params;
+    const campground = await Campground.findById(id);
+    if(!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds')
+    }
+    res.render('campgrounds/edit', {campground})
+}));
+```
+
+Let's view a campground that's not ours when we are not currently logged in. We first see that there's no "Edit" button. When we type in the edit route for a campground that's not ours, we are redirected to the login page. When we log in successfully, we see a message saying that we don't have permissions to edit that page
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img10.jpg?raw=true)
+
+We can apply the `isAuthor()` middleware to the update and delete route
+
+### 4.2 Moving Middleware
+
+Let's move the middleware in `campgrounds.js` to the `middleware.js` file to refactor the former. We will also move some imports as well. Note that you will need to change the paths of them
+
+```js
+// middleware.js
+const {campgroundSchema} = require('./schemas.js');
+const {ExpressError} = require('./utils/ExpressError');
+const Campground = require('./models/campgrounds');
+
+module.exports.validateCampground = (req, res, next) => {...}
+
+module.exports.isAuthor = async(req, res, next) => {...}
+```
+
+And we will destructure those middleware in our `campgrounds.js` 
+
+```js
+// campgrounds.js
+const {isLoggedIn, isAuthor, validateCampground} = require('../middleware');
+```
+
+Let's also move our reviews middleware into the `middleware.js` file
+
+```js
+const {campgroundSchema, reviewSchema} = require('./schemas.js');
+
+module.exports.validateReview = (req, res, next) => {
+    const {error} = reviewSchema.validate(req.body);
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400)
+    }
+    else {
+        next();
+    }
+};
+```
+
+And in our `reviews.js`, we would need to import that middleware
+
+```js
+// reviews.js
+const {validateReview} = require('../middleware');
+```
