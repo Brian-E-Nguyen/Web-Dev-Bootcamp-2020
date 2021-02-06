@@ -116,7 +116,7 @@ Now in our `show.ejs`, we will add an `<li>` tag to display our author
 </ul>
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img1.jpg?raw=true)
 
 ### 1.2 Associating User During Campground Creation
 
@@ -134,11 +134,11 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async(req, res, next
 
 Let's make a new account and create a campground to test it out
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img2.jpg?raw=true)
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img3.jpg?raw=true)
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img4.jpg?raw=true)
 
 ## 2. Showing and Hiding Edit/Delete
 
@@ -164,13 +164,13 @@ In the conditional, the reason why we have to check for `currentUser` is that if
 
 Now that we edited our template, let's try this out when we are not signed in, when we are signed in and viewing another one's campground, and when we are signed in and viewing our own campground
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img5.jpg?raw=true)
 
 Now we are signed in as 'mimi'
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img6.jpg?raw=true)
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img7.jpg?raw=true)
 
 There's still a problem where someone can still go to the backend and modify the campgrounds they don't own. We'll fix that in the next section
 
@@ -205,9 +205,9 @@ router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) =
 }));
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img8.jpg?raw=true)
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img9.jpg?raw=true)
 
 We should also add this code into our DELETE route and the GET route where we view the edit form
 
@@ -243,7 +243,7 @@ router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async(req,res) => {
 
 Let's view a campground that's not ours when we are not currently logged in. We first see that there's no "Edit" button. When we type in the edit route for a campground that's not ours, we are redirected to the login page. When we log in successfully, we see a message saying that we don't have permissions to edit that page
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img10.jpg?raw=true)
 
 We can apply the `isAuthor()` middleware to the update and delete route
 
@@ -337,7 +337,7 @@ Now let's go to the campgrounds show page router. If we're not logged in, we sti
 
 Now let's view a campground when we're not logged in
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img11.jpg?raw=true)
 
 ### 5.3 Preventing Outside Requests
 
@@ -360,7 +360,7 @@ router.post('/', isLoggedIn, validateReview, catchAsync( async (req, res) => {
 }));
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img12.jpg?raw=true)
 
 So after we create the new review, we will set the `review.author` to be `req.user._id`
 
@@ -378,7 +378,7 @@ router.post('/', isLoggedIn, validateReview, catchAsync( async (req, res) => {
 }));
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img13.jpg?raw=true)
 
 And this is what we get when we search for reviews in our DB
 
@@ -451,7 +451,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 
 We're telling it to pass in all of the reviews from the `reviews` array on the one campground we're finding, then on each review, populate the author. Then, populate the one author for the campground. Let's test this out
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img14.jpg?raw=true)
 
 ```
 {
@@ -514,7 +514,7 @@ Let's go into our `show.ejs` to display the owner of a review. We will add an `<
 <% } %>
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img15.jpg?raw=true)
 
 ### Hiding Review Button
 
@@ -538,7 +538,7 @@ We will modify that condition to check if the review's author is the same as the
 <% } %> 
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img16.jpg?raw=true)
 
 As you can see here, the delete button doesn't show on other's reviews
 
@@ -576,4 +576,4 @@ router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, r
 
 A way that we can test this out is to remove the logic for hiding the delete button for a review, then sending the DELETE requeset. We're currently signed in as 'tim', and this is what we get if we try to delete a review that isn't ours
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/52-YelpCamp-Authorization/img-for-notes/img17.jpg?raw=true)
