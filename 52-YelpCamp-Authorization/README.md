@@ -387,3 +387,193 @@ And this is what we get when we search for reviews in our DB
 
 { "_id" : ObjectId("601c562d5236041de489929d"), "rating" : 5, "body" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "author" : ObjectId("6014644ae18c19056071bdb6"), "__v" : 0 }
 ```
+
+## 6. More Reviews Authorization
+
+Our next goal is to display the username of the reviewer. What we would do to the DB is similar on campground in that we populate authors and reviews
+
+```js
+router.get('/:id', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+        .populate('reviews')
+        .populate('author');
+    console.log(campground);
+    if(!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds')
+    }
+    res.render('campgrounds/show', {campground});
+}));
+```
+
+Our campground model both have the `reviews` and `author` field
+
+```js
+const CampgroundSchema = new Schema({
+    title: String,
+    image: String,
+    price: Number,
+    description: String,
+    location: String,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
+});
+```
+
+What we want to do, in addition, is that for each one of those reviews that we're populating, we want to populate each author. It's different from what we've seen so far, in that we pass in an object.
+
+```js
+router.get('/:id', catchAsync(async (req, res) => {
+    const campground = await Campground.findById(req.params.id)
+        .populate({
+            path: 'reviews',
+            populate: {
+                path: 'author'
+            }
+        })
+        .populate('author');
+    console.log(campground);
+    if(!campground) {
+        req.flash('error', 'Cannot find that campground!');
+        return res.redirect('/campgrounds')
+    }
+    res.render('campgrounds/show', {campground});
+}));
+```
+
+We're telling it to pass in all of the reviews from the `reviews` array on the one campground we're finding, then on each review, populate the author. Then, populate the one author for the campground. Let's test this out
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img14.jpg?raw=true)
+
+```
+{
+  reviews: [
+    {
+      _id: 601c562d5236041de489929d,
+      rating: 5,
+      body: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      author: [Object],
+      __v: 0
+    },
+    {
+      _id: 601d9156ad7a9b2a740a9856,
+      rating: 5,
+      body: 'This place is POGGERS',
+      author: [Object],
+      __v: 0
+    }
+  ],
+  _id: 60184efb8076cf368cc56663,
+  author: {
+    _id: 6014644ae18c19056071bdb6,
+    email: 'tim@gmail.com',
+    username: 'tim',
+    __v: 0
+  },
+  location: 'Jefferson City, Missouri',
+  title: 'Sea Group Camp',
+  image: 'https://source.unsplash.com/collection/483251',
+  description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?',
+  price: 21,
+  __v: 3
+}
+```
+
+Now it would be easier to store the username with the review, but right now it's fine. You would need to think how you would store your data
+
+### Displaying Owner of Review
+
+Let's go into our `show.ejs` to display the owner of a review. We will add an `<h6>` tag for the owner
+
+```html
+<% for( let review of campground.reviews ) { %>
+<div class="card mb-3">
+    <div class="card-body">
+    <h5 class="card-title">Rating: <%= review.rating %> </h5>
+    <!-- **********************
+        NEW PIECE OF CODE RIGHT HERE 
+        **********************
+    -->
+    <h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %> </h6>
+    <p class="card-text">Review: <%= review.body %> </p>
+    <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
+        <button class="btn btn-sm btn-danger">  
+        Delete
+        </button>
+    </form>
+    </div>
+</div>
+<% } %>
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img15.jpg?raw=true)
+
+### Hiding Review Button
+
+Another thing we want to do is to make sure the Delete button doesn't show up if the user doesn't own the review. It's very similar to what we did with hiding the Edit/Delete buttons for a campground. It's similar to this line of code that we used for the campground
+
+```js
+<% if (currentUser && campground.author.equals(currentUser._id)) { %>
+
+<% } >
+```
+
+We will modify that condition to check if the review's author is the same as the current user's ID
+
+```html
+<% if (currentUser && review.author.equals(currentUser._id)) { %>
+<form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="post">
+    <button class="btn btn-sm btn-danger">  
+    Delete
+    </button>
+</form>
+<% } %> 
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img16.jpg?raw=true)
+
+As you can see here, the delete button doesn't show on other's reviews
+
+### isReviewAuthor Middleware
+
+Let's fix the problem where we can't send a DELETE request to delete reviews. We will make a new middleware called `isReviewAuthor`
+
+```js
+// middleware.js
+
+module.exports.isReviewAuthor = async (req, res, next) => {
+    const { id, reviewId } = req.params;
+    const review = await Review.findById(reviewId);
+    if (!review.author.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that!');
+        return res.redirect(`/campgrounds/${id}`);
+    }
+    next();
+}
+```
+
+We will import this middleware into our `reviews.js` and use that for our DELETE request
+
+```js
+// reviews.js
+
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
+    const {id, reviewId} = req.params;
+    await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});
+    await Review.findByIdAndDelete(reviewId);
+    req.flash('success', 'Successfully deleted review!');
+    res.redirect(`/campgrounds/${id}`)
+}));
+```
+
+A way that we can test this out is to remove the logic for hiding the delete button for a review, then sending the DELETE requeset. We're currently signed in as 'tim', and this is what we get if we try to delete a review that isn't ours
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/52-YelpCamp-Authorization/52-YelpCamp-Authorization/img-for-notes/img17.jpg?raw=true)
