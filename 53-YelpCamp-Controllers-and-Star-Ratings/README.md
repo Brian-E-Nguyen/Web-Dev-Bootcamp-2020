@@ -78,3 +78,40 @@ router.delete('/:id', isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampgro
 
 module.exports = router;
 ```
+
+## 2. Adding a Reviews (and Users) Controller
+
+Let's make another file in our _controllers_ directory called `reviews.js` and refactor everything, just like we did with our `campgrounds.js` routes
+
+```js
+// routes/reviews.js
+const express = require('express');
+const router = express.Router({mergeParams: true});
+const {validateReview, isLoggedIn, isReviewAuthor} = require('../middleware');
+const reviews = require('../controllers/reviews');
+
+const catchAsync = require('../utils/catchAsync');
+
+router.post('/', isLoggedIn, validateReview, catchAsync(reviews.createReview));
+
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview));
+
+module.exports = router;
+```
+
+```js
+// controllers/reviews.js
+const Campground = require('../models/campgrounds');
+const Review = require('../models/review');
+
+module.exports.createReview = async (req, res) => {
+    ...
+}
+
+module.exports.deleteReview = async (req, res) => {
+    ...
+}
+```
+
+The same thing goes with the 'users' controller and routes. You get the idea
+
