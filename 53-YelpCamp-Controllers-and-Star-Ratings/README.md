@@ -115,3 +115,47 @@ module.exports.deleteReview = async (req, res) => {
 
 The same thing goes with the 'users' controller and routes. You get the idea
 
+## 3. A Fancy Way To Restructure Routes
+
+We'll see a way of grouping similar routes together, or rather, routes that have the same path, but different verbs. We can use a method called `router.route(path)`, which lets us define a single route that handles different verbs, i.e. chaining on PUT, GET, etc. In our `routes/campgrounds.js`, let's start with grouping the `/` routes together
+
+```js
+// routes/campgrounds.js
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+```
+
+We also have some routes that are standalones, which won't make sense to group them, and we also have others that have the same path. This is what our finished grouping should look like:
+
+```js
+// routes/campgrounds.js
+
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+
+router.get('/new', isLoggedIn, campgrounds.renderNewForm);
+
+router.route('/:id')
+    .get(catchAsync(campgrounds.showCampground))
+    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.updateCampground))
+    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
+
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.renderEditForm));
+```
+
+Note that we need to put the `/new` route before the `/:id` group or things would break. Let's do the same grouping for `routes/users.js`
+
+```js
+// routes/users.js
+router.route('/register')
+    .get(users.renderRegister)
+    .post(catchAsync(users.register));
+
+router.route('/login')
+    .get(users.renderLogin)
+    .post(passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login);
+
+router.get('/logout', users.logout);
+```
