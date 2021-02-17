@@ -159,3 +159,39 @@ router.route('/login')
 
 router.get('/logout', users.logout);
 ```
+
+## 4. Displaying Star Ratings
+
+What we will do now is having star ratings by clicking on the stars instead of having a slider. Also instead of having "Rating: ___", we will display the number of stars. We could do this from scratch ourselves by using a star entity codes, but we won't because it's annoying and extra difficult. We'll instead use a library called _Starability_
+
+**Link to GitHub page**
+
+- https://github.com/LunarLogic/starability
+
+We will use the `starability-basic.css` file and put it in our _public/css_ directory, then we will include it in our `show.ejs`
+
+```js
+<% layout('layouts/boilerplate') %> 
+<link rel="stylesheet" href="/css/stars.css">
+
+...
+```
+
+Let's put this code in the review card to test it out
+
+```html
+<h3>Rated element name</h3>
+<p class="starability-result" data-rating="3">
+    Rated: 3 stars
+</p>
+```
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/53-YelpCamp-Controllers-and-Stars/53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img1.jpg?raw=true)
+
+Now what we want to do is to display the number of stars based on the review rating instead of hardcoding the values
+
+```html
+<p class="starability-result" data-rating="<%= review.rating %>">
+    Rated: <%= review.rating %> stars
+</p>
+```
