@@ -186,7 +186,7 @@ Let's put this code in the review card to test it out
 </p>
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/53-YelpCamp-Controllers-and-Stars/53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main//53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img1.jpg?raw=true)
 
 Now what we want to do is to display the number of stars based on the review rating instead of hardcoding the values
 
@@ -196,7 +196,7 @@ Now what we want to do is to display the number of stars based on the review rat
 </p>
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/53-YelpCamp-Controllers-and-Stars/53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main//53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img2.jpg?raw=true)
 
 ## 5. Star Rating Form
 
@@ -240,6 +240,6 @@ Then, for each of the `name` values in the `<input>` tags, we will add `review[r
 
 Let's test it out now
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/53-YelpCamp-Controllers-and-Stars/53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main//53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img3.jpg?raw=true)
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/53-YelpCamp-Controllers-and-Stars/53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main//53-YelpCamp-Controllers-and-Star-Ratings/img-for-notes/img4.jpg?raw=true)
