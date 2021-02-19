@@ -106,3 +106,12 @@ Now that we set it to multiple files, we would need to change `req.file` to `req
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img6.jpg?raw=true)
 
 ![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img7.jpg?raw=true)
+
+
+## 3. Cloudinary Registration
+
+**Link to Cloudinary**
+
+- https://cloudinary.com/
+
+Create and log into your account. We will use the API key and the secret for our app, but we don't want to directly embed those in our code and put them on GitHub; the reason for this is that if anyone sees our code, then they have access to our credentials. And if we connect our credit card to this app, someone can just store a bunch of stuff in your own account, and that can be very expensive. This applies to every service with API calls
