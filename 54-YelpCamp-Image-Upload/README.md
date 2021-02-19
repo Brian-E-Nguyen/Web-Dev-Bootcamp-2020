@@ -115,3 +115,46 @@ Now that we set it to multiple files, we would need to change `req.file` to `req
 - https://cloudinary.com/
 
 Create and log into your account. We will use the API key and the secret for our app, but we don't want to directly embed those in our code and put them on GitHub; the reason for this is that if anyone sees our code, then they have access to our credentials. And if we connect our credit card to this app, someone can just store a bunch of stuff in your own account, and that can be very expensive. This applies to every service with API calls
+
+## 4. Environment Variables with dotenv
+
+What we do instead of directly embedding API creds or secret keys is storing them in a file that we don't include when we submit online. We use a `.env` file to store our information. Let's make a .env file and store it in the top level of our application.
+
+The basics of a .env file is that it's like a key-value file. The naming of the keys can be anything. Below is an example
+
+```
+SECRET=aabc123
+```
+
+Next, we will install a package called _dotenv_
+
+```
+npm i dotenv
+```
+
+Inside of our `app.js`, we will add this code at the very top
+
+```js
+// app.js
+if(process.env.NODE_ENV !== 'PRODUCTION') {
+    require('dotenv').config();
+}
+```
+
+We're saying if we're running in development mode (which we are), then require the _dotenv_ package, which will take the variables defined in our .env file and add them to `process.env.NODE_ENV`
+
+So now, we have access to the different variables in .env. Let's run our app to see the secret printed out
+
+```js
+console.log(process.env.SECRET)
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img8.jpg?raw=true)
+
+Let's add in the things that we want to store in the .env file (remember you can name the keys however you want)
+
+```
+CLOUDINARY_CLOUD_NAME=AAAAAAAAAAAA
+CLOUDINARY_KEY=AAAAAAA
+CLOUDINARY_SECRET=AAAAAAAAAAAAA
+```
