@@ -8,3 +8,101 @@ We will now tackle on uploading an image to our website. It's not from anything 
 2. we need to store the images somewhere, and we don't store them in Mongo because image file sizes are very large. Instead, we will use a tool called _Cloudinary_ that stores photos and lets us easily retrieve them
 
 We will set up our form so that it accepts files, and it will hit our server and then our endpoint somewhere. Then we will take the files and store in _Cloudinary_; the tool will then send us the URL to our images, then we can store the URL's in our Mongo DB
+
+## 2. The Multer Middleware
+
+### 2.1 File Input
+
+If we want to upload files with our form, we would need to set the encoding type to be `multipart/form-data`. This will break some things for us, but we'll worry about those problems later. In our `new.ejs`, we will set the `enctype` to that value
+
+```html
+<!-- new.ejs -->
+<form action="/campgrounds" method="post" novalidate class="validated-form" enctype="multipart/form-data">
+```
+
+Then we can add an input for a file. We will replace it with the current input for image URL, which will look like this
+
+```html
+<!-- new.ejs -->
+<input type="file" name="image" id="">
+```
+
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img1.jpg?raw=true)
+
+### 2.2 Editing Our Route
+
+The next thing we'll do is go over to the route where the campground is submitted. Let's display the `req.body` in our console so that we know what we're sending
+
+```js
+// routes/campgrounds.js
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    .post((req, res) => {
+        res.send(req.body)
+    });
+```
+
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img2.jpg?raw=true)
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img3.jpg?raw=true)
+
+### 2.3 Using Multer
+
+When we submit that form, we will hit that route, but there's nothing in the body. This brings us to the next point, which is in order to parse multipart forms, we need to use another middleware called _Multer_. Multer does what the built-in body-parsing middleware does, so that we can parse JSON or URL-encoded data
+
+**Link to the docs**
+
+- https://github.com/expressjs/multer
+
+#### 2.3.1 Single File Upload
+
+Let's import Multer to our `routes/campgrounds.js` file. On our POST route for `/`, we can add in the `upload` tag
+
+```js
+// routes/campgrounds.js
+var multer  = require('multer')
+var upload = multer({ dest: 'uploads/' })
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    .post(upload.single('image'),(req, res) => {
+        console.log(req.body, req.file);
+        res.send('IT WORKED!!!!!!!!');
+    });
+```
+
+Let's try this out by uploading our image
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img4.jpg?raw=true)
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img5.jpg?raw=true)
+
+This tells us information about our file and where it is, and you can see we have an _uploads_ folder created in our app. For now, we don't care about where we are storing those files since we will send them to the cloud later.
+
+### 2.3.2 Mutiple File Upload
+
+From the previous example, we've used `upload.single()`, but we can also use `upload.array()`, which would expect multiple files. 
+
+```js
+// routes/campgrounds.js
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
+    .post(upload.array('image'),(req, res) => {
+        console.log(req.body, req.files);
+        res.send('IT WORKED!!!!!!!!');
+    });
+```
+
+To do this in our input tag on `new.ejs`, we would have another value called `multiple`
+
+```html
+<input type="file" name="image" id="" multiple>
+```
+
+Now that we set it to multiple files, we would need to change `req.file` to `req.files` in our POST route
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img6.jpg?raw=true)
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img7.jpg?raw=true)
