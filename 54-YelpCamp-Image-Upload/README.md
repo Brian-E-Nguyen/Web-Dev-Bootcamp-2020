@@ -255,3 +255,100 @@ The pics are now stored on Cloudinary
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img11.jpg?raw=true)
 
 We get these really weird names so that we don't have conflicts when more than 1 person uploads an image of the same name
+
+## 6. Storing Uploaded Links in Mongo
+
+### 6.0 Fixing Upload Mistake From Previous Section
+
+One thing that Colt did incorrectly in the previous video was the folder and the allowed formats. The uploads didn't actually go into the _YelpCamp_ folder on Cloudinary. We need to put this information inside of `params`
+
+```js
+// cloudinary/index.js
+const storage = new CloudinaryStorage({
+    cloudinary, 
+    params: {
+        // the folder that we'll store our files in Cloudinary
+        folder: 'YelpCamp',
+        allowedFormats: ['jpeg', 'png', 'jpg']
+    }
+});
+
+```
+
+Everything should work now
+
+### 6.1 Fixing Our Backend
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img12.jpg?raw=true)
+
+What we want to do now is take the path and filename of the file and store them. First let's update our model in `campgrounds.js`. For the value of the `image` field, we will change it to an array
+
+```js
+const CampgroundSchema = new Schema({
+    title: String,
+    images: [
+        {
+            url: String,
+            filename: String
+        }
+    ],
+...
+```
+
+Then we will go to `routes/campgrounds.js` to add in the upload file middleware
+
+```js
+// routes/campgrounds.js
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, upload.array('image'), catchAsync(campgrounds.createCampground));
+```
+
+Then inside of our `controllers/campgrounds.js`, we will retrieve the filenames and add them to our campground
+
+```js
+// controllers/campgrounds.js
+module.exports.createCampground = async(req, res, next) => {
+    const campground = new Campground(req.body.campground);
+    campground.images = req.files.map(file => ({url: file.path, filename: file.filename}));
+    campground.author = req.user._id;
+    await campground.save();
+    req.flash('success', 'Successfully made a new campground!')
+    res.redirect(`/campgrounds/${campground._id}`);
+}
+```
+
+Let's see what happens here by displaying our `campground` object in our console
+
+**NOTE:** There's an error when we do submit our campground, so we have to reorder our middleware for now. This is bad in a production environment because we don't want to upload our images before we validate a campground, but we'll have to do it this way for now
+
+```js
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground));
+```
+
+And inside of our `schemas.js`, we'll remove the validation for images for now
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img13.jpg?raw=true)
+
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img14.jpg?raw=true)
+
+### 6.2 Displaying Our Image
+
+Inside of our `show.ejs`, we will loop over all of our images
+
+```html
+<% for (let image of campground.images) { %> 
+    <img src="<%= image.url %> " class="card-img-top" alt="...">
+<% } %> 
+```
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img15.jpg?raw=true)
+
+
+Let's try uploading two pics
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img16.jpg?raw=true)
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img17.jpg?raw=true)
