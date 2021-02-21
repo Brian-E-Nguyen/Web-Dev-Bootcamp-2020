@@ -158,3 +158,100 @@ CLOUDINARY_CLOUD_NAME=AAAAAAAAAAAA
 CLOUDINARY_KEY=AAAAAAA
 CLOUDINARY_SECRET=AAAAAAAAAAAAA
 ```
+
+## 5. Uploading To Cloudinary Basics
+
+The next step is to take the files that Multer is able to pass in and upload them to Cloudinary. To do this, there's an easy tool called _Multer Storage Cloudinary_ to make it a smooth process
+
+**Link to the docs**
+
+- https://github.com/affanshahid/multer-storage-cloudinary
+
+### 5.1 Setting Up Our Config
+
+To use this, we need to first install the following packages
+
+`npm i cloudinary multer-storage-cloudinary`
+
+Then we will copy the imports and place them in a new file called `index.js` inside of new folder called _cloudinary_. The next thing we'll do is setting the config
+
+```js
+// cloudinary/index.js
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+});
+```
+
+We are setting these keys to the values stored in our .env file. The next thing we'll do is configure the storage of our files
+
+```js
+// cloudinary/index.js
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    ...
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary, 
+    // the folder that we'll store our files in Cloudinary
+    folder: 'YelpCamp',
+    allowedFormats: ['jpeg', 'png', 'jpg']
+});
+```
+
+Lastly, we'll export both of those variables. The entire file should look like this:
+
+```js
+// cloudinary/index.js
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary, 
+    // the folder that we'll store our files in Cloudinary
+    folder: 'YelpCamp',
+    allowedFormats: ['jpeg', 'png', 'jpg']
+});
+
+module.exports = {
+    cloudinary,
+    storage
+}
+```
+
+### 5.2 Changing campgrounds.js
+
+Inside of our `campgrounds.js` file in our _routes_ folder, we will require the `storage` object. Note that for our path, we don't have to put '../cloudinary/index.js' because Node will automatically detect `index.js` files. For our upload destination, will replace the current one with `storage`
+
+```js
+// routes/campgrounds.js
+const {storage} = require('../cloudinary');
+const upload = multer({ storage });
+```
+
+### 5.3 Uploading Our Photos
+
+Now let's try sending a file and see if it works
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img9.jpg?raw=true)
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img10.jpg?raw=true)
+
+The pics are now stored on Cloudinary
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img11.jpg?raw=true)
+
+We get these really weird names so that we don't have conflicts when more than 1 person uploads an image of the same name
