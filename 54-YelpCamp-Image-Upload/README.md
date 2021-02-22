@@ -508,3 +508,5 @@ module.exports.updateCampground = async (req, res) => {
 
 Let's try adding new photos to an existing campground to see if it works
 
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img22.jpg?raw=true)
+
