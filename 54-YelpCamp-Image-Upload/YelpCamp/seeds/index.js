@@ -18,7 +18,10 @@ db.once('open', () => {
 // Returns a random element from the array
 const sample = array => array[Math.floor(Math.random() * array.length)];
 
-
+/* 
+NOTE: 'image' field must be changed to 'images'. I did not do that
+so that I don't reveal my Cloudinary username
+*/
 const seedDB = async() => {
     await Campground.deleteMany({});
     for (let i = 0; i < 50; i++) {

@@ -419,3 +419,45 @@ One problem is that there are some campgrounds that only have one image, yet the
 ```
 
 ![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img20.jpg?raw=true)
+
+## 8. Fixing Our Seeds
+
+Right now, none of our campground thumbnails are showing when viewing all campgrounds because we changed the `image` field to `images` in our schema. We'll fix that in our seeds
+
+```js
+// seeds/index.js
+ for (let i = 0; i < 50; i++) {
+        const randomNum = Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random() * 20) + 10;
+        const camp = new Campground({
+            author: '6014644ae18c19056071bdb6',
+            location: `${cities[randomNum].city}, ${cities[randomNum].state}`,
+            title: `${sample(descriptors)} ${sample(places)}`,
+            images: [
+                {
+                  url: ...,
+                  filename: ...
+                },
+                {
+                  url: ...,
+                  filename: ...
+                },
+                {
+                  url: ...,
+                  filename: ...
+                }
+              ],
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?",
+            price: price
+        });
+```
+
+Then inside of our `campgrounds/index.ejs` file, we will slightly edit our code so that we can show the first pic in the awrray
+
+```html
+<div class="col-md-4">
+    <img class="img-fluid" alt="" src="<%= campground.images[0].url %> ">
+</div>
+```
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img21.jpg?raw=true)
