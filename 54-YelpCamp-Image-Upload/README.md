@@ -352,3 +352,70 @@ Let's try uploading two pics
 ![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img16.jpg?raw=true)
 
 ![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img17.jpg?raw=true)
+
+
+## 7. Displaying Images In A Carousel
+
+### 7.1 The Process
+
+We'll add a carousel so that we can easily see all of the images for a campground without the clutter. We will copy the code provided in the Bootstrap carousel docs and put them in our `show.ejs`. We'll make some changes to it
+
+**Link to Boostrap carousel docs**
+
+- https://getbootstrap.com/docs/5.0/components/carousel/
+
+We can start by looping over all of our images by using the code from the previous section
+
+```html
+<div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+<div class="carousel-inner">
+    <% for (let image of campground.images) { %> 
+    <div class="carousel-item">
+    <img src="<%= image.url %> " class="d-block w-100" alt="...">
+    </div>
+    <% } %> 
+<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+</button>
+</div>
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img18.jpg?raw=true)
+
+One problem is that we set the `active` class on all images, and we don't want that. We only want 1 image to have the `active` class. We'll use a `foreach` loop instead so that we can access to each individual image
+
+```html
+<% campground.images.forEach((image, index) => { %> 
+<div class="carousel-item <%= index === 0 ? 'active' : '' %> ">
+    <img src="<%= image.url %> " class="d-block w-100" alt="...">
+</div>
+<% }); %> 
+```
+
+This will now work. If we go into the devtools, we can see that the `active` class will alternate between each image
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img19.jpg?raw=true)
+
+### 7.2 One Image Carousel Fix
+
+One problem is that there are some campgrounds that only have one image, yet the controls to switch between images still appear on them. This will be confusing to the user because they would think that the controls are broken. Let's fix that by adding a condition to check if there's more than 1 image on a campground
+
+```html
+ <% if (campground.images.length > 1) { %> 
+<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+</button>
+<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"  data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+</button>
+<% } %> 
+```
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img20.jpg?raw=true)
