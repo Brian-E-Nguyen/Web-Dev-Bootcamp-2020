@@ -461,3 +461,50 @@ Then inside of our `campgrounds/index.ejs` file, we will slightly edit our code 
 ```
 
 ![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img21.jpg?raw=true)
+
+## 9. Adding Upload to Edit Page
+
+Let's give users the ability to add more photos when they're editing a particular campground. For time's sake, we'll show you how to do it with the existing form. It's not complex, but it's pretty bad UX
+
+First, we'll make sure that our form supports multipart/form-data
+
+```html
+<form action="/campgrounds/<%=campground._id%>?_method=PUT" method="post" novalidate class="validated-form" enctype="multipart/form-data">
+```
+
+Then inside of our PUT request for campgrounds, we'll add the `upload.array('image')` middleware
+
+```js
+// routes/campgrounds.js
+router.route('/:id')
+    .get(catchAsync(campgrounds.showCampground))
+    .put(isLoggedIn, isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.updateCampground))
+    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
+```
+
+Then in our `edit.ejs`, we will add the input for multiple files
+
+```html
+<!-- edit.ejs -->
+<div class="mb-3">
+    <label class="form-label" for="image">Add Images</label>
+    <input type="file" name="image" id="image" multiple>
+</div>
+```
+
+Lastly, in our `controllers/campgrounds.js`, we will modify our `updateCampground` function to support image upload
+
+```js
+module.exports.updateCampground = async (req, res) => {
+    const {id} = req.params;
+    const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground}, {new: true});
+    const imgs = req.files.map(file => ({url: file.path, filename: file.filename}));
+    campground.images.push(...imgs);
+    await campground.save();
+    req.flash('success', 'Successfully updated campground');
+    res.redirect(`/campgrounds/${campground._id}`);
+}
+```
+
+Let's try adding new photos to an existing campground to see if it works
+
