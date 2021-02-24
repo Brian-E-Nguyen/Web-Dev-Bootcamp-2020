@@ -510,3 +510,46 @@ Let's try adding new photos to an existing campground to see if it works
 
 ![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img22.jpg?raw=true)
 
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img23.jpg?raw=true)
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img24.jpg?raw=true)
+
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img25.jpg?raw=true)
+
+
+## 10. Customizing File Input
+
+### 10.1 Adding Bootstrap Markup
+
+The next thing we'll do is improve the file input button because it's not very attractive. We will add this for our input 
+
+```html
+<div class="mb-3">
+    <label for="image" class="form-label">Choose image(s)</label>
+    <input class="form-control" type="file" id="formFile" name="image" multiple>
+</div>
+```
+
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img26.jpg?raw=true)
+
+
+### 10.2 bs-custom-file-input
+
+One slight problem (though not app-breaking) that we have is that when we enter our files, their names do not show up. They do so when you hover over the file counter, but that's bad UX. Instead, we will add a library called _bs-custom-file-input_ that lets us display file names for `multiple` input. We will add its CDN to the bottom of our `boilerplate.ejs` file and in our `validateForms.js` file, we will add this line of code
+
+```js
+bsCustomFileInput.init();
+```
+
+One slight problem is that the _bs-custom-file-input_ package supports Bootstrap 4, but we're working in Bootstrap 5. It's expecting classes called `custom-file` and `custom-file-label` and it's different for 5. We'll just add that into our label
+
+```html
+<div class="mb-3 custom-file">
+    <label for="image" class="form-label custom-file-label">Choose image(s)</label>
+    <input class="form-control" type="file" id="formFile" name="image" multiple>
+</div>
+```
+
+![img277](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img27.jpg?raw=true)
+
+
