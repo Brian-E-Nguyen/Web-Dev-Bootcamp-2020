@@ -550,6 +550,14 @@ One slight problem is that the _bs-custom-file-input_ package supports Bootstrap
 </div>
 ```
 
-![img277](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img27.jpg?raw=true)
+![img27](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img27.jpg?raw=true)
 
 
+## 11. A Word of Warning
+
+We're done with image upload, but there is some problems you must know
+
+1. We're not limiting how many photos someone can upload. Too many images can cause problems. We can have some server-side or client-side validations
+2. How large of a file can someone upload?
+
+This image upload feature, or basically this entire project, is only a small fraction to what Yelp is. There's a lot more going on in the background, but for time's sake, we'll keep moving
