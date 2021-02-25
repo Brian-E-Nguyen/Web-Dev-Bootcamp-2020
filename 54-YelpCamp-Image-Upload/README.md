@@ -561,3 +561,68 @@ We're done with image upload, but there is some problems you must know
 2. How large of a file can someone upload?
 
 This image upload feature, or basically this entire project, is only a small fraction to what Yelp is. There's a lot more going on in the background, but for time's sake, we'll keep moving
+
+## 12. Deleting Campgrounds Form
+
+### 12.2 Modifying Our Input Tag
+
+Let's update our edit form so that the user can acutally view the currently uploaded images, and delete any of them. What we're gonna do, which is not great UI, is have a checkbox for each image
+
+We'll start by looping through all of the images in our `campground` array inside of our `edit.ejs`
+
+```html
+<div class="mb-3">
+    <% campground.images.forEach(function(img, i) { %>
+        <img src="<%= img.url %> " class="img-thumbnail" alt="">
+    <% }) %> 
+</div>
+```
+
+![img28](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img28.jpg?raw=true)
+
+Note that we are adding the class of `img-thumbnail` because some images may be too large to display on the screen; this class makes them smaller. Next we will add a label and a checkmark for each image to delete them
+
+```html
+<div class="mb-3">
+    <% campground.images.forEach(function(img, i) { %>
+        <img src="<%= img.url %> " class="img-thumbnail" alt="">
+        <div class="form-check-inline">
+            <input type="checkbox" name="" id="image-<%= i %> ">
+        </div>
+        <label for="image-<%= i %>">Delete?</label>
+    <% }) %> 
+</div>
+```
+
+Now how do we actually delete the photos? We would have to add some fields into our input tag. `value` is the URL of our image
+
+```html
+<div class="form-check-inline">
+    <input type="checkbox" name="" id="image-<%= i %> " name="deleteImages[]" value="<%= img.filename %> ">
+</div>
+```
+
+![img29](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img29.jpg?raw=true)
+
+### 12.2 Modifying Our Campground Schema
+
+Then inside of our `schemas.js`, let's add a new field called `deleteImages`
+
+```js
+module.exports.campgroundSchema = Joi.object({
+    campground: Joi.object({
+        title: Joi.string().required(),
+        price: Joi.number().required().min(0),
+        // image: Joi.string().required(),
+        location: Joi.string().required(),
+        description: Joi.string().required()
+    }).required(),
+    deleteImages: Joi.array()
+});
+```
+
+Lastly, inside of our update campground controller, let's print out `req.body` to see what we are sending. Here's what we see if we delete two images for example
+
+![img30](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img30.jpg?raw=true)
+
+![img31](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img31.jpg?raw=true)
