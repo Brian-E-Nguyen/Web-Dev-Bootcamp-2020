@@ -626,3 +626,56 @@ Lastly, inside of our update campground controller, let's print out `req.body` t
 ![img30](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img30.jpg?raw=true)
 
 ![img31](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img31.jpg?raw=true)
+
+## 13. Deleting Images Backend
+
+### 13.1 Deleting Image From Mongo
+
+Now that we have the `deletedImages` array, we want to delete where there is a filename in Cloudinary that matches one of the files in `deletedImages`. We will add this query inside of our `updateCampground` controller
+
+```js
+// controllers/campgrounds.js
+module.exports.updateCampground = async (req, res) => {
+    const { id } = req.params;
+    console.log(req.body);
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    campground.images.push(...imgs);
+    await campground.save();
+    if (req.body.deletedImages) {
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deletedImages } } } })
+    }
+    req.flash('success', 'Successfully updated campground!');
+    res.redirect(`/campgrounds/${campground._id}`);
+}
+```
+
+![img32](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img32.jpg?raw=true)
+
+### 13.2 Deleting Image From Cloudinary
+
+Now we have to delete the photos on Cloudinary. To do this is not that bad. All we need to do is use a method that comes with the Cloudinary client. If there are any images in our `deletedImages[]`, then we need to loop over them
+
+```js
+// controllers/campgrounds.js
+const { cloudinary } = require('../cloudinary');
+
+...
+
+module.exports.updateCampground = async (req, res) => {
+    const { id } = req.params;
+    console.log(req.body);
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
+    campground.images.push(...imgs);
+    await campground.save();
+    if (req.body.deletedImages) {
+        for(let filename  of req.body.deletedImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deletedImages } } } })
+    }
+    req.flash('success', 'Successfully updated campground!');
+    res.redirect(`/campgrounds/${campground._id}`);
+}
+```
