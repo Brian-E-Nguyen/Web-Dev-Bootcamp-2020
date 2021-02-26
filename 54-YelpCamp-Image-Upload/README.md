@@ -27,7 +27,7 @@ Then we can add an input for a file. We will replace it with the current input f
 <input type="file" name="image" id="">
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img1.jpg?raw=true)
 
 ### 2.2 Editing Our Route
 
@@ -43,9 +43,9 @@ router.route('/')
     });
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img2.jpg?raw=true)
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img3.jpg?raw=true)
 
 ### 2.3 Using Multer
 
@@ -74,9 +74,9 @@ router.route('/')
 
 Let's try this out by uploading our image
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img4.jpg?raw=true)
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img5.jpg?raw=true)
 
 This tells us information about our file and where it is, and you can see we have an _uploads_ folder created in our app. For now, we don't care about where we are storing those files since we will send them to the cloud later.
 
@@ -103,9 +103,9 @@ To do this in our input tag on `new.ejs`, we would have another value called `mu
 
 Now that we set it to multiple files, we would need to change `req.file` to `req.files` in our POST route
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img6.jpg?raw=true)
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img7.jpg?raw=true)
 
 
 ## 3. Cloudinary Registration
@@ -149,7 +149,7 @@ So now, we have access to the different variables in .env. Let's run our app to 
 console.log(process.env.SECRET)
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img8.jpg?raw=true)
 
 Let's add in the things that we want to store in the .env file (remember you can name the keys however you want)
 
@@ -246,13 +246,13 @@ const upload = multer({ storage });
 
 Now let's try sending a file and see if it works
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img9.jpg?raw=true)
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img10.jpg?raw=true)
 
 The pics are now stored on Cloudinary
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img11.jpg?raw=true)
 
 We get these really weird names so that we don't have conflicts when more than 1 person uploads an image of the same name
 
@@ -279,7 +279,7 @@ Everything should work now
 
 ### 6.1 Fixing Our Backend
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img12.jpg?raw=true)
 
 What we want to do now is take the path and filename of the file and store them. First let's update our model in `campgrounds.js`. For the value of the `image` field, we will change it to an array
 
@@ -330,10 +330,10 @@ router.route('/')
 
 And inside of our `schemas.js`, we'll remove the validation for images for now
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img13.jpg?raw=true)
 
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img14.jpg?raw=true)
 
 ### 6.2 Displaying Our Image
 
@@ -344,14 +344,14 @@ Inside of our `show.ejs`, we will loop over all of our images
     <img src="<%= image.url %> " class="card-img-top" alt="...">
 <% } %> 
 ```
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img15.jpg?raw=true)
 
 
 Let's try uploading two pics
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img16.jpg?raw=true)
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img17.jpg?raw=true)
 
 
 ## 7. Displaying Images In A Carousel
@@ -385,7 +385,7 @@ We can start by looping over all of our images by using the code from the previo
 </div>
 ```
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img18.jpg?raw=true)
 
 One problem is that we set the `active` class on all images, and we don't want that. We only want 1 image to have the `active` class. We'll use a `foreach` loop instead so that we can access to each individual image
 
@@ -399,7 +399,7 @@ One problem is that we set the `active` class on all images, and we don't want t
 
 This will now work. If we go into the devtools, we can see that the `active` class will alternate between each image
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img19.jpg?raw=true)
 
 ### 7.2 One Image Carousel Fix
 
@@ -418,7 +418,7 @@ One problem is that there are some campgrounds that only have one image, yet the
 <% } %> 
 ```
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img20.jpg?raw=true)
 
 ## 8. Fixing Our Seeds
 
@@ -460,7 +460,7 @@ Then inside of our `campgrounds/index.ejs` file, we will slightly edit our code 
 </div>
 ```
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img21.jpg?raw=true)
 
 ## 9. Adding Upload to Edit Page
 
@@ -508,13 +508,13 @@ module.exports.updateCampground = async (req, res) => {
 
 Let's try adding new photos to an existing campground to see if it works
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img22.jpg?raw=true)
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img23.jpg?raw=true)
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img24.jpg?raw=true)
 
-![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img25.jpg?raw=true)
+![img25](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img25.jpg?raw=true)
 
 
 ## 10. Customizing File Input
@@ -530,7 +530,7 @@ The next thing we'll do is improve the file input button because it's not very a
 </div>
 ```
 
-![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img26.jpg?raw=true)
+![img26](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img26.jpg?raw=true)
 
 
 ### 10.2 bs-custom-file-input
@@ -550,7 +550,7 @@ One slight problem is that the _bs-custom-file-input_ package supports Bootstrap
 </div>
 ```
 
-![img27](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img27.jpg?raw=true)
+![img27](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img27.jpg?raw=true)
 
 
 ## 11. A Word of Warning
@@ -578,7 +578,7 @@ We'll start by looping through all of the images in our `campground` array insid
 </div>
 ```
 
-![img28](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img28.jpg?raw=true)
+![img28](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img28.jpg?raw=true)
 
 Note that we are adding the class of `img-thumbnail` because some images may be too large to display on the screen; this class makes them smaller. Next we will add a label and a checkmark for each image to delete them
 
@@ -602,7 +602,7 @@ Now how do we actually delete the photos? We would have to add some fields into 
 </div>
 ```
 
-![img29](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img29.jpg?raw=true)
+![img29](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img29.jpg?raw=true)
 
 ### 12.2 Modifying Our Campground Schema
 
@@ -623,9 +623,9 @@ module.exports.campgroundSchema = Joi.object({
 
 Lastly, inside of our update campground controller, let's print out `req.body` to see what we are sending. Here's what we see if we delete two images for example
 
-![img30](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img30.jpg?raw=true)
+![img30](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img30.jpg?raw=true)
 
-![img31](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img31.jpg?raw=true)
+![img31](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img31.jpg?raw=true)
 
 ## 13. Deleting Images Backend
 
@@ -650,7 +650,7 @@ module.exports.updateCampground = async (req, res) => {
 }
 ```
 
-![img32](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img32.jpg?raw=true)
+![img32](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img32.jpg?raw=true)
 
 ### 13.2 Deleting Image From Cloudinary
 
@@ -749,4 +749,4 @@ Now, we have a new property called `img.thumbnail`. We will put that in our `<im
 </div>
 ```
 
-![img33](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img33.jpg?raw=true)
+![img33](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/54-YelpCamp-Image-Upload/img-for-notes/img33.jpg?raw=true)
