@@ -679,3 +679,74 @@ module.exports.updateCampground = async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`);
 }
 ```
+
+## 14. Adding a Thumbnail Virtual Property
+
+### 14.1 Image Transformation API
+
+Lastly, we will show you a feature from Cloudinary that lets you request thumbnail images on our edit page. 
+
+**Link to the docs**
+
+- https://cloudinary.com/documentation/image_transformations
+
+We can use this API to specify parameters for how we want our images to look like. Below is an example of an image link with custom parameters. As you can see, the custom parameter for this image is `w_300`. This means that the file returned to us will have a width of 300
+
+```
+https://res.cloudinary.com/efjio80u9/image/upload/w_300/v809389/g98us876ycocapass.png
+```
+
+### 14.2 Virtual Properties
+
+One problem we have is that we are storing the image links in our DB, except that we don't have the width 300. What's kinda annoying is that if we want to use the transformation API, we have to dynamically add the parameter to the link. If you remember with Mongoose, we can set up virtual properties. We want virtual properties on each image. 
+
+Inside of our `models/campgrounds.js` file, we will create a separate schema for our images called `ImageSchema` where we will store the URL and the filename of each image. Then inside of our `CamgroundSchema`, we will replace the value of our preexisting `images` field with `[ImageSchema]`
+
+
+```js
+// models/campgrounds.js
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+});
+const CampgroundSchema = new Schema({
+    title: String,
+    images: [ImageSchema],
+```
+
+Next, we will add the virtual property to our image where we can modify the link
+
+```js
+// models/campgrounds.js
+const ImageSchema = new Schema({
+    url: String,
+    filename: String
+});
+
+ImageSchema.virtual('thumbnail').get(function() {
+    return this.url.replace('/upload', '/upload/w_200')
+})
+
+const CampgroundSchema = new Schema({
+    title: String,
+    images: [ImageSchema],
+```
+
+### 14.3 Displaying Our Thumbnails
+
+Now, we have a new property called `img.thumbnail`. We will put that in our `<img>` tag inside `campgrounds/edit.ejs`
+
+```html
+<!-- campgrounds/edit.ejs -->
+<div class="mb-3">
+    <% campground.images.forEach(function(img, i) { %>
+        <img src="<%= img.thumbail %>" class="img-thumbnail" alt="">
+        <div class="form-check-inline">
+            <input type="checkbox" id="image-<%=i%>" name="deletedImages[]" value="<%=img.filename%>">
+        </div>
+        <label for="image-<%=i%>">Delete?</label>
+    <% }) %> 
+</div>
+```
+
+![img33](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/54-YelpCamp-Image-Upload/54-YelpCamp-Image-Upload/img-for-notes/img33.jpg?raw=true)
