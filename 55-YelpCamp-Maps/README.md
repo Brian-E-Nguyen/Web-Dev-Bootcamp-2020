@@ -84,6 +84,7 @@ More specifically inside of this, we want the `geometry` field because it gives 
 Then what we need to do is use `req.body.campground.location` for our `query`
 
 ```js
+// controllers/campgrounds.js
 module.exports.createCampground = async(req, res, next) => {
     const geoData = await geocoder.forwardGeocode({
         query: req.body.campground.location,
@@ -99,3 +100,67 @@ module.exports.createCampground = async(req, res, next) => {
 
 ![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img6.jpg?raw=true)
 
+
+## 3. Working With GeoJSON
+
+### 3.1 Intro to GeoJSON
+
+The next thing we will do is storing our information in our campground model. We could store the latitude and longitude in their own separate fields, but the way we will do this is different. What we're getting back from `geoData.body.features[0].geometry.coordinates` is a GeoJSON object
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img7.jpg?raw=true)
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img8.jpg?raw=true)
+
+GeoJSON follows a particular format where we have `type` and `coordinate` fields, and we will store this entire thing. Here's what our `CampgroundSchema` will look like now:
+
+```js
+// models/campgrounds.js
+const CampgroundSchema = new Schema({
+    title: String,
+    images: [ImageSchema],
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
+
+...
+```
+
+Mongo has a lot of support for GeoJSON that you can do. We have to follow a pattern that involves storing certain stuff like "Point", so that's why we can't just only store latitude and longitude
+
+### 3.2 Storing Our GeoJSON Data
+
+When we create a campground, the way we will store that geometry is by attaching it to `req.body.camground` after we insert it into our new campground
+
+```js
+// controllers/campgrounds.js
+module.exports.createCampground = async(req, res, next) => {
+    const geoData = await geocoder.forwardGeocode({
+        query: req.body.campground.location,
+        limit: 1
+    }).send();
+    const campground = new Campground(req.body.campground);
+    campground.geometry = geoData.body.features[0].geometry;
+    campground.images = req.files.map(file => ({url: file.path, filename: file.filename}));
+    campground.author = req.user._id;
+    await campground.save();
+    console.log(campground);
+    req.flash('success', 'Successfully made a new campground!')
+    res.redirect(`/campgrounds/${campground._id}`);
+}
+```
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img9.jpg?raw=true)
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img10.jpg?raw=true)
+
+We get a geometry of `{ type: 'Point', coordinates: [ -122.3301, 47.6038 ] }`. Let's insert the coordinates in maps to verify that we get Seattle, Washington
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img11.jpg?raw=true)
