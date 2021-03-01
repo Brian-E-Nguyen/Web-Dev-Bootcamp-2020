@@ -243,3 +243,95 @@ const map = new mapboxgl.Map({
 ```
 
 And everything will work fine
+
+## 5. Centering The Map On A Campground
+
+### 5.1 Marker On Location
+
+Let's talk about how we can add a marker on the map. Here's an example on the docs
+
+```html
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYnVyYWl5ZW4iLCJhIjoiY2tsbXBua2xtMGJmOTJzcXB0MnlmZHBtaiJ9.hNxy11aREESyZDOO6H9gHQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [12.550343, 55.665957],
+        zoom: 8
+    });
+ 
+    var marker = new mapboxgl.Marker()
+        .setLngLat([12.550343, 55.665957])
+        .addTo(map);
+</script>
+```
+
+We create a new marker using `Marker()`, then we use the `setLngLat()` to specify the longitude and latitude of our location, and lastly, `addToMap(map)`. Let's do that on our `showPageMap.js`
+
+```js
+// showPageMap.js
+mapboxgl.accessToken = mapToken;
+const map = new mapboxgl.Map({
+  container: 'map', // container ID
+  style: 'mapbox://styles/mapbox/streets-v11', // style URL
+  center: [-74.5, 40], // starting position [lng, lat]
+  zoom: 4 // starting zoom
+});
+
+new mapboxgl.Marker()
+  .setLngLat([-74.5, 40])
+  .addTo(map);
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img13.jpg?raw=true)
+
+The docs specify how you can customize your marker. The default is set to this light blue
+
+### 5.2 Centering the Location
+
+Let's get this map centered on the actual location and put a marker on it. What we need to do is the same process like we did with a map token, where we use EJS to create a JS variable that we have access to in a JS file. In our `<script>` tag inside of our `show.ejs` file, we will create a campground variable so that we have access to it on the client-side
+
+```html
+<!-- show.ejs -->
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  const campground = <%- campground %>;
+</script>
+```
+
+There's a problem with this though. This is what we get when we look in the console
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img14.jpg?raw=true)
+
+The value of the ID needs to be in quotes, so we need to stringify the JSON object
+
+```html
+<!-- show.ejs -->
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  const campground = <%- JSON.stringify(campground) %>;
+</script>
+```
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img15.jpg?raw=true)
+
+So now we have access to the campground object, let's use it in our `showPageMap.js` to use the coordinates for our `center` field
+
+```js
+// showPageMap.js
+mapboxgl.accessToken = mapToken;
+const map = new mapboxgl.Map({
+  container: 'map', // container ID
+  style: 'mapbox://styles/mapbox/streets-v11', // style URL
+  center: campground.geometry.coordinates, // starting position [lng, lat]
+  zoom: 8 // starting zoom
+});
+
+new mapboxgl.Marker()
+  .setLngLat(campground.geometry.coordinates)
+  .addTo(map);
+```
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img16.jpg?raw=true)
+
+A problem that might happen is that a user might enter a location that doesn't exist. We're not handling that at all, but we're only just introducing you to displaying a campground. It's up to you how you would handle it
