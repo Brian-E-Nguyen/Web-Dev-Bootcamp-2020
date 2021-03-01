@@ -10,7 +10,7 @@ A tool that is really popular for developers is _Mapbox_
 
 First thing we do after we create an account is go to the tokens page where we will retrieve our public token, then we will add it to our .env file. Note that we don't hide this from the public because the client-side will use this 
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img1.jpg?raw=true)
 
 ```
 MAPBOX_TOKEN=pk.eyJ1IjoiYnVyYWl5ZW4iLCJhIjoiY2tsbXBua2xtMGJmOTJzcXB0MnlmZHBtaiJ9.hNxy11aREESyZDOO6H9gHQ
@@ -75,11 +75,11 @@ module.exports.createCampground = async(req, res, next) => {
 
 When we test this out, we get a lot in return, but we're more focused on the `geoData.body`, and inside of that, we are focused on the `features` field. 
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img2.jpg?raw=true)
 
 More specifically inside of this, we want the `geometry` field because it gives us our coordinates. Printing `geoData.body.features[0].geometry.coordinates` will give us the longitude first, then latitude
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img3.jpg?raw=true)
 
 Then what we need to do is use `req.body.campground.location` for our `query`
 
@@ -94,11 +94,11 @@ module.exports.createCampground = async(req, res, next) => {
 ...
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img4.jpg?raw=true)
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img5.jpg?raw=true)
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img6.jpg?raw=true)
 
 
 ## 3. Working With GeoJSON
@@ -107,9 +107,9 @@ module.exports.createCampground = async(req, res, next) => {
 
 The next thing we will do is storing our information in our campground model. We could store the latitude and longitude in their own separate fields, but the way we will do this is different. What we're getting back from `geoData.body.features[0].geometry.coordinates` is a GeoJSON object
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img7.jpg?raw=true)
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img8.jpg?raw=true)
 
 GeoJSON follows a particular format where we have `type` and `coordinate` fields, and we will store this entire thing. Here's what our `CampgroundSchema` will look like now:
 
@@ -157,13 +157,13 @@ module.exports.createCampground = async(req, res, next) => {
 }
 ```
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img9.jpg?raw=true)
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img10.jpg?raw=true)
 
 We get a geometry of `{ type: 'Point', coordinates: [ -122.3301, 47.6038 ] }`. Let's insert the coordinates in maps to verify that we get Seattle, Washington
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img11.jpg?raw=true)
 
 ## 4. Displaying A Map
 
@@ -214,7 +214,7 @@ Let's put the `<div>` tag in our `show.ejs` file just right above the carousel. 
 </script>
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img12.jpg?raw=true)
 
 ### 4.2 Moving Map Code Into Separate Script
 
@@ -283,7 +283,7 @@ new mapboxgl.Marker()
   .addTo(map);
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img13.jpg?raw=true)
 
 The docs specify how you can customize your marker. The default is set to this light blue
 
@@ -301,7 +301,7 @@ Let's get this map centered on the actual location and put a marker on it. What 
 
 There's a problem with this though. This is what we get when we look in the console
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img14.jpg?raw=true)
 
 The value of the ID needs to be in quotes, so we need to stringify the JSON object
 
@@ -313,7 +313,7 @@ The value of the ID needs to be in quotes, so we need to stringify the JSON obje
 </script>
 ```
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img15.jpg?raw=true)
 
 So now we have access to the campground object, let's use it in our `showPageMap.js` to use the coordinates for our `center` field
 
@@ -332,7 +332,7 @@ new mapboxgl.Marker()
   .addTo(map);
 ```
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img16.jpg?raw=true)
 
 A problem that might happen is that a user might enter a location that doesn't exist. We're not handling that at all, but we're only just introducing you to displaying a campground. It's up to you how you would handle it
 
@@ -389,6 +389,6 @@ new mapboxgl.Marker()
 
 Here's what happens when we click on the marker
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/55-YelpCamp-Maps/img-for-notes/img17.jpg?raw=true)
 
 There's a lot more customization options, so be sure to read the docs
