@@ -369,3 +369,26 @@ const camp = new Campground({
 ```
 
 The geometry we put in here points to Seattle, Washington
+
+## 7. Customizing Map Popup
+
+One more thing we can do with maps is add a popup when we click on the map. Inside of our `showPageMap.js`, right before we call `addTo(map)`, we use a method called `setPopup`
+
+```js
+// showPageMap.js
+new mapboxgl.Marker()
+  .setLngLat(campground.geometry.coordinates)
+  .setPopup(
+    new mapboxgl.Popup({offset: 25})
+      .setHTML(
+        `<h3>${campground.title}</h3>`
+      )
+  )
+  .addTo(map);
+```
+
+Here's what happens when we click on the marker
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img17.jpg?raw=true)
+
+There's a lot more customization options, so be sure to read the docs
