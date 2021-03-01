@@ -164,3 +164,82 @@ module.exports.createCampground = async(req, res, next) => {
 We get a geometry of `{ type: 'Point', coordinates: [ -122.3301, 47.6038 ] }`. Let's insert the coordinates in maps to verify that we get Seattle, Washington
 
 ![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img11.jpg?raw=true)
+
+## 4. Displaying A Map
+
+We will work on displaying a map for our campground, and then later we will have a pin that will point to the exact location. The portion of Mapbox that we'll be using is _Mapbox GL JS_, which is a tool to render interactive maps.
+
+**Link to the docs**
+
+- https://docs.mapbox.com/mapbox-gl-js/api/
+
+ Let's grab the CDN's from the docs and put them in our boilerplate between our `<head>` tags
+
+ ```html
+<!-- boilerplate.ejs -->
+<head>
+    ...
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+ ```
+
+ To display our map, we need to add the following code somewhere in our HTML file
+
+```html
+<div id='map' style='width: 400px; height: 300px;'></div>
+
+<script>
+mapboxgl.accessToken = '<your access token>';
+var map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: [-74.5, 40], // starting position [lng, lat]
+    zoom: 9 // starting zoom
+});
+</script>
+```
+
+Let's put the `<div>` tag in our `show.ejs` file just right above the carousel. The next thing is to enable the actual map, because right now, it's not showing. Let's add a `<script>` tag at the bottom and add in the remainder of our code. Note, for our access token, we will import it from our .env file
+
+```html
+<script>
+  mapboxgl.accessToken = '<%-process.env.MAPBOX_TOKEN%>'
+  const map = new mapboxgl.Map({
+    container: 'map', // container ID
+    style: 'mapbox://styles/mapbox/streets-v11', // style URL
+    center: [-74.5, 40], // starting position [lng, lat]
+    zoom: 9 // starting zoom
+});
+</script>
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img12.jpg?raw=true)
+
+### 4.2 Moving Map Code Into Separate Script
+
+We will move our JS code into a new file called `public/js/showPageMap.js`, and we will reference it with the `<script>` tag inside `show.ejs`. There's a problem: we won't be able to use the EJS access token inside the JavaScript file because EJS takes the template goes through all EJS syntax in our `show.ejs`, then spits out regular HTML. It doesn't go through the script at the bottom of an EJS file because it doesn't think there's any EJS syntax and leaves it alone. What we need to do is get the access token from an EJS file to our JS file
+
+At the very top of our `show.ejs` file, we will put a `<script>` tag that has our Mapbox token
+
+```html
+<!-- show.ejs -->
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+</script>
+```
+
+And now we can reference the `mapToken` variable in our `showPageMap.js` file
+
+```js
+// showPageMap.js
+mapboxgl.accessToken = mapToken;
+const map = new mapboxgl.Map({
+  container: 'map', // container ID
+  style: 'mapbox://styles/mapbox/streets-v11', // style URL
+  center: [-74.5, 40], // starting position [lng, lat]
+  zoom: 9 // starting zoom
+});
+```
+
+And everything will work fine
