@@ -335,3 +335,37 @@ new mapboxgl.Marker()
 ![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/55-YelpCamp-Maps/55-YelpCamp-Maps/img-for-notes/img16.jpg?raw=true)
 
 A problem that might happen is that a user might enter a location that doesn't exist. We're not handling that at all, but we're only just introducing you to displaying a campground. It's up to you how you would handle it
+
+## 6. Fixing Our Seeds Bug
+
+One issue that we've ran into is that when seeding new campgrounds, we weren't uploading any images. We will put this in our `index.ejs` to check if there are any images in the campground. If not, we will have a default
+
+```html
+<% if (campground.images.length) { %>
+<img class="img-fluid" alt="" src="<%=campground.images[0].url%>">
+<% } else { %>
+<img class="img-fluid" alt="" src="https://images.unsplash.com/photo-1465800872432-a98681fc5828?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1792&q=80">
+<% } %> 
+```
+
+We could have a backup image inside of our model also, because the show pages don't have an image. Also, our old campgrounds don't have longitude and latitude, and if we were to delete a photo from them, then things will break. These little problems always come up when creating an app.
+
+In our `seeds/index.js` file, let's hardcode a value for `geometry`
+
+```js
+// seeds/index.js
+const camp = new Campground({
+            author: '6014644ae18c19056071bdb6',
+            location: `${cities[randomNum].city}, ${cities[randomNum].state}`,
+            title: `${sample(descriptors)} ${sample(places)}`,
+            image: 'https://source.unsplash.com/collection/483251',
+            description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione distinctio ducimus omnis quo dicta nisi. Atque minus asperiores a tempora harum blanditiis, vitae commodi delectus. Assumenda delectus quibusdam sequi corrupti?",
+            price: price,
+            geometry : { 
+                type : "Point", 
+                coordinates : [ -122.3301, 47.6038 ]
+            },
+...
+```
+
+The geometry we put in here points to Seattle, Washington
