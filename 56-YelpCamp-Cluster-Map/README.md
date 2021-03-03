@@ -35,3 +35,21 @@ The copied JS code is using another Mapbox token. Let's use our own by referenci
 
 <script src="/js/clusterMap.js"></script>
 ```
+
+## 3. Reseeding Our Database (again)
+
+We will reseed our DB so that the campgrounds are spread out across the US. If we take a look at our _seeds_ directory and see our `cities.js` file, each city already has a latitude and longitude associated with it. Using these, we can remove the hardcoded value of `[ -122.3301, 47.6038 ]` for our coordinates and replace them with these:
+
+```js
+geometry : { 
+    type : "Point", 
+    coordinates : [ 
+        cities[random1000].longitude,
+        cities[random1000].latitude,
+    ]
+}
+```
+
+Now the location of the campground should be the same as what is shown on it's show page map
+
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img3.jpg?raw=true)
