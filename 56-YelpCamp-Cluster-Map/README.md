@@ -273,3 +273,146 @@ map.addLayer({
 ```
 
 You can play around with these on your own
+
+## 6. Changing Cluster Size and Color
+
+We have a small data set with our campgrounds, so let's increase its size. In our seeds file, let's change our loop from 50 to 300
+
+```js
+// seeds/index.js
+ for (let i = 0; i < 300; i++) {
+        const random1000 = Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random() * 20) + 10;
+        const camp = new Campground({
+```
+
+One major problem that we have with this many campgrounds is that our campgrounds' index page will be overrun with campgrounds. Later on, we can use infinite scroll or pagination
+
+Right now, we have different tiers of clusters
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img10.jpg?raw=true)
+
+If we go to the code to find the color of the circle, we can see that the color of the circle is based on the `point_count`. The code comes with some helpful comments
+
+```js
+map.addLayer({
+    id: 'clusters',
+    type: 'circle',
+    source: 'campgrounds',
+    filter: ['has', 'point_count'],
+    paint: {
+        // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+        // with three steps to implement three types of circles:
+        //   * Blue, 20px circles when point count is less than 100
+        //   * Yellow, 30px circles when point count is between 100 and 750
+        //   * Pink, 40px circles when point count is greater than or equal to 750
+        'circle-color': [
+            'step',
+            ['get', 'point_count'],
+            '#51bbd6',
+            100,
+            '#f1f075',
+            750,
+            '#f28cb1'
+        ],
+        'circle-radius': [
+            'step',
+            ['get', 'point_count'],
+            20,
+            100,
+            30,
+            750,
+            40
+        ]
+    }
+});
+```
+
+Let's take a look at the section for color. The next few code are really clunky so beware. The hex value and the number below it are 'grouped' together and represent each tier. For 100 and below, clusters will have the hex value of '#51bbd6', and so on. Above 750 is '#f28cb1'
+
+```js
+'circle-color': [
+    'step',
+    ['get', 'point_count'],
+    '#51bbd6',
+    100,
+    '#f1f075',
+    750,
+    '#f28cb1'
+],
+```
+
+Let's change our circles to these values
+
+
+```js
+'circle-color': [
+    'step',
+    ['get', 'point_count'],
+    'red',
+    10,
+    'orange',
+    30,
+    'yellow'
+],
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img11.jpg?raw=true)
+
+
+Now we let's change the radius of each circle depending on how many campgrounds there are. The first number is pixel width and the next is the tier. This is saying anything below 100 campgrounds will be 20px wide
+
+```js
+'circle-radius': [
+    'step',
+    ['get', 'point_count'],
+    20,
+    100,
+    30,
+    750,
+    40
+]
+```
+
+Let's change it so it matches with our circle colors above
+
+```js
+'circle-radius': [
+    'step',
+    ['get', 'point_count'],
+    20,
+    10,
+    30,
+    30,
+    40
+]
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img12.jpg?raw=true)
+
+Here's the final customization since Colt fiddled around with it some more
+
+```js
+style: 'mapbox://styles/mapbox/light-v10',
+...
+'circle-color': [
+    'step',
+    ['get', 'point_count'],
+    '#00bcd4',
+    10,
+    '#2196f3',
+    30,
+    '#3f51b5'
+],
+'circle-radius': [
+    'step',
+    ['get', 'point_count'],
+    15,
+    20,
+    25,
+    30,
+    40
+]
+```
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img13.jpg?raw=true)
