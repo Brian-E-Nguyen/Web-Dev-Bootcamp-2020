@@ -53,3 +53,92 @@ geometry : {
 Now the location of the campground should be the same as what is shown on it's show page map
 
 ![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img3.jpg?raw=true)
+
+
+## 4. Basic Clustering Campgrounds
+
+So now that we have our new data for our campgrounds, let's see how we can plug them into our map. When we go over to the `clusterMap.js` file, we see that there are a lot of `on()` functions. These reference different types of events. The code below, for example, is an event for hovering over a cluster on a map
+
+```JS
+map.on('mouseenter', 'clusters', function () {
+    map.getCanvas().style.cursor = 'pointer';
+});
+```
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img4.jpg?raw=true)
+
+Our map is loading its data from this piece of code
+
+```js
+map.on('load', function () {
+    // Add a new source from our GeoJSON data and
+    // set the 'cluster' option to true. GL-JS will
+    // add the point_count property to your source data.
+    map.addSource('earthquakes', {
+        type: 'geojson',
+        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+        data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson',
+        cluster: true,
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    });
+
+```
+
+As you can see, it's loading data from a website link
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img5.jpg?raw=true)
+
+Let's take one set of the data so that it's easier to see
+
+```json
+{
+  "type": "Feature",
+  "properties": {
+    "id": "ak16994521",
+    "mag": 2.3,
+    "time": 1507425650893,
+    "felt": null,
+    "tsunami": 0
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -151.5129,
+      63.1016,
+      0
+    ]
+  }
+}
+```
+
+What we need to do is pass in our own data inside `data`. On the `index.ejs` page, we will pass in `campgrounds` to `clusterMap.js`
+
+```html
+<!-- campgrounds/index.ejs -->
+<script>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+    const campgrounds = <%- JSON.stringify(campgrounds); %>
+</script>
+
+<script src="/js/clusterMap.js"></script>
+```
+
+Let's add our `campgrounds` object to our data. When we view the index page, we get this in our console
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img6.jpg?raw=true)
+
+It did get our data, but it's unhappy with the way that it's formatted. If you look at the earthquake's data, everything is under the key of `features`; our's is just an array. We can have our data conform to that pattern by creating an object and setting `features` to that data; then we will pass that object into `clusterMap.js`
+
+```html
+<!-- campgrounds/index.ejs -->
+<script>
+    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+    const campgrounds = {features: <%- JSON.stringify(campgrounds); %>}
+</script>
+
+<script src="/js/clusterMap.js"></script>
+```
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img7.jpg?raw=true)
