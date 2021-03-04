@@ -142,3 +142,134 @@ It did get our data, but it's unhappy with the way that it's formatted. If you l
 ```
 
 ![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img7.jpg?raw=true)
+
+## 5. Tweaking Clustering Code
+
+### 5.1 Data Sources
+
+Let's return to `clusterMap.js` and see what's going on 
+
+```js
+map.on('load', function () {
+    // Add a new source from our GeoJSON data and
+    // set the 'cluster' option to true. GL-JS will
+    // add the point_count property to your source data.
+    map.addSource('earthquakes', {
+        type: 'geojson',
+...
+```
+
+A string is passed into the `addSource()` function called `earthquakes`. This is a label or name for a source. The data is referred to by the keyword `source`, and we can have multiple sources in our map
+
+```js
+  map.addLayer({
+        id: 'clusters',
+        type: 'circle',
+        source: 'earthquakes',
+        filter: ['has', 'point_count'],
+        paint: {
+...
+```
+
+Let's change our source to `campgrounds` and replace all references of `earthqakes` withh `campgrounds` as our source
+
+### 5.2 Going Through and Understanding the Code
+
+Now we have options for customizing our circle
+
+```js
+'circle-color': [
+    'step',
+    ['get', 'point_count'],
+    '#51bbd6',
+    100,
+    '#f1f075',
+    750,
+    '#f28cb1'
+],
+'circle-radius': [
+    'step',
+    ['get', 'point_count'],
+    20,
+    100,
+    30,
+    750,
+    40
+]
+```
+
+This code below shows the amount of clusters in a circle and for the text that we see
+
+```js
+ map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'campgrounds',
+        filter: ['has', 'point_count'],
+        layout: {
+            'text-field': '{point_count_abbreviated}',
+            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            'text-size': 12
+        }
+    });
+```
+
+This code below is for a single unclustered point
+
+```js
+map.addLayer({
+        id: 'unclustered-point',
+        type: 'circle',
+        source: 'campgrounds',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+            'circle-color': '#11b4da',
+            'circle-radius': 4,
+            'circle-stroke-width': 1,
+            'circle-stroke-color': '#fff'
+        }
+    });
+```
+
+Just by going through line-by-line in the code, we have a better understanding of how it works. Now we can play around with it and set up some tweaks
+
+### 5.3 Making Some Tweaks
+
+Our unclustered point is very small. Let's make it bigger my increasing its radius to 10 and its stroke width to 5
+
+```js
+map.addLayer({
+    id: 'unclustered-point',
+    type: 'circle',
+    source: 'campgrounds',
+    filter: ['!', ['has', 'point_count']],
+    paint: {
+        'circle-color': '#11b4da',
+        'circle-radius': 10,
+        'circle-stroke-width': 5,
+        'circle-stroke-color': '#fff'
+    }
+});
+```
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img8.jpg?raw=true)
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img9.jpg?raw=true)
+
+For the code below, the `text-field` has `{point_count_abbreviated}`, which shows the count of campgrounds in a cluster. What we can do is interpolate to by adding in our own value
+
+```js
+map.addLayer({
+        id: 'cluster-count',
+        type: 'symbol',
+        source: 'campgrounds',
+        filter: ['has', 'point_count'],
+        layout: {
+            'text-field': 'Num: {point_count_abbreviated}',
+            'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+            'text-size': 12
+        }
+    });
+```
+
+You can play around with these on your own
