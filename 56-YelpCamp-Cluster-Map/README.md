@@ -416,3 +416,161 @@ style: 'mapbox://styles/mapbox/light-v10',
 ```
 
 ![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img13.jpg?raw=true)
+
+
+## 7. Adding Custom Popups
+
+### 7.1 Intro
+
+The last thing we'll work on for this section is what happens when you click on a single point on the map. We're still seeing earthquake stuff, so let's fix that so we see a link to the campground or the title of it. Let's look at this part of the code in our `clusterMap.js`
+
+```js
+map.on('click', 'unclustered-point', function (e) {
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var mag = e.features[0].properties.mag;
+    var tsunami;
+
+    if (e.features[0].properties.tsunami === 1) {
+        tsunami = 'yes';
+    } else {
+        tsunami = 'no';
+    }
+    // Ensure that if the map is zoomed out such that
+    // multiple copies of the feature are visible, the
+    // popup appears over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+
+    new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(
+            'magnitude: ' + mag + '<br>Was there a tsunami?: ' + tsunami
+        )
+        .addTo(map);
+});
+```
+
+This code is saying when you click on an unclusered point, run this function. We can see things like setting a tsunami or setting our own HTML message. Part of the code is earthquake-specific logic, which can be tricky because we want to is maybe take the title & ID to make a show-page. The way that they did it from the example we've copied was having this line of code
+
+```js
+// 'e' is an event object
+var coordinates = e.features[0].geometry.coordinates.slice();
+```
+
+Let's run `console.log(e.features[0])` and take a look at what's inside
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img14.jpg?raw=true)
+
+The event has a key called `properties`, but there's nothing inside of it. This brings us back to GeoJSON and how mapbox is expecting our data to be formatted. They expect your data to follow a pattern similar to the one show below
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img15.jpg?raw=true)
+
+### 7.2 Adding Virtual Properties to Campgrounds
+
+Our data does not have a `properties` field. All that we want is a pre-made description. To do this, we could make a virtual property in Mongoose and send it back. Let's go inside of our campground model and add a virtual property to it
+
+```js
+// models/campgrounds.js
+CampgroundSchema.virtual('properties.popUpMarkup').get(function() {
+    return 'I AM POPUP TEXT'
+});
+```
+
+Then inside of our index page, if we wanted to access that virtual, we would add this:
+
+```html
+<div class="card-body">
+    <h5 class="card-title"><%= campground.title %></h5>
+    <!-- NEW PIECE OF CODE -->
+    <h5 class="card-title"><%= campground.properties.popUpMarkup %></h5>
+    <p class="card-text"><%= campground.description %></p>
+    <p class="card-text">
+        <small class="text-muted"><%= campground.location %> </small>
+    </p>
+    <a class="btn btn-primary" href="/campgrounds/<%=campground._id%>">View <%= campground.title %> </a>
+</div>
+```
+
+And now we will see the text for each campground when we go on the index page
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img16.jpg?raw=true)
+
+### 7.3 Including Virtuals to Mongoose
+
+There's a problem. If we look at the `campgrounds` array, we don't have the `properties` field. 
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img17.jpg?raw=true)
+
+
+This is because by default, Mongoose does not include virtuals when you convert a document to JSON. To do this, we would have to this code:
+
+```js
+// models/campgrounds.js
+const opts = {toJSON: {virtuals: true}};
+```
+
+Then we will add that to the end of our campground schema
+
+```js
+// models/campgrounds.js
+
+...
+
+ reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ],
+}, opts);
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img18.jpg?raw=true)
+
+
+Now that we fixed this, let's click on a single campground. It will now show  `properties`. This is good because Mapbox automatically looks for a key called `properties`
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img19.jpg?raw=true)
+
+
+### 7.4 Customizing Our Markup
+
+Let's edit our code a bit so that we append the markup inside of the popup
+
+```js
+map.on('click', 'unclustered-point', function (e) {
+    // NEW LINE OF CODE
+    const text = e.features[0].properties.popUpMarkup;
+    var coordinates = e.features[0].geometry.coordinates.slice();
+
+    // Ensure that if the map is zoomed out such that
+    // multiple copies of the feature are visible, the
+    // popup appears over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+
+    // APPEND TEXT
+    new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML(
+            text
+        )
+        .addTo(map);
+});
+```
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img20.jpg?raw=true)
+
+Now we can edit our virtual to include the information we want. Let's change it so that when we click on a campground, it shows us the link to its show-page
+
+```js
+// models/campgrounds.js
+CampgroundSchema.virtual('properties.popUpMarkup').get(function() {
+    // 'this' referes to the campground object
+    return `<a href="/campgrounds/${this._id}">${this.title}</a>`
+});
+```
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img21.jpg?raw=true)
