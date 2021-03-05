@@ -4,7 +4,7 @@
 
 We will add a cool cluster map onto our index page for campgrounds. It'll look like this:
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img1.jpg?raw=true)
 
 Note that it may look intimidating, but we would just mostly reference code from Mapbox's documentation. There's no way that we can do this on our own
 
@@ -24,7 +24,7 @@ First, inside of our `campgrounds/index.ejs` file, let's make a `<div>` tag wher
 
 Then let's copy all of the JS from that example in the link and put it inside of our new file `clusterMap.js` inside of our _public_ directory. We will then reference that file in our `campgrounds/index.ejs`
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img2.jpg?raw=true)
 
 The copied JS code is using another Mapbox token. Let's use our own by referencing it inside of a `<script>` tag, just like how we did in our `campgrounds/show.ejs`
 
@@ -52,7 +52,7 @@ geometry : {
 
 Now the location of the campground should be the same as what is shown on it's show page map
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img3.jpg?raw=true)
 
 
 ## 4. Basic Clustering Campgrounds
@@ -65,7 +65,7 @@ map.on('mouseenter', 'clusters', function () {
 });
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img4.jpg?raw=true)
 
 Our map is loading its data from this piece of code
 
@@ -88,7 +88,7 @@ map.on('load', function () {
 
 As you can see, it's loading data from a website link
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img5.jpg?raw=true)
 
 Let's take one set of the data so that it's easier to see
 
@@ -127,7 +127,7 @@ What we need to do is pass in our own data inside `data`. On the `index.ejs` pag
 
 Let's add our `campgrounds` object to our data. When we view the index page, we get this in our console
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img6.jpg?raw=true)
 
 It did get our data, but it's unhappy with the way that it's formatted. If you look at the earthquake's data, everything is under the key of `features`; our's is just an array. We can have our data conform to that pattern by creating an object and setting `features` to that data; then we will pass that object into `clusterMap.js`
 
@@ -141,7 +141,7 @@ It did get our data, but it's unhappy with the way that it's formatted. If you l
 <script src="/js/clusterMap.js"></script>
 ```
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img7.jpg?raw=true)
 
 ## 5. Tweaking Clustering Code
 
@@ -252,9 +252,9 @@ map.addLayer({
 });
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img8.jpg?raw=true)
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img9.jpg?raw=true)
 
 For the code below, the `text-field` has `{point_count_abbreviated}`, which shows the count of campgrounds in a cluster. What we can do is interpolate to by adding in our own value
 
@@ -290,7 +290,7 @@ One major problem that we have with this many campgrounds is that our campground
 
 Right now, we have different tiers of clusters
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img10.jpg?raw=true)
 
 If we go to the code to find the color of the circle, we can see that the color of the circle is based on the `point_count`. The code comes with some helpful comments
 
@@ -357,7 +357,7 @@ Let's change our circles to these values
 ],
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img11.jpg?raw=true)
 
 
 Now we let's change the radius of each circle depending on how many campgrounds there are. The first number is pixel width and the next is the tier. This is saying anything below 100 campgrounds will be 20px wide
@@ -388,7 +388,7 @@ Let's change it so it matches with our circle colors above
 ]
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img12.jpg?raw=true)
 
 Here's the final customization since Colt fiddled around with it some more
 
@@ -415,7 +415,7 @@ style: 'mapbox://styles/mapbox/light-v10',
 ]
 ```
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img13.jpg?raw=true)
 
 
 ## 7. Adding Custom Popups
@@ -460,11 +460,11 @@ var coordinates = e.features[0].geometry.coordinates.slice();
 
 Let's run `console.log(e.features[0])` and take a look at what's inside
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img14.jpg?raw=true)
 
 The event has a key called `properties`, but there's nothing inside of it. This brings us back to GeoJSON and how mapbox is expecting our data to be formatted. They expect your data to follow a pattern similar to the one show below
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img15.jpg?raw=true)
 
 ### 7.2 Adding Virtual Properties to Campgrounds
 
@@ -494,13 +494,13 @@ Then inside of our index page, if we wanted to access that virtual, we would add
 
 And now we will see the text for each campground when we go on the index page
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img16.jpg?raw=true)
 
 ### 7.3 Including Virtuals to Mongoose
 
 There's a problem. If we look at the `campgrounds` array, we don't have the `properties` field. 
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img17.jpg?raw=true)
 
 
 This is because by default, Mongoose does not include virtuals when you convert a document to JSON. To do this, we would have to this code:
@@ -526,12 +526,12 @@ Then we will add that to the end of our campground schema
 }, opts);
 ```
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img18.jpg?raw=true)
 
 
 Now that we fixed this, let's click on a single campground. It will now show  `properties`. This is good because Mapbox automatically looks for a key called `properties`
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img19.jpg?raw=true)
 
 
 ### 7.4 Customizing Our Markup
@@ -561,7 +561,7 @@ map.on('click', 'unclustered-point', function (e) {
 });
 ```
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img20.jpg?raw=true)
 
 Now we can edit our virtual to include the information we want. Let's change it so that when we click on a campground, it shows us the link to its show-page
 
@@ -573,4 +573,4 @@ CampgroundSchema.virtual('properties.popUpMarkup').get(function() {
 });
 ```
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/56-YelpCamp-Cluster-Map/56-YelpCamp-Cluster-Map/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/56-YelpCamp-Cluster-Map/img-for-notes/img21.jpg?raw=true)
