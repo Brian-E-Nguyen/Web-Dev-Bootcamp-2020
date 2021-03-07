@@ -321,3 +321,58 @@ Our campgrounds spacing are too close together. Let's space them out. Inside of 
 Let's put the `mb-3` inside of the class
 
 ![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img17.jpg?raw=true)
+
+## 6. Removing Inline Map Styles
+
+One more small thing we should do is remove all of the inline styles that we have on our maps. Let's make a new stylesheet in our public CSS folder called `app.css`, which will be our basic stylesheet for many uses. This is what we will have inside of it
+
+```css
+/* app.css */
+#cluster-map {
+    width: 100%;
+    height: 500px;
+}
+
+#map {
+    width: 100%;
+    height: 300px;
+}
+```
+
+Then we will reference it in our `boilerplate.ejs`
+
+```html
+<link rel="stylesheet" href="/css/app.css">
+```
+
+Then we will remove the inline styles for our maps
+
+```html
+<!-- index.ejs -->
+
+<!-- Before -->
+<div id="map" style="width: 100%; height: 500px;">
+
+<!-- After -->
+```
+
+```html
+<!-- show.ejs -->
+
+<!-- Before -->
+<div id='map' style='width: 400px; height: 300px;'></div>
+
+<!-- After -->
+<div id='map'></div>
+```
+
+But then we need to go into our `clusterMap.js` and change the ID from `map` to `cluster-map`
+
+```js
+const map = new mapboxgl.Map({
+    container: 'cluster-map',
+    style: 'mapbox://styles/mapbox/light-v10',
+    center: [-103.59179687498357, 40.66995747013945],
+    zoom: 3
+});
+```
