@@ -222,3 +222,65 @@ body {
 ```
 
 ![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img9.jpg?raw=true)
+
+## 3. Styling Login Form
+
+Next up, we will make the login form a bit nicer by using pure Bootstrap. We will make it skinnier and will add an image on top. Let's first cut out and add some new code
+
+```html
+<!-- login.ejs -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Login</h5>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+We'll paste everything that we've cut out into the empty `<div>` and this is what it looks like
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img10.jpg?raw=true)
+
+Next we'll add the image to it. We'll put it above the `<div class="card-body">`
+
+```html
+<!-- login.ejs -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
+            <div class="card shadow">
+                <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+                    alt="" class="card-img-top" />
+                <div class="card-body">
+                    <h5 class="card-title">Login</h5>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img11.jpg?raw=true)
+
+Some extra things that we can do is that we can add the `autofocus` value on the username input so that the cursor is already in there when we load the page
+
+```html
+<input class="form-control" type="text" name="username" id="username" autofocus required>
+```
+
+And for our login button, we can have it span across the card
+
+```html
+<div class="d-grid gap-2">
+    <button class="btn btn-success">Login</button>
+</div>
+```
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img12.jpg?raw=true)
