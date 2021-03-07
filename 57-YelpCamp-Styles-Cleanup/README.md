@@ -284,3 +284,40 @@ And for our login button, we can have it span across the card
 ```
 
 ![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img12.jpg?raw=true)
+
+## 4. Styling Register Form (and Other Forms)
+
+We are mostly copying the markup from the login form to the register form
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img13.jpg?raw=true)
+
+In our `new.ejs` and `edit.ejs`, we will wrap everything with these tags
+
+```html
+<div class="col-md-6 offset-md-3">
+    <div class="card shadow">
+        <div class="card-body">
+
+        </div>
+    </div>
+</div>
+```
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img14.jpg?raw=true)
+
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img15.jpg?raw=true)
+
+## 5. Spacing Campgrounds
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img16.jpg?raw=true)
+
+Our campgrounds spacing are too close together. Let's space them out. Inside of our `index.ejs`, Colt did a mess-up by having this:
+
+```html
+<div class="card" mb-3>
+```
+
+Let's put the `mb-3` inside of the class
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img17.jpg?raw=true)
