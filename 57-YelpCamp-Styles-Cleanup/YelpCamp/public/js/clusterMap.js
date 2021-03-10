@@ -8,6 +8,9 @@ const map = new mapboxgl.Map({
 
 console.log(campgrounds)
 
+var nav = new mapboxgl.NavigationControl();
+map.addControl(nav, 'top-right');
+
 map.on('load', function () {
     // Add a new source from our GeoJSON data and
     // set the 'cluster' option to true. GL-JS will

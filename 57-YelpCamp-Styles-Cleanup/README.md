@@ -376,3 +376,18 @@ const map = new mapboxgl.Map({
     zoom: 3
 });
 ```
+
+## 7. Adding Map Controls
+
+One more quick thing we want to do is add map controls so that we can zoom in and out of it. You can do that without controls but it's not that intuitive.  The Mapbox docs comes with a lot of features that you can add to the map, but the one we want is navigational controls The code we will add in our `clusterMap.js` and our `showPageMap.js` is this:
+
+```js
+var nav = new mapboxgl.NavigationControl();
+map.addControl(nav, 'top-right');
+```
+
+Note that the default position is `top-right`
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img18.jpg?raw=true)
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img19.jpg?raw=true)
