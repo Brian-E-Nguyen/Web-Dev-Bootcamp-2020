@@ -81,7 +81,7 @@ Then we will add in some more link tags to make our navbar
 </nav>
 ```
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img1.jpg?raw=true)
 
 Let's make a new stylesheet called `home.css` where we will put our CSS code for our home page. Inside of it, let's define our `conver-container` class with this code. Then we will reference that sheet inside of our `home.ejs` file.
 
@@ -94,7 +94,7 @@ Let's make a new stylesheet called `home.css` where we will put our CSS code for
 
 Now our home page should look like this:
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img2.jpg?raw=true)
 
 Right below the end of the `<header>` tag, let's add more to that body with some descriptions, buttons, and a copyright section
 
@@ -121,7 +121,7 @@ Right below the end of the `<header>` tag, let's add more to that body with some
 </footer>
 ```
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img3.jpg?raw=true)
 
 
 Lastly, let's change the `body` class to have a height of 100vh (view height)
@@ -133,7 +133,7 @@ body {
 }
 ```
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img4.jpg?raw=true)
 
 ## 2. Additional Home Page Styling
 
@@ -152,7 +152,7 @@ body {
 }
 ```
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img5.jpg?raw=true)
 
 ### 2.2 Nav links
 
@@ -167,7 +167,7 @@ Let's edit our nav links so that they look fancier
 }
 ```
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img6.jpg?raw=true)
 
 The next thing we'll do for the links is give them a border on the bottom, but make them transparent. When we hover over them, then they will display
 
@@ -186,7 +186,7 @@ The next thing we'll do for the links is give them a border on the bottom, but m
 }
 ```
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img7.jpg?raw=true)
 
 One last thing is to make the link active on its current page
 
@@ -196,7 +196,7 @@ One last thing is to make the link active on its current page
 }
 ```
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img8.jpg?raw=true)
 
 
 ### 2.3 Body Editing
@@ -221,7 +221,7 @@ body {
 }
 ```
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img9.jpg?raw=true)
 
 ## 3. Styling Login Form
 
@@ -245,7 +245,7 @@ Next up, we will make the login form a bit nicer by using pure Bootstrap. We wil
 
 We'll paste everything that we've cut out into the empty `<div>` and this is what it looks like
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img10.jpg?raw=true)
 
 Next we'll add the image to it. We'll put it above the `<div class="card-body">`
 
@@ -267,7 +267,7 @@ Next we'll add the image to it. We'll put it above the `<div class="card-body">`
 </div>
 ```
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img11.jpg?raw=true)
 
 Some extra things that we can do is that we can add the `autofocus` value on the username input so that the cursor is already in there when we load the page
 
@@ -283,13 +283,13 @@ And for our login button, we can have it span across the card
 </div>
 ```
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img12.jpg?raw=true)
 
 ## 4. Styling Register Form (and Other Forms)
 
 We are mostly copying the markup from the login form to the register form
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img13.jpg?raw=true)
 
 In our `new.ejs` and `edit.ejs`, we will wrap everything with these tags
 
@@ -303,14 +303,14 @@ In our `new.ejs` and `edit.ejs`, we will wrap everything with these tags
 </div>
 ```
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img14.jpg?raw=true)
 
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img15.jpg?raw=true)
 
 ## 5. Spacing Campgrounds
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img16.jpg?raw=true)
 
 Our campgrounds spacing are too close together. Let's space them out. Inside of our `index.ejs`, Colt did a mess-up by having this:
 
@@ -320,7 +320,7 @@ Our campgrounds spacing are too close together. Let's space them out. Inside of 
 
 Let's put the `mb-3` inside of the class
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img17.jpg?raw=true)
 
 ## 6. Removing Inline Map Styles
 
@@ -388,6 +388,6 @@ map.addControl(nav, 'top-right');
 
 Note that the default position is `top-right`
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img18.jpg?raw=true)
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/57-YelpCamp-Styles-Cleanup/57-YelpCamp-Styles-Cleanup/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/57-YelpCamp-Styles-Cleanup/img-for-notes/img19.jpg?raw=true)
