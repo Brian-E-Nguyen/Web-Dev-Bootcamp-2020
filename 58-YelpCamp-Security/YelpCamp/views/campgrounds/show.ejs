@@ -55,10 +55,7 @@
     <% if(currentUser) { %>
     <h2>Leave a Review</h2>
     <form action="/campgrounds/<%=campground._id%>/reviews" class="mb-3 validated-form" method="POST" novalidate>
-      <!-- <div class="mb-3">
-                <label class="form-label" for="">Rating</label>
-                <input class="form-range" type="range" min="1" max="5" name="review[rating]" id="rating">
-              </div> -->
+
       <div class="mb-3">
         <fieldset class="starability-basic">
           <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked
