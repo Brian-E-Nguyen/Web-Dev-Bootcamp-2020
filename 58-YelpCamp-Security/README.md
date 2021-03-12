@@ -352,3 +352,38 @@ const sessionConfig = {
 *Note that the website is still storing our previous cookie*
 
 The reason why we would want to change the name is that `connect.id` is the default name. Someone could write a script to search for that session name and pretend to be another user. We don't want that. We can just name it something simple like `session`. We're not trying to hide the session, by the way
+
+## 5. Hiding Errors
+
+Another thing to be aware of when you are deploying or creating an application for production is that you don't want to give users any errors or dev stack traces
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img19.jpg?raw=true)
+
+The title of the error is fine, but below it is not because it doesn't make sense to a user. One option, inside `error.ejs` is to hide it with EJS conditionals 
+
+```html
+<% if(process.env.NODE_ENV !== 'PRODUCTION') { %> 
+    <p><%= err.stack %> </p>
+<% } %> 
+```
+
+Here's how we can run production mode in our console. Note that things will break because we don't have an access token for our Mapbox client
+
+```
+NODE_ENV=production node app.js
+```
+
+Let's then go into our `app.js` and do this:
+
+```js
+// app.js
+
+// if(process.env.NODE_ENV !== 'PRODUCTION') {
+//     require('dotenv').config();
+// }
+require('dotenv').config();
+```
+
+Now when we log back in and create an error, it should not show the stack trace
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img20.jpg?raw=true)
