@@ -281,3 +281,74 @@ So now let's see what happens when we use HTML tags on our reviews or campground
 ![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img15.jpg?raw=true)
 
 ![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img16.jpg?raw=true)
+
+## 4. Minor Changes to Sessions / Cookies
+
+Next up, there are some simple changes we can make around our sessions and cookies. This will be quick
+
+If you remember, the code below is how we set up our cookies. The `httpOnly` says our cookies are only accessible through HTTP and not JS. If someone were to write their own JS and execute it on our site, they will not be able to see our session cookie
+
+```js
+// app.js
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        // 1000 milliseconds in a second
+        // 60 seconds in a minute
+        // 60 minutes in an hour
+        // 24 hours in a day
+        // 7 days in a week
+        // This cookie will expire in a week
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+Remember that you can verify that our cookie is HttpOnly by going into the dev tools and looking at our cookies
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img17.jpg?raw=true)
+
+If we were to add `secure: true` inside of the cookie, then it will break things. It says that this cookie should only work over HTTPS. Local host is not HTTPS. If we were to log in, then we wouldn't be signed into an account
+
+```js
+// app.js
+const sessionConfig = {
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        secure: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+We would wawnt this field right when we deploy our app
+
+One other thing we should do is change the default name of our session. Right now, it's `connect.sid`, but we can change the name of it by using `name:`
+
+```js
+const sessionConfig = {
+    name: 'blah',
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img18.jpg?raw=true)
+
+*Note that the website is still storing our previous cookie*
+
+The reason why we would want to change the name is that `connect.id` is the default name. Someone could write a script to search for that session name and pretend to be another user. We don't want that. We can just name it something simple like `session`. We're not trying to hide the session, by the way
