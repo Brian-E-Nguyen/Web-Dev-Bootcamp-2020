@@ -387,3 +387,51 @@ require('dotenv').config();
 Now when we log back in and create an error, it should not show the stack trace
 
 ![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img20.jpg?raw=true)
+
+## 6. Using Helmet
+
+The final security related-topic that we will cover for now is a package called _Helmet_. It comes with middleware that changes the behavior of HTTP headers
+
+ **Link to the docs**
+
+- https://helmetjs.github.io/
+
+Let's install it with `npm i helmet` and require it in our `app.js`
+
+```js
+// app.js
+const helmet = require('helmet');
+...
+app.use(helmet());
+```
+
+This enables us to use all methods that comes with Helmet, but there's one problem with that which we'll cover in the next section. One of these called...
+
+```js
+app.use(helmet.contentSecurityPolicy());
+```
+
+... will not be happy with some of our application. If we load our app up, we get these things
+
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img21.jpg?raw=true)
+
+We will cover why this happens in the next video. For now, let's edit our middleware to disable `contentSecurityPolicy`
+
+```js
+// This disables the `contentSecurityPolicy` middleware but keeps the rest.
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
+```
+
+Let's show a quick example of what Helmet does. When we send a GET request, we get these in our headers
+
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img22.jpg?raw=true)
+
+Some of these came from Helmet. This is what we get if we disabled it 
+
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img23.jpg?raw=true)
+
+The headers that our included with Helmet are in the docs, which explain what they are. These headers just make our app more secure
