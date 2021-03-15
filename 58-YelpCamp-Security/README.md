@@ -435,3 +435,107 @@ Some of these came from Helmet. This is what we get if we disabled it
 ![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img23.jpg?raw=true)
 
 The headers that our included with Helmet are in the docs, which explain what they are. These headers just make our app more secure
+
+## 7. Content Security Policy Fun
+
+### 7.1 CPS Info
+
+When we go back to regular Helmet and don't disable Content Security Policy, then everything breaks. What is Content Security Policy? From the docs: 
+
+`helmet.contentSecurityPolicy` *sets the* `Content-Security-Policy` *header which helps mitigate cross-site scripting attacks, among other things*
+
+On [MDN's article on Security policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), it says that *CSP is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement to distribution of malware.*
+
+This allows us to specify a list of acceptable sources to retrieve resources from, like images, links, scripts, etc. It's about designating your own policy
+
+### 7.2 Configuring Our Own CPS
+
+When we configure the content security policy for Helmet, we pass in our own options. Below is the default
+
+```
+default-src 'self';
+base-uri 'self';
+block-all-mixed-content;
+font-src 'self' https: data:;
+frame-ancestors 'self';
+img-src 'self' data:;
+object-src 'none';
+script-src 'self';
+script-src-attr 'none';
+style-src 'self' https: 'unsafe-inline';
+upgrade-insecure-requests
+```
+
+If we send a GET request in our app, this is what the browser will see. Then the browser decides what sources to load resources from.
+
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img24.jpg?raw=true)
+
+Below is an example of how we can set our own content policy
+
+```js
+// Sets "Content-Security-Policy: default-src 'self';script-src 'self' example.com;object-src 'none';upgrade-insecure-requests"
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "example.com"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: [],
+    },
+  })
+);
+```
+
+This will be the entire code that we will use to set up our content policy:
+
+```js
+// Configuring Content Security Policy
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net",
+];
+//This is the array that needs added to
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net",
+];
+const connectSrcUrls = [
+    "https://api.mapbox.com/",
+    "https://a.tiles.mapbox.com/",
+    "https://b.tiles.mapbox.com/",
+    "https://events.mapbox.com/",
+];
+const fontSrcUrls = [];
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: [],
+            connectSrc: ["'self'", ...connectSrcUrls],
+            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+            workerSrc: ["'self'", "blob:"],
+            objectSrc: [],
+            imgSrc: [
+                "'self'",
+                "blob:",
+                "data:",
+                "https://res.cloudinary.com/buraiyen/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
+                "https://images.unsplash.com/",
+            ],
+            fontSrc: ["'self'", ...fontSrcUrls],
+        },
+    })
+);
+```
+
+What complicates things right now is that we have different CDN's, files, scripts, etc. that we are loading. We have arrays of links that we will allow to our content policy. Then we actually configure helmet. We are deliberately restricting the locations where we fetch scripts, images, links, files, etc.
+
+Note that this will not completely safeguard your app. This is the bare minimum for your Express app
