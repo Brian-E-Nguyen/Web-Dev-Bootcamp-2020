@@ -145,3 +145,63 @@ The first thing is creating an Heroku account. There's no credit card required. 
 - https://devcenter.heroku.com/articles/heroku-cli
 
 After we download the CLI, we need to log in with our Heroku account through the CLI with the `heroku login` command. We will focus on deploying our app in the next section
+
+## 4. Pushing to Heroku
+
+In our Heroku CLI, we will use a command called `heroku create` which hill make a new app for us on Heroku. Before you run that, make sure you are on the top level of your application
+
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img14.jpg?raw=true)
+
+This command makes us a URL and we should see this app in our dashboard. When we go to that URL, we see this:
+
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img15.jpg?raw=true)
+
+Now let's work on deploying our app. Let's go to our `app.js` and change what we did with our DB URL. Additionally, we will add a new `secret` variable 
+
+```js
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp' ;
+
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+
+mongoose.connect(dbUrl, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+});
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 60 * 60
+});
+
+store.on('error', function (e) {
+    console.log('SESSION STORE ERROR', e)
+})
+
+const sessionConfig = {
+    store,
+    name: 'session',
+    secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+We will now push our code to git. Before, make sure you have a `.gitignore` file with `node_modules` and `.env` inside of it and commit all of our files. Use `git remote -v` to see the remote places that you are pushing your code to
+
+```
+$ git remote -v
+heroku  https://git.heroku.com/infinite-ridge-76281.git (fetch)
+heroku  https://git.heroku.com/infinite-ridge-76281.git (push)
+```
+
+Finally, run `git push heroku master` to push your code to your app. There is an error when the pushing is complete though. We will fix that in the next section
+
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img16.jpg?raw=true)
