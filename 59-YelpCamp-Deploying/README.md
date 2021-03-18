@@ -133,3 +133,15 @@ The information inside of this collect will not be stored forever. Each individu
         "session" : "{\"cookie\":{\"originalMaxAge\":604800000,\"expires\":\"2021-03-25T00:15:16.790Z\",\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":\"brian\"}}"
 }
 ```
+
+## 3. Heroku Setup
+
+Now we will work on deploying our app by using a tool called _Heroku_. This platform tends to be the friendliest for beginners to deploy things like Express apps. That doesn't mean it'll be completely friendly. There are things that you need to configure, change, install, etc. That's all the things that we'll have to do on another machine
+
+The first thing is creating an Heroku account. There's no credit card required. The next step is installing the Heroku CLI. This allows us to use many command line Heroku tools, which are very important and are how we will get our code from our machine to Heroku.
+
+**Link to Heroku CLI docs and download**
+
+- https://devcenter.heroku.com/articles/heroku-cli
+
+After we download the CLI, we need to log in with our Heroku account through the CLI with the `heroku login` command. We will focus on deploying our app in the next section
