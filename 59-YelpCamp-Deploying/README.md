@@ -205,3 +205,39 @@ heroku  https://git.heroku.com/infinite-ridge-76281.git (push)
 Finally, run `git push heroku master` to push your code to your app. There is an error when the pushing is complete though. We will fix that in the next section
 
 ![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img16.jpg?raw=true)
+
+## 5. Fixing Heroku Errors
+
+Geroku gives us a command called `heroku logs --tail` that we can run to see the logs. One of the logs we see is this:
+
+```
+2021-03-18T18:35:05.353389+00:00 app[web.1]: npm ERR! missing script: start
+```
+
+Heroku doesn't know what to do with our app. We have been using Node and `app.js`. Inside of our `package.json`, we will add a field `start` and the value of `node app.js`
+
+```json
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+```
+
+Another thing that we want to change is the port that we are serving our app. We are currently hardcoding `3000`, but on Heroku, there's a port that's specified
+
+```js
+const portNumber = proces.env.PORT || 3000;
+
+app.listen(portNumber, () => {
+    console.log(`SERVING ON PORT ${portNumber}`);
+});
+```
+
+Now we will commit all changes and push our changes with `git push heroku master`. Note that everytime we push changes, the app will rebuild itself
+
+After we push, we still get an application error. Let's see the logs to find out what's causing the problem
+
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img17.jpg?raw=true)
+
+
+Our app has successfully been built and ran, but it cannot find an access token. This is because our environment variables aren't configured. That's what we'll go over in the next video

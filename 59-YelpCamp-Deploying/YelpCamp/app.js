@@ -22,8 +22,6 @@ const MongoStore = require('connect-mongo').default;
 
 const mongoSanitize = require('express-mongo-sanitize');
 
-const portNumber = 3000;
-
 const usersRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
@@ -179,6 +177,8 @@ app.use((err, req, res, next) => {
     }
     res.status(statusCode).render('error', {err});
 });
+
+const portNumber = proces.env.PORT || 3000;
 
 app.listen(portNumber, () => {
     console.log(`SERVING ON PORT ${portNumber}`);
