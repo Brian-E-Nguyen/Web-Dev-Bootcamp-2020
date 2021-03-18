@@ -62,3 +62,74 @@ When we make new data or edit them for our DB, they will now show up in our clou
 ![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img13.jpg?raw=true)
 
 For now, we'll use our local DB because we still haven't put this app into production 
+
+## 2. Using Mongo For Our Session Store
+
+### 2.1 connect-mongo
+
+The next thing we'll do is configure our app to store session information using Mongo. We talked in the past that the default storage location for sessions is in memory. That can be problematic because it doesn't scale well. It's pretty easy to configure with a tool called `connect-mongo`
+
+`npm i connect-mongo`
+
+**Link to the docs**
+
+- https://www.npmjs.com/package/connect-mongo
+
+We will require it in our `app.js` and edit our session configuration so that it has `connect-mongo`
+
+```js
+const MongoStore = require('connect-mongo').default;
+
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret: 'thisshouldbeabettersecret!',
+    touchAfter: 24 * 60 * 60
+});
+
+const sessionConfig = {
+    store,
+    name: 'session',
+    secret: 'thisshouldbeabettersecret!',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    }
+}
+```
+
+`touchAfter` refers to unnecessary saves or updates where the data in the session has not changed. So if the data has changed, then it will be saved and updated in our Mongo store; but if it was the same as it was, then it won't continuously update every time a user refreshes a page
+
+### 2.2 Seeing Our Session Data
+
+Now let's log into our app to see if our session is stored in our DB. We will do this with the query `db.sessions.find()`
+
+```
+> db.sessions.find().pretty()
+{
+        "_id" : "K9GlzDokiPO5bnrsNLuVCY4BKyvYtsiE",
+        "expires" : ISODate("2021-03-25T00:00:29.607Z"),
+        "lastModified" : ISODate("2021-03-18T00:00:29.607Z"),
+        "session" : "{\"cookie\":{\"originalMaxAge\":604800000,\"expires\":\"2021-03-25T00:00:29.607Z\",\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":\"tim\"}}"
+}
+```
+
+The information inside of this collect will not be stored forever. Each individual session by default lasts for only 14 days. This collection, obviously, can store more than 1 session. Let's log into this app from another browser so that we can see another session
+
+```
+> db.sessions.find().pretty()
+{
+        "_id" : "K9GlzDokiPO5bnrsNLuVCY4BKyvYtsiE",
+        "expires" : ISODate("2021-03-25T00:00:29.607Z"),
+        "lastModified" : ISODate("2021-03-18T00:00:29.607Z"),
+        "session" : "{\"cookie\":{\"originalMaxAge\":604800000,\"expires\":\"2021-03-25T00:00:29.607Z\",\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":\"tim\"}}"
+}
+{
+        "_id" : "vbcUN3bTNSfteI3agTm1OYhb8erZkLb1",
+        "expires" : ISODate("2021-03-25T00:15:16.790Z"),
+        "lastModified" : ISODate("2021-03-18T00:15:16.790Z"),
+        "session" : "{\"cookie\":{\"originalMaxAge\":604800000,\"expires\":\"2021-03-25T00:15:16.790Z\",\"httpOnly\":true,\"path\":\"/\"},\"flash\":{},\"passport\":{\"user\":\"brian\"}}"
+}
+```
