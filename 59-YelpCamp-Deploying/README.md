@@ -8,33 +8,33 @@ The next chunk of sections is about deploying our application, which takes some 
 
 We will go through the register/login process and then create a free cluster to host our DB
 
-![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img1.jpg?raw=true)
+![img1](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img1.jpg?raw=true)
 
-![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img2.jpg?raw=true)
+![img2](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img2.jpg?raw=true)
 
-![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img3.jpg?raw=true)
+![img3](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img3.jpg?raw=true)
 
 The next thing we will do is create our first database user. This isn't something that we've used so far. Database users also exist on our local Mongo instance, but it's a capability of Mongo of different users with different permissions. There could be a problem where someone has unwanted access to our DB, so we will have to set up a user with a username and password
 
-![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img4.jpg?raw=true)
+![img4](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img4.jpg?raw=true)
 
-![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img5.jpg?raw=true)
+![img5](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img5.jpg?raw=true)
 
 Be sure to copy the password because we will need it for later
 
 The next thing we have to do, which is kinda annoying, is whitelisting our IP address, which is approving certain IP addresses that can access our cluster. We will go inside _Network Access_ to add IP addresses. We will then add our own IP address to it
 
-![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img6.jpg?raw=true)
+![img6](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img6.jpg?raw=true)
 
-![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img7.jpg?raw=true)
+![img7](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img7.jpg?raw=true)
 
 Finally, we will connect to our cluster. We will do that by going under the _Clusters_ tab and clicking on the _CONNECT_ button
 
-![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img8.jpg?raw=true)
+![img8](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img8.jpg?raw=true)
 
-![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img9.jpg?raw=true)
+![img9](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img9.jpg?raw=true)
 
-![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img10.jpg?raw=true)
+![img10](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img10.jpg?raw=true)
 
 ### 1.2 Changing Our Connection
 
@@ -53,13 +53,13 @@ mongoose.connect(dbUrl, {
 
 Now when we go to our app, we don't see any campgrounds. That's good because everything is now hosted on our cloud DB. 
 
-![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img11.jpg?raw=true)
+![img11](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img11.jpg?raw=true)
 
 When we make new data or edit them for our DB, they will now show up in our cloud DB
 
-![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img12.jpg?raw=true)
+![img12](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img12.jpg?raw=true)
 
-![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img13.jpg?raw=true)
+![img13](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img13.jpg?raw=true)
 
 For now, we'll use our local DB because we still haven't put this app into production 
 
@@ -150,11 +150,11 @@ After we download the CLI, we need to log in with our Heroku account through the
 
 In our Heroku CLI, we will use a command called `heroku create` which hill make a new app for us on Heroku. Before you run that, make sure you are on the top level of your application
 
-![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img14.jpg?raw=true)
+![img14](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img14.jpg?raw=true)
 
 This command makes us a URL and we should see this app in our dashboard. When we go to that URL, we see this:
 
-![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img15.jpg?raw=true)
+![img15](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img15.jpg?raw=true)
 
 Now let's work on deploying our app. Let's go to our `app.js` and change what we did with our DB URL. Additionally, we will add a new `secret` variable 
 
@@ -204,7 +204,7 @@ heroku  https://git.heroku.com/infinite-ridge-76281.git (push)
 
 Finally, run `git push heroku master` to push your code to your app. There is an error when the pushing is complete though. We will fix that in the next section
 
-![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img16.jpg?raw=true)
+![img16](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img16.jpg?raw=true)
 
 ## 5. Fixing Heroku Errors
 
@@ -237,7 +237,7 @@ Now we will commit all changes and push our changes with `git push heroku master
 
 After we push, we still get an application error. Let's see the logs to find out what's causing the problem
 
-![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img17.jpg?raw=true)
+![img17](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img17.jpg?raw=true)
 
 
 Our app has successfully been built and ran, but it cannot find an access token. This is because our environment variables aren't configured. That's what we'll go over in the next video
@@ -248,14 +248,14 @@ We don't use the .env file with Heroku. Instead, we can configure our own enviro
 
 One way is when we go to our dashboard and the settings of our app, we then have the option to configure our variables. Whatever keys and values we add to these fields will be added to the `process.env`. We need to do this for every single item in our .env file
 
-![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img18.jpg?raw=true)
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img18.jpg?raw=true)
 
 The other way is doing it through the CLI
 
-![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img19.jpg?raw=true)
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img19.jpg?raw=true)
 
 When we set our environment variables, we still see an error
 
-![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img20.jpg?raw=true)
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/main/59-YelpCamp-Deploying/img-for-notes/img20.jpg?raw=true)
 
 We had to whitelist our IP address from our machine to use our Atlas URL, but now we're not accessing it from our machine; Heroku is trying to access it. What we need to do is go back into Atlas and allow acccess from anywhere. It's fine to do this alongside Heroku. Finally, we will run `heroku restart` in our CLI and everything should work
