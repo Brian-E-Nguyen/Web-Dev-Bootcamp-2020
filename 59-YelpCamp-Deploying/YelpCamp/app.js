@@ -178,8 +178,8 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', {err});
 });
 
-const portNumber = proces.env.PORT || 3000;
+var port = process.env.PORT || 3000;
 
-app.listen(portNumber, () => {
-    console.log(`SERVING ON PORT ${portNumber}`);
+app.listen(port, function () {  
+  console.log("Server Has Started!");
 });

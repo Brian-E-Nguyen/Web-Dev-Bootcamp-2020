@@ -241,3 +241,21 @@ After we push, we still get an application error. Let's see the logs to find out
 
 
 Our app has successfully been built and ran, but it cannot find an access token. This is because our environment variables aren't configured. That's what we'll go over in the next video
+
+## 6. Configuring Heroku Env Variables
+
+We don't use the .env file with Heroku. Instead, we can configure our own environment variables in two ways. 
+
+One way is when we go to our dashboard and the settings of our app, we then have the option to configure our variables. Whatever keys and values we add to these fields will be added to the `process.env`. We need to do this for every single item in our .env file
+
+![img18](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img18.jpg?raw=true)
+
+The other way is doing it through the CLI
+
+![img19](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img19.jpg?raw=true)
+
+When we set our environment variables, we still see an error
+
+![img20](https://github.com/Brian-E-Nguyen/Web-Dev-Bootcamp-2020/blob/59-YelpCamp-Deploying/59-YelpCamp-Deploying/img-for-notes/img20.jpg?raw=true)
+
+We had to whitelist our IP address from our machine to use our Atlas URL, but now we're not accessing it from our machine; Heroku is trying to access it. What we need to do is go back into Atlas and allow acccess from anywhere. It's fine to do this alongside Heroku. Finally, we will run `heroku restart` in our CLI and everything should work
